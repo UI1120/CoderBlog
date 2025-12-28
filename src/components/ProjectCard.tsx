@@ -9,8 +9,8 @@ interface ProjectCardProps {
 
 export function ProjectCard({ image, category, title, date }: ProjectCardProps) {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-200">
-      <div className="aspect-video w-full overflow-hidden bg-gray-100">
+    <div className="bg-[#2d6b57] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-[#67e0b8]/30">
+      <div className="aspect-video w-full overflow-hidden bg-gray-800">
         <ImageWithFallback 
           src={image} 
           alt={title}
@@ -21,10 +21,10 @@ export function ProjectCard({ image, category, title, date }: ProjectCardProps) 
         <div className="text-[#67e0b8]">
           {category}
         </div>
-        <h3 className="text-gray-900 mb-3">
+        <h3 className="text-white mb-3">
           {title}
         </h3>
-        <div className="text-gray-500">
+        <div className="text-gray-300">
           {date}
         </div>
       </div>
