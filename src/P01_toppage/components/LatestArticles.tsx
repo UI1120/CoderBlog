@@ -1,4 +1,4 @@
-﻿import { LatestArticleCarousel } from "./LatestArticleCarousel";
+﻿import { ArticleCarousel } from "@/000_common/components/ArticleCarousel";
 
 const articles = [
   {
@@ -64,7 +64,7 @@ export function LatestArticles() {
         <h2 className="text-gray-900 mb-8 text-center text-[24px]">
           最新記事
         </h2>
-        <LatestArticleCarousel articles={articles} />
+        <ArticleCarousel articles={articles} />
         <div className="text-center mt-8">
           <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">
             記事一覧へ

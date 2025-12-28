@@ -28,7 +28,7 @@ export function ArticleHeader({
       <div className="mb-6">
         <Breadcrumb
           items={[
-            { label: "Home", href: "/" },
+            { label: "Home", href: "/index" },
             { label: category, href: `/category/${categoryId}` },
             { label: "Article", href: "#" },
           ]}
@@ -41,14 +41,14 @@ export function ArticleHeader({
           {category}
         </span>
       </div>
-      
+
       {/* タイトル */}
       <h1 className="text-5xl mb-4">{title}</h1>
-      
+
       {/* 詳細 */}
       <p className="text-gray-700 mb-6">{summary}</p>
-      
-      {/* 投稿日時�EグチE�� | クリエイター */}
+
+      {/* 投稿日時・グループ | クリエイター */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span className="text-gray-600">{publishedDate}</span>
@@ -64,4 +64,3 @@ export function ArticleHeader({
     </div>
   );
 }
-

@@ -18,26 +18,16 @@ interface Article {
   content: string;
 }
 
-interface RelatedArticle {
-  id: string;
-  title: string;
-  thumbnail: string;
-  category: string;
-  published_date: string;
-}
-
 interface ArticleDetailProps {
   article: Article;
-  relatedArticles: RelatedArticle[];
 }
 
 export function ArticleDetail({
   article,
-  relatedArticles,
 }: ArticleDetailProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* 記事�EチE��ー�E�パンくず込み�E�E*/}
+      {/* 記事ヘッダー（パンくず込み） */}
       <div className="mb-8">
         <ArticleHeader
           title={article.title}
@@ -60,7 +50,7 @@ export function ArticleDetail({
         />
       </div>
 
-      {/* 記事本斁E*/}
+      {/* 記事本文 */}
       <div className="mb-8">
         <ArticleContent content={article.content} />
       </div>
@@ -75,15 +65,13 @@ export function ArticleDetail({
 
       {/* コメントセクション */}
       <div className="mb-12">
-        <CommentSection />
+        <CommentSection articleId={article.id} />
       </div>
 
-      {/* 関連記亁E*/}
+      {/* 関連記事 */}
       <div>
         <RelatedArticles />
-        {/* <RelatedArticles articles={relatedArticles} /> */}
       </div>
     </div>
   );
 }
-

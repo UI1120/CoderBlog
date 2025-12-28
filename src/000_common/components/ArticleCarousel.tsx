@@ -69,6 +69,7 @@ export function ArticleCarousel({
           {articles.map((article) => (
             <ArticleCard
               key={article.id}
+              id={article.id}
               image={article.image}
               category={article.category}
               title={article.title}
@@ -102,8 +103,8 @@ export function ArticleCarousel({
             key={index}
             onClick={() => scrollToIndex(index)}
             className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
-                ? "bg-[#67e0b8] w-8"
-                : "bg-black/40 hover:bg-black/60"
+              ? "bg-[#67e0b8] w-8"
+              : "bg-black/40 hover:bg-black/60"
               }`}
             aria-label={`ページ ${index + 1}`}
           />

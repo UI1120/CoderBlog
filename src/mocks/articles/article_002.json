@@ -1,0 +1,13 @@
+{
+    "id": "2",
+    "title": "TypeScript 5.x の新機能について",
+    "summary": "TypeScript 5.x で導入された主要な機能と、実プロジェクトでの活用方法について解説します。",
+    "category": "Systems / Web",
+    "category_id": "systems-web",
+    "writer": "渡辺",
+    "group": "Webサークル",
+    "published_date": "2025年12月25日",
+    "good_count": 42,
+    "thumbnail": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0eXBlc2NyaXB0fGVufDF8fHx8MTc2NDU2NzA5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "content": "# TypeScript 5.x の新機能\n\nTypeScript 5.x では、さらに型安全で書きやすい機能が追加されました。\n\n## Const Type Parameters\n\n型引数に `const` をつけることで、推論される型をリテラル型として扱うことができます。\n\n```typescript\nfunction readonly<const T>(arg: T) {\n  return arg;\n}\n```\n\n## Decorators\n\nECMAScript のデコレータ仕様に基づいた新しいデコレータがサポートされました。\n\n詳細な使い方は公式ドキュメントを参照してください。"
+}

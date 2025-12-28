@@ -4,7 +4,32 @@ import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'html-rewrite',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url) {
+            // Rewrite URL without .html to .html extension
+            // Only rewrite if it's a GET request and doesn't have an extension (or is specific path)
+            // But we can just use simple string matching for now based on user request.
+            // Using replace to handle query params too.
+            // Matches /article or /article?query or /article/
+            // Vite handles /article/ usually, but user is asking for /article access.
+            if (req.url === '/article' || req.url.startsWith('/article?')) {
+              req.url = req.url.replace('/article', '/article.html');
+            } else if (req.url === '/index' || req.url.startsWith('/index?')) {
+              req.url = req.url.replace('/index', '/index.html');
+            } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
+              req.url = req.url.replace('/notfound', '/PageNotFound.html');
+            }
+          }
+          next();
+        });
+      }
+    }
+  ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
@@ -56,6 +81,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'index.html'),
         article: path.resolve(__dirname, 'article.html'),
+        notfound: path.resolve(__dirname, 'PageNotFound.html'),
       },
     },
   },

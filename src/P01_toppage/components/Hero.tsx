@@ -1,6 +1,7 @@
 ﻿export function Hero() {
   return (
     <section
+      id="home"
       className="relative bg-cover bg-center"
       style={{
         backgroundImage:

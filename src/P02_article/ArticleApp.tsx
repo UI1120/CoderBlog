@@ -7,14 +7,25 @@ export default function App() {
   const [article, setArticle] = useState<any>(null);
 
   useEffect(() => {
-    // ID 1 の記事を取得（モック API）
-    fetch('/api/articles/1')
+    // URLのクエリパラメータからIDを取得
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      window.location.href = "/notfound";
+      return;
+    }
+
+    fetch(`/api/articles/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Not Found');
         return res.json();
       })
       .then(data => setArticle(data))
-      .catch(err => console.error('Failed to fetch article:', err));
+      .catch(err => {
+        console.error('Failed to fetch article:', err);
+        window.location.href = "/notfound";
+      });
   }, []);
 
   if (!article) {
@@ -29,7 +40,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <article>
-        <ArticleDetail article={article} relatedArticles={article.relatedArticles || []} />
+        <ArticleDetail article={article} />
       </article>
       <Footer />
     </div>
