@@ -1,21 +1,21 @@
-import { ArticleDetail } from "./src/components/ArticleDetail";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
+import { ArticleDetail } from "./components/ArticleDetail";
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 // モックデータ
 const mockArticle = {
-    id: "1",
-    title: "Reactを使った効率的なWebアプリケーション開発",
-    summary: "モダンなReactの機能を活用して、パフォーマンスの高いWebアプリケーションを構築する方法を解説します。",
-    category: "技術",
-    category_id: "tech",
-    writer: "山田太郎",
-    group: "開発チーム",
-    published_date: "2025年12月1日",
-    good_count: 42,
-    thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
-    content:
-        `# はじめに
+  id: "1",
+  title: "Reactを使った効率的なWebアプリケーション開発",
+  summary: "モダンなReactの機能を活用して、パフォーマンスの高いWebアプリケーションを構築する方法を解説します。",
+  category: "技術",
+  category_id: "tech",
+  writer: "山田太郎",
+  group: "開発チーム",
+  published_date: "2025年12月1日",
+  good_count: 42,
+  thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
+  content: 
+`# はじめに
 
 この記事では、Reactを使った効率的なWebアプリケーション開発について解説します。
 
@@ -57,35 +57,35 @@ Reactの機能を適切に活用することで、保守性が高く、パフォ
 };
 
 const relatedArticles = [
-    {
-        id: "2",
-        title: "TypeScriptで型安全なReactアプリケーションを作る",
-        thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&q=80",
-        category: "技術",
-        published_date: "2025年11月28日"
-    },
-    {
-        id: "3",
-        title: "Next.jsでフルスタックアプリケーションを構築する",
-        thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
-        category: "技術",
-        published_date: "2025年11月25日"
-    },
-    {
-        id: "4",
-        title: "モダンスなUIコンポーネントライブラリの選び方",
-        thumbnail: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&q=80",
-        category: "技術",
-        published_date: "2025年11月20日"
-    }
+  {
+    id: "2",
+    title: "TypeScriptで型安全なReactアプリケーションを作る",
+    thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&q=80",
+    category: "技術",
+    published_date: "2025年11月28日"
+  },
+  {
+    id: "3",
+    title: "Next.jsでフルスタックアプリケーションを構築する",
+    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
+    category: "技術",
+    published_date: "2025年11月25日"
+  },
+  {
+    id: "4",
+    title: "モダンなUIコンポーネントライブラリの選び方",
+    thumbnail: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&q=80",
+    category: "技術",
+    published_date: "2025年11月20日"
+  }
 ];
 
-export default function ArticleApp() {
-    return (
-        <div className="min-h-screen bg-gray-50">
-            <Header />
-            <ArticleDetail article={mockArticle} relatedArticles={relatedArticles} />
-            <Footer />
-        </div>
-    );
+export default function App() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header/>
+      <ArticleDetail article={mockArticle} relatedArticles={relatedArticles} />
+      <Footer/>
+    </div>
+  );
 }

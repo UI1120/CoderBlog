@@ -1,5 +1,7 @@
 import { ArticleCarousel } from './ArticleCarousel';
+import { useState, useEffect } from 'react';
 
+/*
 const projects = [
   {
     id: 1,
@@ -50,15 +52,29 @@ const projects = [
     writer: "伊藤"
   }
 ];
+*/
 
 export function ProjectHighlights() {
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/article-lists/project-highlights')
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error('Failed to fetch project highlights:', err));
+  }, []);
+
   return (
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-6">
         <h2 className="text-gray-900 mb-8 text-center text-[24px]">
           活動ピックアップ（Projects）
         </h2>
-        <ArticleCarousel articles={projects} />
+        {projects.length > 0 ? (
+          <ArticleCarousel articles={projects} />
+        ) : (
+          <div className="text-center text-gray-500">読み込み中...</div>
+        )}
       </div>
     </section>
   );
