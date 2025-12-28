@@ -1,5 +1,5 @@
 import { Heart, Share2, Link2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/common/ui/button";
 import { useState } from "react";
 import { toast } from "sonner@2.0.3";
 

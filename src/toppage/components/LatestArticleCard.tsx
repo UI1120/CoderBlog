@@ -1,6 +1,6 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "@/common/components/figma/ImageWithFallback";
 import { Calendar, User } from "lucide-react";
-import { ArticleCard } from "./ArticleCard";
+import { ArticleCard } from "@/common/components/ArticleCard";
 
 interface LatestArticleCardProps {
   image: string;

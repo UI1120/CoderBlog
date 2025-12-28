@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/common/ui/button";
 import { toast } from "sonner@2.0.3";
 
 interface Comment {

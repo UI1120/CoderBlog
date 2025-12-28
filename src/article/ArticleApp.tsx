@@ -1,6 +1,6 @@
 import { ArticleDetail } from "./components/ArticleDetail";
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
+import { Header } from '@/common/components/Header';
+import { Footer } from '@/common/components/Footer';
 
 // モックデータ
 const mockArticle = {
@@ -14,8 +14,8 @@ const mockArticle = {
   published_date: "2025年12月1日",
   good_count: 42,
   thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
-  content: 
-`# はじめに
+  content:
+    `# はじめに
 
 この記事では、Reactを使った効率的なWebアプリケーション開発について解説します。
 
@@ -83,9 +83,9 @@ const relatedArticles = [
 export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header/>
+      <Header />
       <ArticleDetail article={mockArticle} relatedArticles={relatedArticles} />
-      <Footer/>
+      <Footer />
     </div>
   );
 }

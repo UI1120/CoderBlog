@@ -7,7 +7,7 @@ async function enableMocking() {
     return;
   }
 
-  const { worker } = await import('./mocks/browser');
+  const { worker } = await import('@/common/mocks/browser');
 
   // `worker.start()` returns a Promise that resolves once the Service Worker is up and running.
   return worker.start({

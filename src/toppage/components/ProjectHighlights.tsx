@@ -1,4 +1,4 @@
-import { ArticleCarousel } from './ArticleCarousel';
+import { ArticleCarousel } from '@/common/components/ArticleCarousel';
 import { useState, useEffect } from 'react';
 
 /*
