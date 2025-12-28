@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { ArticleCard } from "./ArticleCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 interface Article {
   id: number;
@@ -101,12 +101,11 @@ export function ArticleCarousel({
           <button
             key={index}
             onClick={() => scrollToIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex
+            className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
                 ? "bg-[#67e0b8] w-8"
                 : "bg-black/40 hover:bg-black/60"
-            }`}
-            aria-label={`ペ�Eジ ${index + 1}`}
+              }`}
+            aria-label={`ページ ${index + 1}`}
           />
         ))}
       </div>

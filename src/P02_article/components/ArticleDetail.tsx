@@ -1,4 +1,4 @@
-import { ArticleHeader } from "./ArticleHeader";
+﻿import { ArticleHeader } from "./ArticleHeader";
 import { ArticleContent } from "./ArticleContent";
 import { ActionButtons } from "./ActionButtons";
 import { CommentSection } from "./CommentSection";
@@ -37,7 +37,7 @@ export function ArticleDetail({
 }: ArticleDetailProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* 記事�EチE��ー�E�パンくず込み�E�E*/}
+      {/* 記事�EチE��ー�E�パンくず込み�E�E*/}
       <div className="mb-8">
         <ArticleHeader
           title={article.title}
@@ -86,3 +86,4 @@ export function ArticleDetail({
     </div>
   );
 }
+

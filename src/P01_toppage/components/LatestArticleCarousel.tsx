@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { LatestArticleCard } from './LatestArticleCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -20,7 +20,7 @@ interface LatestArticleCarouselProps {
 export function LatestArticleCarousel({ articles }: LatestArticleCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const cardsPerView = 3;
   const totalPages = Math.ceil(articles.length / cardsPerView);
 
@@ -49,7 +49,7 @@ export function LatestArticleCarousel({ articles }: LatestArticleCarouselProps) 
 
   return (
     <div className="relative">
-      <div 
+      <div
         ref={scrollContainerRef}
         className="overflow-x-auto pb-4 scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -90,12 +90,11 @@ export function LatestArticleCarousel({ articles }: LatestArticleCarouselProps) 
           <button
             key={index}
             onClick={() => scrollToIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex 
-                ? 'bg-[#67e0b8] w-8' 
+            className={`w-2 h-2 rounded-full transition-all ${index === currentIndex
+                ? 'bg-[#67e0b8] w-8'
                 : 'bg-black/40 hover:bg-black/60'
-            }`}
-            aria-label={`ペ�Eジ ${index + 1}`}
+              }`}
+            aria-label={`ページ ${index + 1}`}
           />
         ))}
       </div>

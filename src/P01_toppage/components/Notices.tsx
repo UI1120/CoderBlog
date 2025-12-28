@@ -1,8 +1,8 @@
-import { Bell } from 'lucide-react';
+﻿import { Bell } from 'lucide-react';
 
 const notices = [
-  "学祭展示は2025年11月に開催されまぁE E詳しくはこちめE,
-  "次回�EUnity勉強会�E1/28に開催しまぁE
+  "学祭展示は2025年11月に開催されます。詳しくはこちら。",
+  "次回のUnity勉強会は1/28に開催します。"
 ];
 
 export function Notices() {
@@ -15,8 +15,8 @@ export function Notices() {
         <div className="max-w-3xl mx-auto">
           <div className="bg-white/90 backdrop-blur-sm rounded-lg border border-gray-200 p-6 shadow-sm">
             {notices.map((notice, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`flex items-start gap-3 ${index > 0 ? 'mt-4 pt-4 border-t border-[#67e0b8]/20' : ''}`}
               >
                 <Bell className="w-5 h-5 text-[#67e0b8] flex-shrink-0 mt-1" />

@@ -1,4 +1,4 @@
-import { LatestArticleCarousel } from "./LatestArticleCarousel";
+﻿import { LatestArticleCarousel } from "./LatestArticleCarousel";
 
 const articles = [
   {
@@ -7,7 +7,7 @@ const articles = [
       "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGluZ3xlbnwxfHx8fDE3NjQzODYyMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "Game Dev",
     date: "2025/01/20",
-    title: "Unity ECSで高速化してみぁE,
+    title: "Unity ECSで高速化してみた",
     writer: "こうち",
   },
   {
@@ -16,7 +16,7 @@ const articles = [
       "https://images.unsplash.com/photo-1717501219687-ddce079f704b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwcmVzZWFyY2h8ZW58MXx8fHwxNzY0NDI1Njk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "AI / Research",
     date: "2025/01/18",
-    title: "機械学習モチE��の軽量化Tips",
+    title: "機械学習モデルの軽量化Tips",
     writer: "山田",
   },
   {
@@ -34,7 +34,7 @@ const articles = [
       "https://images.unsplash.com/photo-1762742228148-f38c34ea7f1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1lJTIwZGV2ZWxvcG1lbnQlMjB1bml0exlbnwxfHx8fDE3NjQ0NzUzMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "Robotics",
     date: "2025/01/12",
-    title: "センサー統合シスチE��の実裁E,
+    title: "センサー統合システムの実装",
     writer: "鈴木",
   },
   {
@@ -43,8 +43,8 @@ const articles = [
       "https://images.unsplash.com/photo-1717501219687-ddce079f704b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwcmVzZWFyY2h8ZW58MXx8fHwxNzY0NDI1Njk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "AI / Research",
     date: "2025/01/09",
-    title: "PyTorchでニューラルネット構篁E,
-    writer: "高橁E,
+    title: "PyTorchでニューラルネット構築",
+    writer: "高橋",
   },
   {
     id: 6,
@@ -52,7 +52,7 @@ const articles = [
       "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGluZ3xlbnwxfHx8fDE3NjQzODYyMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "Systems / Web",
     date: "2025/01/06",
-    title: "React ÁETypeScriptのプラクチE��ス",
+    title: "React × TypeScriptのベストプラクティス",
     writer: "渡辺",
   },
 ];
@@ -62,7 +62,8 @@ export function LatestArticles() {
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-6">
         <h2 className="text-gray-900 mb-8 text-center text-[24px]">
-          最新記亁E        </h2>
+          最新記事
+        </h2>
         <LatestArticleCarousel articles={articles} />
         <div className="text-center mt-8">
           <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">

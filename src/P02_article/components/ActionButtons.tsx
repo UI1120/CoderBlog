@@ -1,4 +1,4 @@
-import { Heart, Share2, Link2 } from "lucide-react";
+﻿import { Heart, Share2, Link2 } from "lucide-react";
 import { Button } from "@/000_common/ui/button";
 import { useState } from "react";
 import { toast } from "sonner@2.0.3";
@@ -16,11 +16,11 @@ export function ActionButtons({ goodCount, articleTitle }: ActionButtonsProps) {
     if (!liked) {
       setLiked(true);
       setCurrentGoodCount(prev => prev + 1);
-      toast.success("ぁE��ねしました�E�E);
+      toast.success("ぁE��ねしました�E�E);
     } else {
       setLiked(false);
       setCurrentGoodCount(prev => prev - 1);
-      toast.success("ぁE��ねを取り消しました");
+      toast.success("ぁE��ねを取り消しました");
     }
   };
 
@@ -34,9 +34,9 @@ export function ActionButtons({ goodCount, articleTitle }: ActionButtonsProps) {
   const handleCopyUrl = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("URLをコピ�Eしました");
+      toast.success("URLをコピ�Eしました");
     } catch (err) {
-      toast.error("URLのコピ�Eに失敗しました");
+      toast.error("URLのコピ�Eに失敗しました");
     }
   };
 
@@ -49,7 +49,7 @@ export function ActionButtons({ goodCount, articleTitle }: ActionButtonsProps) {
           className="flex items-center gap-2"
         >
           <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
-          <span>ぁE��ね</span>
+          <span>ぁE��ね</span>
           <span className="ml-1">({currentGoodCount})</span>
         </Button>
 
@@ -68,9 +68,10 @@ export function ActionButtons({ goodCount, articleTitle }: ActionButtonsProps) {
           className="flex items-center gap-2"
         >
           <Link2 className="w-5 h-5" />
-          <span>URLコピ�E</span>
+          <span>URLコピ�E</span>
         </Button>
       </div>
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-
+﻿
 import { createRoot } from "react-dom/client";
 import ArticleApp from "./ArticleApp.tsx";
 import "./index.css";

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/000_common/ui/button";
 import { toast } from "sonner@2.0.3";
 
@@ -15,21 +15,21 @@ export function CommentSection() {
       id: "1",
       user: "田中太郁E,
       comment:
-        "とても参老E��なりました�E�Reactのパフォーマンス最適化につぁE��詳しく解説されてぁE��助かります、E,
+        "とても参老E��なりました�E�Reactのパフォーマンス最適化につぁE��詳しく解説されてぁE��助かります、E,
       date: "2025年12朁E日 14:30",
     },
     {
       id: "2",
       user: "佐藤花孁E,
       comment:
-        "useMemoとuseCallbackの使ぁE�Eけがよく琁E��できました。実際のプロジェクトで試してみます、E,
+        "useMemoとuseCallbackの使ぁE�Eけがよく琁E��できました。実際のプロジェクトで試してみます、E,
       date: "2025年12朁E日 09:15",
     },
     {
       id: "3",
       user: "山田次郁E,
       comment:
-        "コードサンプルが�EかりめE��ぁE��す�E。続編も期征E��てぁE��す！E,
+        "コードサンプルが�EかりめE��ぁE��す�E。続編も期征E��てぁE��す！E,
       date: "2025年12朁E日 18:45",
     },
   ]);
@@ -98,7 +98,7 @@ export function CommentSection() {
           ))}
         </div>
       </div>
-      {/* コメント�E力フォーム */}
+      {/* コメント�E力フォーム */}
       <div className="bg-white rounded-lg shadow-md p-8">
         <h2 className="text-3xl mb-6">コメントを投稿</h2>
 
@@ -116,7 +116,7 @@ export function CommentSection() {
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="名前を�E力してください"
+                placeholder="名前を�E力してください"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#67e0b8] focus:border-transparent"
               />
             </div>
@@ -151,3 +151,4 @@ export function CommentSection() {
     </div>
   );
 }
+

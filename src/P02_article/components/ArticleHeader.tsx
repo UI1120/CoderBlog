@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+﻿import { Heart } from "lucide-react";
 import { Breadcrumb } from "./Breadcrumb";
 
 interface ArticleHeaderProps {
@@ -48,7 +48,7 @@ export function ArticleHeader({
       {/* 詳細 */}
       <p className="text-gray-700 mb-6">{summary}</p>
       
-      {/* 投稿日時�EグチE�� | クリエイター */}
+      {/* 投稿日時�EグチE�� | クリエイター */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span className="text-gray-600">{publishedDate}</span>
@@ -64,3 +64,4 @@ export function ArticleHeader({
     </div>
   );
 }
+

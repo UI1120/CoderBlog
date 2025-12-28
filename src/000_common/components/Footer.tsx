@@ -1,4 +1,4 @@
-export function Footer() {
+﻿export function Footer() {
   return (
     <footer className="bg-black text-white py-12 border-t border-[#67e0b8]/20">
       <div className="container mx-auto px-6">
@@ -21,7 +21,7 @@ export function Footer() {
             プライバシーポリシー
           </a>
           <a href="#analytics" className="hover:text-[#67e0b8] transition-colors">
-            Google AnalyticsにつぁE��
+            Google Analyticsについて
           </a>
         </div>
       </div>

@@ -1,4 +1,4 @@
-export function Hero() {
+﻿export function Hero() {
   return (
     <section
       className="relative bg-cover bg-center"
@@ -13,7 +13,8 @@ export function Hero() {
             OpuCoder 技術ブログ
           </h1>
           <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md">
-            ゲーム開発・AI・ロボット�Eインフラなど、技術系活動�E成果を発信します、E          </p>
+            ゲーム開発・AI・ロボット・インフラなど、技術系活動の成果を発信します。
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">
               プロジェクト記事を見る

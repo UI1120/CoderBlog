@@ -1,4 +1,4 @@
-import { ArticleCarousel } from "@/000_common/components/ArticleCarousel";
+﻿import { ArticleCarousel } from "@/000_common/components/ArticleCarousel";
 import { useState, useEffect } from "react";
 
 /*
@@ -18,7 +18,7 @@ const articles = [
       "https://images.unsplash.com/photo-1717501219687-ddce079f704b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwcmVzZWFyY2h8ZW58MXx8fHwxNzY0NDI1Njk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "AI / Research",
     date: "2025/01/18",
-    title: "機械学習モチE��の軽量化Tips",
+    title: "機械学習モチE��の軽量化Tips",
     writer: "山田",
   },
   {
@@ -36,7 +36,7 @@ const articles = [
       "https://images.unsplash.com/photo-1762742228148-f38c34ea7f1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1lJTIwZGV2ZWxvcG1lbnQlMjB1bml0exlbnwxfHx8fDE3NjQ0NzUzMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "Robotics",
     date: "2025/01/12",
-    title: "センサー統合シスチE��の実裁E,
+    title: "センサー統合シスチE��の実裁E,
     writer: "鈴木",
   },
   {
@@ -54,7 +54,7 @@ const articles = [
       "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWIlMjBkZXZlbG9wbWVudCUyMGNvZGluZ3xlbnwxfHx8fDE3NjQzODYyMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
     category: "Systems / Web",
     date: "2025/01/06",
-    title: "React ÁETypeScriptのプラクチE��ス",
+    title: "React ÁETypeScriptのプラクチE��ス",
     writer: "渡辺",
   },
 ];
@@ -90,3 +90,4 @@ export function RelatedArticles() {
     </section>
   );
 }
+

@@ -1,4 +1,4 @@
-import { Header } from '@/000_common/components/Header';
+﻿import { Header } from '@/000_common/components/Header';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { ProjectHighlights } from './components/ProjectHighlights';

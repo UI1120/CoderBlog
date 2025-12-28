@@ -1,4 +1,4 @@
-import ReactMarkdown from "react-markdown";
+﻿import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 
 interface ArticleContentProps {

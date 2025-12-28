@@ -1,90 +1,36 @@
-import { ArticleDetail } from "./components/ArticleDetail";
+﻿import { ArticleDetail } from "./components/ArticleDetail";
 import { Header } from '@/000_common/components/Header';
 import { Footer } from '@/000_common/components/Footer';
-
-// モチE��チE�Eタ
-const mockArticle = {
-  id: "1",
-  title: "Reactを使った効玁E��なWebアプリケーション開発",
-  summary: "モダンなReactの機�Eを活用して、パフォーマンスの高いWebアプリケーションを構築する方法を解説します、E,
-  category: "技衁E,
-  category_id: "tech",
-  writer: "山田太郁E,
-  group: "開発チ�Eム",
-  published_date: "2025年12朁E日",
-  good_count: 42,
-  thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
-  content:
-    `# はじめに
-
-こ�E記事では、Reactを使った効玁E��なWebアプリケーション開発につぁE��解説します、E
-
-## 主要なポインチE
-
-### 1. コンポ�Eネント設訁E
-
-再利用可能なコンポ�Eネントを作�Eすることで、E��発効玁E��大幁E��向上します、E
-
-- **単一責任の原則**を守る
-- **Props**を適刁E��設計すめE
-- **カスタムフック**で共通ロジチE��を抽出する
-
-### 2. パフォーマンス最適匁E
-
-\`\`\`javascript
-import { memo, useMemo, useCallback } from 'react';
-
-const MyComponent = memo(({ data }) => {
-  const processedData = useMemo(() => {
-    return data.map(item => item * 2);
-  }, [data]);
-  
-  return <div>{processedData}</div>;
-});
-\`\`\`
-
-### 3. 状態管琁E
-
-適刁E��状態管琁E��略を選択することが重要です！E
-
-1. ローカル状態には \`useState\` を使用
-2. グローバル状態には Context API めE��態管琁E��イブラリを検訁E
-3. サーバ�E状態には React Query などのライブラリを活用
-
-## まとめE
-
-Reactの機�Eを適刁E��活用することで、保守性が高く、パフォーマンスに優れたアプリケーションを構築できます。継続的な学習と実践が�E功への鍵となります。`
-};
-
-const relatedArticles = [
-  {
-    id: "2",
-    title: "TypeScriptで型安�EなReactアプリケーションを作る",
-    thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&q=80",
-    category: "技衁E,
-    published_date: "2025年11朁E8日"
-  },
-  {
-    id: "3",
-    title: "Next.jsでフルスタチE��アプリケーションを構築すめE,
-    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80",
-    category: "技衁E,
-    published_date: "2025年11朁E5日"
-  },
-  {
-    id: "4",
-    title: "モダンなUIコンポ�Eネントライブラリの選び方",
-    thumbnail: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&q=80",
-    category: "技衁E,
-    published_date: "2025年11朁E0日"
-  }
-];
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [article, setArticle] = useState<any>(null);
+
+  useEffect(() => {
+    // ID 1 の記事を取得（モック API）
+    fetch('/api/articles/1')
+      .then(res => {
+        if (!res.ok) throw new Error('Not Found');
+        return res.json();
+      })
+      .then(data => setArticle(data))
+      .catch(err => console.error('Failed to fetch article:', err));
+  }, []);
+
+  if (!article) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>読み込み中...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <ArticleDetail article={mockArticle} relatedArticles={relatedArticles} />
+      <article>
+        <ArticleDetail article={article} relatedArticles={article.relatedArticles || []} />
+      </article>
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-import { ImageWithFallback } from "@/000_common/components/figma/ImageWithFallback";
+﻿import { ImageWithFallback } from "@/000_common/components/figma/ImageWithFallback";
 import { Calendar, User } from "lucide-react";
 import { ArticleCard } from "@/000_common/components/ArticleCard";
 
@@ -28,7 +28,7 @@ export function LatestArticleCard({
   );
 
   {
-    /*  ミント�EチE��スカーチE */
+    /*  繝溘Φ繝医・繝・け繧ｹ繧ｫ繝ｼ繝・ */
   }
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow min-w-[280px] max-w-[280px] h-[240px]">
