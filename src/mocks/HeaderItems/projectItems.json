@@ -1,0 +1,22 @@
+[
+    {
+        "label": "Game Dev",
+        "href": "#game-dev"
+    },
+    {
+        "label": "AI / Research",
+        "href": "#ai-research"
+    },
+    {
+        "label": "Systems / Web",
+        "href": "#systems-web"
+    },
+    {
+        "label": "Robotics",
+        "href": "#robotics"
+    },
+    {
+        "label": "すべて見る",
+        "href": "#all-projects"
+    }
+]

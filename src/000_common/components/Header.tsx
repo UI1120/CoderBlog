@@ -1,48 +1,50 @@
-﻿import { useState } from "react";
+﻿import { useState, useEffect } from "react";
 import {
   Twitter,
   Github,
   Youtube,
   Search,
   X,
+  Instagram,
 } from "lucide-react";
 import { DropdownMenu } from "./DropdownMenu";
+import { FRONT_ROOT_PATH, API_BASE_URL } from "@/constants";
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const projectItems = [
-    { label: "Game Dev", href: "#game-dev" },
-    { label: "AI / Research", href: "#ai-research" },
-    { label: "Systems / Web", href: "#systems-web" },
-    { label: "Robotics", href: "#robotics" },
-    { label: "すべて見る", href: "#all-projects" },
-  ];
 
-  const tagItems = [
-    { label: "Unity", href: "#tag-unity" },
-    { label: "React", href: "#tag-react" },
-    { label: "Python", href: "#tag-python" },
-    { label: "AI / ML", href: "#tag-ai" },
-    { label: "TypeScript", href: "#tag-typescript" },
-    { label: "すべてのタグ", href: "#all-tags" },
-  ];
+  const [projectItems, setProjectItems] = useState<any[]>([]);
+  const [tagItems, setTagItems] = useState<any[]>([]);
+  const [writerItems, setWriterItems] = useState<any[]>([]);
 
-  const writerItems = [
-    { label: "こうち", href: "#writer-kouchi" },
-    { label: "山田", href: "#writer-yamada" },
-    { label: "Sato", href: "#writer-sato" },
-    { label: "田中", href: "#writer-tanaka" },
-    { label: "佐藤", href: "#writer-satou" },
-    { label: "すべてのライター", href: "#all-writers" },
-  ];
+  useEffect(() => {
+    // Fetch project items
+    fetch(`${API_BASE_URL}/header/projects`)
+      .then(res => res.json())
+      .then(data => setProjectItems(data))
+      .catch(err => console.error(err));
+
+    // Fetch tag items
+    fetch(`${API_BASE_URL}/header/tags`)
+      .then(res => res.json())
+      .then(data => setTagItems(data))
+      .catch(err => console.error(err));
+
+    // Fetch writer items
+    fetch(`${API_BASE_URL}/header/writers`)
+      .then(res => res.json())
+      .then(data => setWriterItems(data))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <header className="sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between backdrop-blur-md bg-[#67e0b8]/40 rounded-xl px-6 py-3 border border-[#67e0b8]/50">
-          <div
-            className="flex items-center gap-3 text-white"
+          <a
+            href={FRONT_ROOT_PATH}
+            className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity"
             style={{
               textShadow:
                 "2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.5)",
@@ -54,7 +56,7 @@ export function Header() {
               className="w-10 h-10 rounded-lg object-cover"
             />
             Opu Coder Tech Blog
-          </div>
+          </a>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-4">
               <a
@@ -74,12 +76,12 @@ export function Header() {
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="https://youtube.com/@opucoder"
+                href="https://instagram.com/opucoder"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors bg-[#2d7a5f] p-2 rounded-full"
               >
-                <Youtube className="w-5 h-5" />
+                <Instagram className="w-5 h-5" />
               </a>
             </div>
             <nav
@@ -90,7 +92,7 @@ export function Header() {
               }}
             >
               <a
-                href="#home"
+                href={`${FRONT_ROOT_PATH}`}
                 className="text-white hover:text-white/80 transition-colors"
               >
                 Home
@@ -105,13 +107,13 @@ export function Header() {
                 items={writerItems}
               />
               <a
-                href="#about"
+                href={`${FRONT_ROOT_PATH}#about`}
                 className="text-white hover:text-white/80 transition-colors"
               >
                 About
               </a>
               <a
-                href="#contact"
+                href={`${FRONT_ROOT_PATH}#footer`}
                 className="text-white hover:text-white/80 transition-colors"
               >
                 Contact

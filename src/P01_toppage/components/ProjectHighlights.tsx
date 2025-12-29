@@ -1,11 +1,12 @@
 ﻿import { ArticleCarousel } from '@/000_common/components/ArticleCarousel';
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '@/constants';
 
 export function ProjectHighlights() {
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/article-lists/project-highlights')
+    fetch(`${API_BASE_URL}/article-lists/project-highlights`)
       .then(res => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();

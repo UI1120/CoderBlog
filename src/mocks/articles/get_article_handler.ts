@@ -1,6 +1,6 @@
 ﻿import { http, HttpResponse } from 'msw';
-import article001 from './articles/article_001.json';
-import article002 from './articles/article_002.json';
+import article001 from './article_001.json';
+import article002 from './article_002.json';
 
 const articles: Record<string, any> = {
     '1': article001,

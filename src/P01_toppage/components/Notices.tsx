@@ -1,11 +1,19 @@
 ﻿import { Bell } from 'lucide-react';
-
-const notices = [
-  "学祭展示は2025年11月に開催されます。詳しくはこちら。",
-  "次回のUnity勉強会は1/28に開催します。"
-];
+import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '@/constants';
 
 export function Notices() {
+  const [notices, setNotices] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/notices`)
+      .then(res => res.json())
+      .then(data => setNotices(data))
+      .catch(err => console.error('Failed to fetch notices:', err));
+  }, []);
+
+  if (notices.length === 0) return null;
+
   return (
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-6">

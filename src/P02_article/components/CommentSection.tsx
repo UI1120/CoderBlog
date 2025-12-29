@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import { Button } from "@/000_common/ui/button";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/constants";
 
 interface Comment {
   id: string;
@@ -18,7 +19,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/articles/${articleId}/comments`)
+    fetch(`${API_BASE_URL}/articles/${articleId}/comments`)
       .then(res => res.json())
       .then(data => {
         setComments(data);

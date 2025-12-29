@@ -1,11 +1,12 @@
 ﻿import { ArticleCarousel } from "@/000_common/components/ArticleCarousel";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "@/constants";
 
 export function RelatedArticles() {
   const [articles, setArticles] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/article-lists/related-articles')
+    fetch(`${API_BASE_URL}/article-lists/related-articles`)
       .then(res => res.json())
       .then(data => setArticles(data))
       .catch(err => console.error('Failed to fetch related articles:', err));

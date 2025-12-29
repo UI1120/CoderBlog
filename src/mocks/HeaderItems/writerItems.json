@@ -1,0 +1,26 @@
+[
+    {
+        "label": "こうち",
+        "href": "#writer-kouchi"
+    },
+    {
+        "label": "山田",
+        "href": "#writer-yamada"
+    },
+    {
+        "label": "Sato",
+        "href": "#writer-sato"
+    },
+    {
+        "label": "田中",
+        "href": "#writer-tanaka"
+    },
+    {
+        "label": "佐藤",
+        "href": "#writer-satou"
+    },
+    {
+        "label": "すべてのライター",
+        "href": "#all-writers"
+    }
+]

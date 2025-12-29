@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import comments001 from './comments/article_001.json';
-import comments002 from './comments/article_002.json';
+import comments001 from './article_001.json';
+import comments002 from './article_002.json';
 
 const commentsMap: Record<string, any> = {
     '1': comments001,

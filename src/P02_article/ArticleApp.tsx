@@ -2,6 +2,7 @@
 import { Header } from '@/000_common/components/Header';
 import { Footer } from '@/000_common/components/Footer';
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/constants";
 
 export default function App() {
   const [article, setArticle] = useState<any>(null);
@@ -16,7 +17,7 @@ export default function App() {
       return;
     }
 
-    fetch(`/api/articles/${id}`)
+    fetch(`${API_BASE_URL}/articles/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Not Found');
         return res.json();
