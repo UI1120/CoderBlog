@@ -1,9 +1,9 @@
 ﻿import { createRoot } from "react-dom/client";
 import App from "./ArticleApp.tsx";
-import "./article.css";
+import "@/globals.css";
 
 async function enableMocking() {
-    if (process.env.NODE_ENV !== 'development') {
+    if (!import.meta.env.DEV) {
         return;
     }
 

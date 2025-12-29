@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import NotFoundApp from "./NotFoundApp.tsx";
+import App from "./App.tsx";
 import "@/globals.css";
 
 async function enableMocking() {
@@ -15,5 +15,5 @@ async function enableMocking() {
 }
 
 enableMocking().then(() => {
-    createRoot(document.getElementById("root")!).render(<NotFoundApp />);
+    createRoot(document.getElementById("root")!).render(<App />);
 });

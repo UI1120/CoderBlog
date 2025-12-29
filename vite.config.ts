@@ -1,4 +1,6 @@
 
+
+// Force Vite restart 2
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
@@ -23,6 +25,8 @@ export default defineConfig({
               req.url = req.url.replace('/index', '/index.html');
             } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
               req.url = req.url.replace('/notfound', '/PageNotFound.html');
+            } else if (req.url === '/search' || req.url.startsWith('/search?')) {
+              req.url = req.url.replace('/search', '/search.html');
             }
           }
           next();
@@ -82,6 +86,7 @@ export default defineConfig({
         main: path.resolve(__dirname, 'index.html'),
         article: path.resolve(__dirname, 'article.html'),
         notfound: path.resolve(__dirname, 'PageNotFound.html'),
+        search: path.resolve(__dirname, 'search.html'),
       },
     },
   },
