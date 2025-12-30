@@ -13,7 +13,7 @@ interface ArticleCardProps {
 export function ArticleCard({ id, image, category, title, date, writer }: ArticleCardProps) {
   return (
     <a href={`/article?id=${id}`} className="block transform hover:scale-[1.02] transition-transform">
-      <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-200 min-w-[280px] max-w-[280px]">
+      <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-200 w-full max-w-[320px]">
         <div className="aspect-[4/3] w-full overflow-hidden bg-gray-100">
           <ImageWithFallback
             src={image}

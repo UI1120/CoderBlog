@@ -1,22 +1,14 @@
 [
     {
-        "label": "Game Dev",
-        "href": "#game-dev"
+        "label": "ゲーム開発(Unity)",
+        "href": "/project?pid=1"
     },
     {
-        "label": "AI / Research",
-        "href": "#ai-research"
+        "label": "AIビジョンシステム",
+        "href": "/project?pid=2"
     },
     {
-        "label": "Systems / Web",
-        "href": "#systems-web"
-    },
-    {
-        "label": "Robotics",
-        "href": "#robotics"
-    },
-    {
-        "label": "すべて見る",
-        "href": "#all-projects"
+        "label": "CoderBlogプラットフォーム",
+        "href": "/project?pid=3"
     }
 ]

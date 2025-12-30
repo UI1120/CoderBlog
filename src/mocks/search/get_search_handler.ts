@@ -12,7 +12,7 @@ export const get_search_handler = [
 
         // Return only 2 items if query is 'testcase'
         if (query === 'testcase') {
-            return HttpResponse.json(searchResults.slice(0, 2));
+            return HttpResponse.json(searchResults.slice(0, 100));
         }
 
         const filteredArticles = searchResults.filter((article: any) =>

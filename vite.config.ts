@@ -19,14 +19,16 @@ export default defineConfig({
             // Using replace to handle query params too.
             // Matches /article or /article?query or /article/
             // Vite handles /article/ usually, but user is asking for /article access.
-            if (req.url === '/article' || req.url.startsWith('/article?')) {
-              req.url = req.url.replace('/article', '/article.html');
-            } else if (req.url === '/index' || req.url.startsWith('/index?')) {
-              req.url = req.url.replace('/index', '/index.html');
+            if (req.url === '/' || req.url === '/index' || req.url.startsWith('/index?')) {
+              req.url = req.url.replace('/index', '/src/P01_toppage/index.html').replace(/^(\/)$/, '/src/P01_toppage/index.html');
+            } else if (req.url === '/article' || req.url.startsWith('/article?')) {
+              req.url = req.url.replace('/article', '/src/P02_article/article.html');
             } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
-              req.url = req.url.replace('/notfound', '/PageNotFound.html');
+              req.url = req.url.replace('/notfound', '/src/P00_notfound/PageNotFound.html');
             } else if (req.url === '/search' || req.url.startsWith('/search?')) {
-              req.url = req.url.replace('/search', '/search.html');
+              req.url = req.url.replace('/search', '/src/P03_search/search.html');
+            } else if (req.url === '/project' || req.url.startsWith('/project?')) {
+              req.url = req.url.replace('/project', '/src/P04_project/project.html');
             }
           }
           next();
@@ -83,10 +85,11 @@ export default defineConfig({
     outDir: 'build',
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'index.html'),
-        article: path.resolve(__dirname, 'article.html'),
-        notfound: path.resolve(__dirname, 'PageNotFound.html'),
-        search: path.resolve(__dirname, 'search.html'),
+        main: path.resolve(__dirname, 'src/P01_toppage/index.html'),
+        article: path.resolve(__dirname, 'src/P02_article/article.html'),
+        search: path.resolve(__dirname, 'src/P03_search/search.html'),
+        project: path.resolve(__dirname, 'src/P04_project/project.html'),
+        notfound: path.resolve(__dirname, 'src/P00_notfound/PageNotFound.html'),
       },
     },
   },

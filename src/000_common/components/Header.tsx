@@ -22,7 +22,9 @@ export function Header() {
     // Fetch project items
     fetch(`${API_BASE_URL}/header/projects`)
       .then(res => res.json())
-      .then(data => setProjectItems(data))
+      .then(data => {
+        setProjectItems([...data, { label: "すべて見る", href: "/project" }]);
+      })
       .catch(err => console.error(err));
 
     // Fetch tag items
@@ -85,7 +87,7 @@ export function Header() {
               </a>
             </div>
             <nav
-              className="hidden md:flex items-center gap-6"
+              className="hidden lg:flex items-center gap-6"
               style={{
                 textShadow:
                   "2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.5)",
@@ -119,7 +121,7 @@ export function Header() {
                 Contact
               </a>
             </nav>
-            <div className="relative hidden md:flex items-center">
+            <div className="relative hidden lg:flex items-center">
               <input
                 type="text"
                 placeholder="記事を検索..."
