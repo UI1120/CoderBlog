@@ -1,6 +1,6 @@
-﻿import { ArticleDetail } from "./components/ArticleDetail";
-import { Header } from '@/000_common/components/Header';
-import { Footer } from '@/000_common/components/Footer';
+import { ArticleDetail } from "./components/ArticleDetail";
+import { Header } from '@/P00_common/components/Header';
+import { Footer } from '@/P00_common/components/Footer';
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/constants";
 

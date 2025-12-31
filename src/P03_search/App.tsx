@@ -1,7 +1,7 @@
-import { Header } from '@/000_common/components/Header';
-import { Footer } from '@/000_common/components/Footer';
-import { CardMatrix } from '@/000_common/components/CardMatrix';
-import { Pagination } from '@/000_common/components/Pagination';
+import { Header } from '@/P00_common/components/Header';
+import { Footer } from '@/P00_common/components/Footer';
+import { CardMatrix } from '@/P00_common/components/CardMatrix';
+import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
 
@@ -58,7 +58,7 @@ export default function App() {
             <Header />
             <main className="container mx-auto px-6 py-12">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                    「{query}」の検索結果
+                    {query === 'all' ? '最新記事一覧' : `「${query}」の検索結果`}
                 </h1>
                 {loading ? (
                     <div className="text-center text-gray-500">検索中...</div>

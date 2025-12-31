@@ -24,7 +24,7 @@ export default defineConfig({
             } else if (req.url === '/article' || req.url.startsWith('/article?')) {
               req.url = req.url.replace('/article', '/src/P02_article/article.html');
             } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
-              req.url = req.url.replace('/notfound', '/src/P00_notfound/PageNotFound.html');
+              req.url = req.url.replace('/notfound', '/src/P99_notfound/PageNotFound.html');
             } else if (req.url === '/search' || req.url.startsWith('/search?')) {
               req.url = req.url.replace('/search', '/src/P03_search/search.html');
             } else if (req.url === '/project' || req.url.startsWith('/project?')) {
@@ -89,7 +89,7 @@ export default defineConfig({
         article: path.resolve(__dirname, 'src/P02_article/article.html'),
         search: path.resolve(__dirname, 'src/P03_search/search.html'),
         project: path.resolve(__dirname, 'src/P04_project/project.html'),
-        notfound: path.resolve(__dirname, 'src/P00_notfound/PageNotFound.html'),
+        notfound: path.resolve(__dirname, 'src/P99_notfound/PageNotFound.html'),
       },
     },
   },

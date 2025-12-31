@@ -15,8 +15,12 @@ export const HERO_CONFIG = {
     backgroundImageUrl: "https://images.unsplash.com/photo-1683813479742-4730f91fa3ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5JTIwY29kaW5nJTIwd29ya3NwYWNlfGVufDF8fHx8MTc2NDQ3NjM1OXww&ixlib=rb-4.1.0&q=80&w=1080",
     /** Primary button text */
     primaryButtonText: "プロジェクト記事を見る",
+    /** Primary button destination */
+    primaryButtonPref: "/project",
     /** Secondary button text */
     secondaryButtonText: "最新記事一覧",
+    /** Secondary button destination */
+    secondaryButtonPref: "/search",
 };
 
 /**

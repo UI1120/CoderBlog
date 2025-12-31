@@ -1,4 +1,4 @@
-﻿import { ArticleCarousel } from "@/000_common/components/ArticleCarousel";
+import { ArticleCarousel } from "@/P00_common/components/ArticleCarousel";
 
 const articles = [
   {

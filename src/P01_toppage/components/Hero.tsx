@@ -1,6 +1,14 @@
 ﻿import { HERO_CONFIG } from '@/config/siteConfig';
 
 export function Hero() {
+  const handlePrimaryClick = () => {
+    window.location.assign(HERO_CONFIG.primaryButtonPref);
+  };
+
+  const handleSecondaryClick = () => {
+    window.location.assign(HERO_CONFIG.secondaryButtonPref);
+  };
+
   return (
     <section
       id="home"
@@ -18,10 +26,18 @@ export function Hero() {
             {HERO_CONFIG.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">
+            <button
+              type="button"
+              onClick={handlePrimaryClick}
+              className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors"
+            >
               {HERO_CONFIG.primaryButtonText}
             </button>
-            <button className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg border border-white/30 hover:bg-white/30 transition-colors">
+            <button
+              type="button"
+              onClick={handleSecondaryClick}
+              className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg border border-white/30 hover:bg-white/30 transition-colors"
+            >
               {HERO_CONFIG.secondaryButtonText}
             </button>
           </div>

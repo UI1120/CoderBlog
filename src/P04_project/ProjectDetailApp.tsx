@@ -1,7 +1,7 @@
-import { Header } from '@/000_common/components/Header';
-import { Footer } from '@/000_common/components/Footer';
-import { CardMatrix } from '@/000_common/components/CardMatrix';
-import { Pagination } from '@/000_common/components/Pagination';
+import { Header } from '@/P00_common/components/Header';
+import { Footer } from '@/P00_common/components/Footer';
+import { CardMatrix } from '@/P00_common/components/CardMatrix';
+import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '@/constants';
 
