@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import searchResults from './search_results.json';
+import projectsArticles from '../articleLists/projectsArticles.json';
 
 export const get_search_handler = [
     http.get('/api/search', ({ request }) => {
@@ -8,6 +9,11 @@ export const get_search_handler = [
 
         if (!query) {
             return HttpResponse.json([]);
+        }
+
+        // Article overview (latest articles list)
+        if (query === 'all') {
+            return HttpResponse.json(projectsArticles);
         }
 
         // Return only 2 items if query is 'testcase'

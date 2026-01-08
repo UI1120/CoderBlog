@@ -12,7 +12,8 @@ export default function App() {
     const ITEMS_PER_PAGE = 12;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('q') || '';
+    const query = (urlParams.get('q') || '').trim();
+    const isAllQuery = query.toLowerCase() === 'all';
 
     useEffect(() => {
         const p = parseInt(new URLSearchParams(window.location.search).get('page') || '1');
@@ -58,7 +59,7 @@ export default function App() {
             <Header />
             <main className="container mx-auto px-6 py-12">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                    {query === 'all' ? '最新記事一覧' : `「${query}」の検索結果`}
+                    {isAllQuery ? '最新記事一覧' : `「${query}」の検索結果`}
                 </h1>
                 {loading ? (
                     <div className="text-center text-gray-500">検索中...</div>
