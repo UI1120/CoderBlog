@@ -12,15 +12,17 @@ export default function App() {
     const ITEMS_PER_PAGE = 12;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const query = (urlParams.get('q') || '').trim();
-    const isAllQuery = query.toLowerCase() === 'all';
+    const query = urlParams.get('q') || '';
+    const trimmedQuery = query.trim();
+    const isAllQuery = query === '' || trimmedQuery.toLowerCase() === 'all';
 
     useEffect(() => {
         const p = parseInt(new URLSearchParams(window.location.search).get('page') || '1');
         setPage(p);
 
         setLoading(true);
-        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(query)}`)
+        // If query is empty, we handle it same as 'all', fetching all articles
+        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(trimmedQuery)}`)
             .then(res => res.json())
             .then(data => {
                 setArticles(data);
@@ -30,7 +32,7 @@ export default function App() {
                 console.error('Failed to fetch search results:', err);
                 setLoading(false);
             });
-    }, [query]);
+    }, [query]); // Re-run when raw query string changes
 
     // Handle browser back/forward navigation
     useEffect(() => {
@@ -59,7 +61,7 @@ export default function App() {
             <Header />
             <main className="container mx-auto px-6 py-12">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                    {isAllQuery ? '最新記事一覧' : `「${query}」の検索結果`}
+                    {isAllQuery ? '最新記事一覧' : `「${trimmedQuery}」の検索結果`}
                 </h1>
                 {loading ? (
                     <div className="text-center text-gray-500">検索中...</div>

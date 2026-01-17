@@ -1,7 +1,5 @@
-import { Card } from "@/P00_common/ui/card";
-import { Badge } from "@/P00_common/ui/badge";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { ArticleHeader } from "@/P02_article/components/ArticleHeader";
+import { ArticleContent } from "@/P02_article/components/ArticleContent";
 
 interface PreviewProps {
     title: string;
@@ -17,81 +15,49 @@ interface PreviewProps {
 export function Preview({
     title,
     summary,
-    keywords,
     content,
     category,
     project,
-    tags,
     thumbnail,
 }: PreviewProps) {
+    // プレビュー用に現在の日付を使用
+    const currentDate = new Date().toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+
     return (
-        <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+            {/* 記事ヘッダー（パンくず込み） */}
+            <div className="mb-8">
+                <ArticleHeader
+                    title={title || "記事タイトル"}
+                    summary={summary || "記事の概要がここに入ります"}
+                    category={category || "カテゴリ"}
+                    categoryId="preview"
+                    writer="Editor User"
+                    group={project || "プロジェクト"}
+                    publishedDate={currentDate}
+                    goodCount={0}
+                />
+            </div>
+
+            {/* サムネイル */}
             {thumbnail && (
-                <div className="w-full h-64 rounded-lg overflow-hidden">
+                <div className="mb-8">
                     <img
                         src={thumbnail}
-                        alt="サムネイル"
-                        className="w-full h-full object-cover"
+                        alt={title}
+                        className="w-full h-auto rounded-lg shadow-lg"
                     />
                 </div>
             )}
 
-            <Card className="p-8">
-                {title && (
-                    <h1 className="mb-4 text-3xl font-bold">{title}</h1>
-                )}
-
-                {summary && (
-                    <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <p className="text-gray-700 italic">{summary}</p>
-                    </div>
-                )}
-
-                {keywords && (
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-600">
-                            <strong>キーワード:</strong> {keywords}
-                        </p>
-                    </div>
-                )}
-
-                <div className="mb-6">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {category && (
-                            <Badge variant="secondary">
-                                カテゴリー: {category}
-                            </Badge>
-                        )}
-                        {project && (
-                            <Badge variant="outline">
-                                プロジェクト: {project}
-                            </Badge>
-                        )}
-                    </div>
-
-                    {tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                            {tags.map((tag) => (
-                                <Badge key={tag} variant="default">
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="prose prose-gray max-w-none">
-                    {content ? (
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {content}
-                        </ReactMarkdown>
-                    ) : (
-                        <p className="text-gray-400 italic">
-                            記事の内容がまだ入力されていません
-                        </p>
-                    )}
-                </div>
-            </Card>
+            {/* 記事本文 */}
+            <div className="mb-8">
+                <ArticleContent content={content || "記事の内容がここに入ります"} />
+            </div>
         </div>
     );
 }

@@ -1,0 +1,22 @@
+[
+    {
+        "label": "Game Dev",
+        "href": "/category/game-dev"
+    },
+    {
+        "label": "Web Dev",
+        "href": "/category/web-dev"
+    },
+    {
+        "label": "AI / ML",
+        "href": "/category/ai-ml"
+    },
+    {
+        "label": "Mobile",
+        "href": "/category/mobile"
+    },
+    {
+        "label": "Design",
+        "href": "/category/design"
+    }
+]
