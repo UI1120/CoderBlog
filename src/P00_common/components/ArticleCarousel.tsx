@@ -67,15 +67,16 @@ export function ArticleCarousel({
           style={{ width: "max-content" }}
         >
           {articles.map((article) => (
-            <ArticleCard
-              key={article.id}
-              id={article.id}
-              image={article.image}
-              category={article.category}
-              title={article.title}
-              date={article.date}
-              writer={article.writer}
-            />
+            <div key={article.id} className="w-[280px]">
+              <ArticleCard
+                id={article.id}
+                image={article.image}
+                category={article.category}
+                title={article.title}
+                date={article.date}
+                writer={article.writer}
+              />
+            </div>
           ))}
         </div>
       </div>

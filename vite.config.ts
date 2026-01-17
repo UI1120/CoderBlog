@@ -27,9 +27,12 @@ export default defineConfig({
               req.url = req.url.replace('/notfound', '/src/P99_notfound/PageNotFound.html');
             } else if (req.url === '/search' || req.url.startsWith('/search?')) {
               req.url = req.url.replace('/search', '/src/P03_search/search.html');
+            } else if (req.url === '/project' || req.url.startsWith('/project?')) {
               req.url = req.url.replace('/project', '/src/P04_project/project.html');
             } else if (req.url === '/login' || req.url.startsWith('/login?')) {
               req.url = req.url.replace('/login', '/src/A01_login/login.html');
+            } else if (req.url === '/editor' || req.url.startsWith('/editor?')) {
+              req.url = req.url.replace('/editor', '/src/A04_editor/editor.html');
             }
           }
           next();
@@ -91,6 +94,7 @@ export default defineConfig({
         search: path.resolve(__dirname, 'src/P03_search/search.html'),
         project: path.resolve(__dirname, 'src/P04_project/project.html'),
         login: path.resolve(__dirname, 'src/A01_login/login.html'),
+        editor: path.resolve(__dirname, 'src/A04_editor/editor.html'),
         notfound: path.resolve(__dirname, 'src/P99_notfound/PageNotFound.html'),
       },
     },
