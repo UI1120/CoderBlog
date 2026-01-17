@@ -31,7 +31,7 @@ export default function ProjectDetailApp() {
             .then(data => setProjectDetails(data));
 
         // Fetch articles associated with projects
-        const fetchArticles = fetch(`${API_BASE_URL}/projects-articles`)
+        const fetchArticles = fetch(`${API_BASE_URL}/articles`)
             .then(res => res.json())
             .then(data => setProjects(data));
 

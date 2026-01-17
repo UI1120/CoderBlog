@@ -6,7 +6,7 @@ export function ProjectHighlights() {
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/article-lists/project-highlights`)
+    fetch(`${API_BASE_URL}/articles`)
       .then(res => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();

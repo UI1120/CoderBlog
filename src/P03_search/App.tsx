@@ -20,7 +20,7 @@ export default function App() {
         setPage(p);
 
         setLoading(true);
-        fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`)
+        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(query)}`)
             .then(res => res.json())
             .then(data => {
                 setArticles(data);
