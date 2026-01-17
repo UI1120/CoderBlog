@@ -2,8 +2,9 @@ import { Button } from "@/P00_common/ui/button";
 import { Input } from "@/P00_common/ui/input";
 import { Label } from "@/P00_common/ui/label";
 import { Textarea } from "@/P00_common/ui/textarea";
-import { Upload, Save } from "lucide-react";
+import { Upload } from "lucide-react";
 import MDEditor from '@uiw/react-md-editor';
+import { API_BASE_URL } from "@/constants";
 
 interface ArticleEditorProps {
     title: string;
@@ -14,7 +15,6 @@ interface ArticleEditorProps {
     onSummaryChange: (summary: string) => void;
     onKeywordsChange: (keywords: string) => void;
     onContentChange: (content: string) => void;
-    onSave: () => void;
 }
 
 export function ArticleEditor({
@@ -26,7 +26,6 @@ export function ArticleEditor({
     onSummaryChange,
     onKeywordsChange,
     onContentChange,
-    onSave,
 }: ArticleEditorProps) {
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -40,16 +39,29 @@ export function ArticleEditor({
         }
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const base64 = event.target?.result as string;
-                const imageMarkdown = `![画像](${base64})`;
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const response = await fetch(`${API_BASE_URL}/upload/image`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Image upload failed');
+                }
+
+                const data = await response.json();
+                const imageMarkdown = `![画像](${data.url})`;
                 onContentChange(content + '\n' + imageMarkdown);
-            };
-            reader.readAsDataURL(file);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('画像のアップロードに失敗しました。');
+            }
         }
     };
 
@@ -124,11 +136,6 @@ export function ArticleEditor({
                         </Button>
                     </label>
                 </div>
-
-                <Button onClick={onSave} size="lg">
-                    <Save className="w-4 h-4 mr-2" />
-                    完成/保存
-                </Button>
             </div>
 
             <div data-color-mode="light">
@@ -136,7 +143,7 @@ export function ArticleEditor({
                     value={content}
                     onChange={(val) => onContentChange(val || '')}
                     height={600}
-                    preview="live"
+                    preview="edit"
                 />
             </div>
         </div>

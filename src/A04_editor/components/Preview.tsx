@@ -1,5 +1,5 @@
-import { ArticleHeader } from "@/P02_article/components/ArticleHeader";
-import { ArticleContent } from "@/P02_article/components/ArticleContent";
+import { ArticleHeader } from "@/P00_common/components/ArticleHeader";
+import { ArticleContent } from "@/P00_common/components/ArticleContent";
 
 interface PreviewProps {
     title: string;

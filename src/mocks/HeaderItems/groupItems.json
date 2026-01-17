@@ -1,0 +1,18 @@
+[
+    {
+        "href": "/group/app-team",
+        "label": "アプリ開発班"
+    },
+    {
+        "href": "/group/web-team",
+        "label": "Web班"
+    },
+    {
+        "href": "/group/game-team",
+        "label": "ゲーム制作班"
+    },
+    {
+        "href": "/group/infra-team",
+        "label": "インフラ班"
+    }
+]

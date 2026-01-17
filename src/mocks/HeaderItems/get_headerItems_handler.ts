@@ -3,6 +3,7 @@ import projectItems from './projectItems.json';
 import tagItems from './tagItems.json';
 import writerItems from './writerItems.json';
 import categoryItems from './categoryItems.json';
+import groupItems from './groupItems.json';
 
 export const get_headerItems_handler = [
     http.get('/api/header/projects', () => {
@@ -16,5 +17,8 @@ export const get_headerItems_handler = [
     }),
     http.get('/api/header/categories', () => {
         return HttpResponse.json(categoryItems);
+    }),
+    http.get('/api/header/groups', () => {
+        return HttpResponse.json(groupItems);
     }),
 ];

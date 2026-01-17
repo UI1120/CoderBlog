@@ -1,5 +1,5 @@
-﻿import { ArticleHeader } from "./ArticleHeader";
-import { ArticleContent } from "./ArticleContent";
+﻿import { ArticleHeader } from "@/P00_common/components/ArticleHeader";
+import { ArticleContent } from "@/P00_common/components/ArticleContent";
 import { ActionButtons } from "./ActionButtons";
 import { CommentSection } from "./CommentSection";
 import { RelatedArticles } from "./RelatedArticles";
