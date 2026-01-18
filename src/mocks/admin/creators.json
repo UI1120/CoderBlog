@@ -1,0 +1,166 @@
+{
+    "creators": [
+        {
+            "creator_id": 101,
+            "display_name": "管理者メイン",
+            "creator_type": "individual",
+            "profile": "システム全体の管理を担当しています。記事の最終チェックも行います。",
+            "icon_path": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop",
+            "account_id": 1
+        },
+        {
+            "creator_id": 1,
+            "display_name": "おがた",
+            "creator_type": "individual",
+            "profile": "岡山県立大学の技術サークル OPUCoder の代表です。フロントエンド開発が得意です。",
+            "icon_path": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
+            "account_id": 2
+        },
+        {
+            "creator_id": 2,
+            "display_name": "田中 太郎",
+            "creator_type": "individual",
+            "profile": "データサイエンスを専攻しています。PythonとAI技術に関する記事を主に書いています。",
+            "icon_path": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+            "account_id": 3
+        },
+        {
+            "creator_id": 3,
+            "display_name": "佐藤 一輝",
+            "creator_type": "individual",
+            "profile": "UI/UXデザインに興味があり、モバイルアプリの使いやすさを研究しています。趣味はカフェ巡りです。",
+            "icon_path": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop",
+            "account_id": 4
+        },
+        {
+            "creator_id": 4,
+            "display_name": "鈴木 雅之",
+            "creator_type": "individual",
+            "profile": "バックエンドエンジニアとして、Go言語とMicroservicesを勉強中です。",
+            "icon_path": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+            "account_id": 5
+        },
+        {
+            "creator_id": 10,
+            "display_name": "Webチーム",
+            "creator_type": "group",
+            "profile": "OPUCoder 内の Web 開発を担当するチームです。公式サイトの運用を行っています。",
+            "icon_path": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 1,
+                    "display_name": "おがた"
+                },
+                {
+                    "creator_id": 3,
+                    "display_name": "佐藤 一輝"
+                }
+            ]
+        },
+        {
+            "creator_id": 11,
+            "display_name": "AI研究会",
+            "creator_type": "group",
+            "profile": "最新の機械学習アルゴリズムやLLMについて、週に一度勉強会を開催しています。",
+            "icon_path": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 2,
+                    "display_name": "田中 太郎"
+                }
+            ]
+        },
+        {
+            "creator_id": 12,
+            "display_name": "岡山デザイン部",
+            "creator_type": "group",
+            "profile": "岡山県の魅力を伝えるためのポスターやロゴを制作しているデザイン集団です。",
+            "icon_path": "https://images.unsplash.com/photo-1558655146-d09347e92766?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 3,
+                    "display_name": "佐藤 一輝"
+                }
+            ]
+        },
+        {
+            "creator_id": 13,
+            "display_name": "競技プログラミング部",
+            "creator_type": "group",
+            "profile": "AtCoderなどの競技プログラミングに取り組むメンバーが集まっています。",
+            "icon_path": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 1,
+                    "display_name": "おがた"
+                },
+                {
+                    "creator_id": 4,
+                    "display_name": "鈴木 雅之"
+                }
+            ]
+        },
+        {
+            "creator_id": 14,
+            "display_name": "ロボット工学ゼミ",
+            "creator_type": "group",
+            "profile": "自律走行ロボットの開発を行っている有志のグループです。",
+            "icon_path": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 2,
+                    "display_name": "田中 太郎"
+                },
+                {
+                    "creator_id": 4,
+                    "display_name": "鈴木 雅之"
+                }
+            ]
+        },
+        {
+            "creator_id": 15,
+            "display_name": "アプリ開発班",
+            "creator_type": "group",
+            "profile": "Flutter/Swiftなどを使ったスマートフォンアプリ開発を行っています。学内の課題を解決するアプリを作ることを目標にしています。",
+            "icon_path": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=100&h=100&fit=crop",
+            "members": []
+        },
+        {
+            "creator_id": 16,
+            "display_name": "セキュリティラボ",
+            "creator_type": "group",
+            "profile": "CTF（Capture The Flag）への参加や、脆弱性診断の勉強をしています。",
+            "icon_path": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=100&h=100&fit=crop",
+            "members": []
+        },
+        {
+            "creator_id": 17,
+            "display_name": "インフラエンジニア組",
+            "creator_type": "group",
+            "profile": "サーバー構築からクラウド（AWS/GCP）の運用までをカバーするグループです。",
+            "icon_path": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100&h=100&fit=crop",
+            "members": []
+        },
+        {
+            "creator_id": 18,
+            "display_name": "岡山地域貢献PJ",
+            "creator_type": "group",
+            "profile": "地元の商店街と協力して、IT、を活用した活性化に取り組んでいます。",
+            "icon_path": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=100&h=100&fit=crop",
+            "members": []
+        },
+        {
+            "creator_id": 19,
+            "display_name": "OPUCoder広報部",
+            "creator_type": "group",
+            "profile": "サークルの活動内容をSNSやブログで発信するチームです。",
+            "icon_path": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=100&h=100&fit=crop",
+            "members": [
+                {
+                    "creator_id": 1,
+                    "display_name": "おがた"
+                }
+            ]
+        }
+    ]
+}

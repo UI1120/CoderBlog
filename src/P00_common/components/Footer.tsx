@@ -20,8 +20,8 @@
           <a href="#privacy" className="hover:text-[#67e0b8] transition-colors">
             プライバシーポリシー
           </a>
-          <a href="#analytics" className="hover:text-[#67e0b8] transition-colors">
-            Google Analyticsについて
+          <a href="/login" className="hover:text-[#67e0b8] transition-colors">
+            運用者用
           </a>
         </div>
       </div>

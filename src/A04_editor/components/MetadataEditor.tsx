@@ -1,5 +1,5 @@
 import { ChevronsUpDown, Upload, X, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { API_BASE_URL } from "@/constants";
 import { AdminCard } from "@/A00_common/components/AdminCard";
 import { AdminButton } from "@/A00_common/components/AdminButton";
@@ -36,6 +36,7 @@ export function MetadataEditor({
     const [projects, setProjects] = useState<any[]>([]);
     const [groups, setGroups] = useState<any[]>([]);
     const [tagsList, setTagsList] = useState<any[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/header/categories`).then(res => res.json()).then(setCategories).catch(console.error);
@@ -178,11 +179,13 @@ export function MetadataEditor({
                                 </div>
                             </div>
                             <div className="flex justify-center">
-                                <label htmlFor="thumbnail-upload" className="cursor-pointer">
-                                    <AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />}>
-                                        画像を貼り替える
-                                    </AdminButton>
-                                </label>
+                                <AdminButton
+                                    variant="secondary"
+                                    icon={<Upload className="w-4 h-4" />}
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    画像を貼り替える
+                                </AdminButton>
                             </div>
                         </div>
                     ) : (
@@ -194,14 +197,22 @@ export function MetadataEditor({
                                 <p className="font-bold text-gray-400 text-sm">画像をここにドロップまたはクリック</p>
                                 <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest mt-1">Recommended size: 1200x630px</p>
                             </div>
-                            <label htmlFor="thumbnail-upload">
-                                <AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />}>
-                                    ファイルをアップロード
-                                </AdminButton>
-                            </label>
+                            <AdminButton
+                                variant="secondary"
+                                icon={<Upload className="w-4 h-4" />}
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                ファイルをアップロード
+                            </AdminButton>
                         </div>
                     )}
-                    <input type="file" id="thumbnail-upload" className="hidden" accept="image/*" onChange={handleThumbnailUpload} />
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleThumbnailUpload}
+                    />
                 </AdminCard>
 
                 <div className="bg-emerald-600/5 border border-emerald-600/10 rounded-2xl p-6">

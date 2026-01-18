@@ -1,0 +1,49 @@
+{
+    "accounts": [
+        {
+            "account_id": 1,
+            "login_name": "admin_user",
+            "email": "admin@example.com",
+            "role": "admin",
+            "status": "active",
+            "last_login_at": "2026-01-18T10:00:00Z",
+            "icon_path": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop"
+        },
+        {
+            "account_id": 2,
+            "login_name": "ogata",
+            "email": "ogata@example.com",
+            "role": "user",
+            "status": "active",
+            "last_login_at": "2026-01-17T15:00:00Z",
+            "icon_path": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
+        },
+        {
+            "account_id": 3,
+            "login_name": "tanaka",
+            "email": "tanaka@example.com",
+            "role": "user",
+            "status": "active",
+            "last_login_at": "2026-01-16T12:00:00Z",
+            "icon_path": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
+        },
+        {
+            "account_id": 4,
+            "login_name": "satoh",
+            "email": "satoh@example.com",
+            "role": "user",
+            "status": "active",
+            "last_login_at": "2026-01-18T09:00:00Z",
+            "icon_path": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop"
+        },
+        {
+            "account_id": 5,
+            "login_name": "suzuki",
+            "email": "suzuki@example.com",
+            "role": "user",
+            "status": "banned",
+            "last_login_at": "2025-12-30T10:00:00Z",
+            "icon_path": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
+        }
+    ]
+}

@@ -34,7 +34,11 @@ export default defineConfig({
             } else if (req.url === '/editor' || req.url.startsWith('/editor?')) {
               req.url = req.url.replace('/editor', '/src/A04_editor/editor.html');
             } else if (req.url === '/master_management' || req.url.startsWith('/master_management?')) {
-              req.url = req.url.replace('/master_management', '/src/A05_master_management/management.html');
+              req.url = req.url.replace('/master_management', '/src/A05_master_management/index.html');
+            } else if (req.url === '/creator_management' || req.url.startsWith('/creator_management?')) {
+              req.url = req.url.replace('/creator_management', '/src/A06_creator_management/index.html');
+            } else if (req.url === '/account_management' || req.url.startsWith('/account_management?')) {
+              req.url = req.url.replace('/account_management', '/src/A07_account_management/index.html');
             } else if (req.url === '/baduser' || req.url.startsWith('/baduser?')) {
               req.url = req.url.replace('/baduser', '/src/P98_baduser/index.html');
             }
@@ -100,7 +104,9 @@ export default defineConfig({
         login: path.resolve(__dirname, 'src/A01_login/login.html'),
         editor: path.resolve(__dirname, 'src/A04_editor/editor.html'),
         notfound: path.resolve(__dirname, 'src/P99_notfound/PageNotFound.html'),
-        master_management: path.resolve(__dirname, 'src/A05_master_management/management.html'),
+        master_management: path.resolve(__dirname, 'src/A05_master_management/index.html'),
+        creator_management: path.resolve(__dirname, 'src/A06_creator_management/index.html'),
+        account_management: path.resolve(__dirname, 'src/A07_account_management/index.html'),
         baduser: path.resolve(__dirname, 'src/P98_baduser/index.html'),
       },
     },

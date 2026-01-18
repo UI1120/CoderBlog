@@ -50,7 +50,7 @@ export function AdminModal({
                 </div>
 
                 {/* Body */}
-                <div className="p-10">
+                <div className="p-10 max-h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
                     {children}
                 </div>
 

@@ -14,7 +14,7 @@ import {
 import { API_BASE_URL } from "@/constants";
 import { AdminLayout } from "@/A00_common/components/AdminLayout";
 import { AdminHeader } from "@/A00_common/components/AdminHeader";
-import { AdminTab } from "@/A00_common/components/AdminTab";
+import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { AdminCard } from "@/A00_common/components/AdminCard";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 import { AdminModal } from "@/A00_common/components/AdminModal";
@@ -175,7 +175,7 @@ export default function App() {
                     </>
                 }
                 navElement={
-                    <>
+                    <AdminTabGroup>
                         {tabConfig.map((tab) => (
                             <AdminTab
                                 key={tab.id}
@@ -185,7 +185,7 @@ export default function App() {
                                 onClick={() => setActiveTab(tab.id as ResourceType)}
                             />
                         ))}
-                    </>
+                    </AdminTabGroup>
                 }
             />
 

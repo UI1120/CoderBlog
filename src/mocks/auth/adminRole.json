@@ -2,6 +2,7 @@
     "user": {
         "id": "admin_user",
         "name": "管理者ユーザー",
-        "role": "admin"
+        "role": "admin",
+        "icon_path": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
     }
 }

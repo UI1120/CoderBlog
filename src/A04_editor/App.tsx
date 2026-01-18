@@ -7,7 +7,7 @@ import { Toaster } from "@/P00_common/ui/sonner";
 import { toast } from "sonner";
 import { AdminLayout } from "@/A00_common/components/AdminLayout";
 import { AdminHeader } from "@/A00_common/components/AdminHeader";
-import { AdminTab } from "@/A00_common/components/AdminTab";
+import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 import { AdminModal } from "@/A00_common/components/AdminModal";
 import { Popover, PopoverContent, PopoverTrigger } from "@/P00_common/ui/popover";
@@ -168,7 +168,7 @@ export default function App() {
                     </div>
                 }
                 navElement={
-                    <>
+                    <AdminTabGroup>
                         <AdminTab
                             label="記事編集"
                             icon={<FileEdit className="w-4 h-4" />}
@@ -187,7 +187,7 @@ export default function App() {
                             isActive={activeTab === "preview"}
                             onClick={() => setActiveTab("preview")}
                         />
-                    </>
+                    </AdminTabGroup>
                 }
             />
 

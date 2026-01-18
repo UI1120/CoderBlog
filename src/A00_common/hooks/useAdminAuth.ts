@@ -4,6 +4,7 @@ export interface UserInfo {
     id: string;
     name: string;
     role: "admin" | "user";
+    icon_path?: string;
 }
 
 export function useAdminAuth() {

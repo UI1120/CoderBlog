@@ -1,4 +1,5 @@
 import { ImageIcon, FileText } from "lucide-react";
+import React, { useRef } from "react";
 import MDEditor from '@uiw/react-md-editor';
 import { API_BASE_URL } from "@/constants";
 import { AdminCard } from "@/A00_common/components/AdminCard";
@@ -25,6 +26,9 @@ export function ArticleEditor({
     onKeywordsChange,
     onContentChange,
 }: ArticleEditorProps) {
+    const markdownInputRef = useRef<HTMLInputElement>(null);
+    const imageInputRef = useRef<HTMLInputElement>(null);
+
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && (file.type === "text/markdown" || file.name.endsWith('.md'))) {
@@ -105,29 +109,35 @@ export function ArticleEditor({
                 <div className="flex gap-3">
                     <input
                         type="file"
-                        id="file-upload"
+                        ref={markdownInputRef}
                         className="hidden"
                         accept=".md,.txt"
                         onChange={handleFileUpload}
                     />
-                    <label htmlFor="file-upload">
-                        <AdminButton variant="secondary" icon={<FileText className="w-4 h-4" />} className="cursor-pointer">
-                            Markdown読込
-                        </AdminButton>
-                    </label>
+                    <AdminButton
+                        variant="secondary"
+                        icon={<FileText className="w-4 h-4" />}
+                        className="cursor-pointer"
+                        onClick={() => markdownInputRef.current?.click()}
+                    >
+                        Markdown読込
+                    </AdminButton>
 
                     <input
                         type="file"
-                        id="image-upload"
+                        ref={imageInputRef}
                         className="hidden"
                         accept="image/*"
                         onChange={handleImageUpload}
                     />
-                    <label htmlFor="image-upload">
-                        <AdminButton variant="secondary" icon={<ImageIcon className="w-4 h-4" />} className="cursor-pointer">
-                            画像追加
-                        </AdminButton>
-                    </label>
+                    <AdminButton
+                        variant="secondary"
+                        icon={<ImageIcon className="w-4 h-4" />}
+                        className="cursor-pointer"
+                        onClick={() => imageInputRef.current?.click()}
+                    >
+                        画像追加
+                    </AdminButton>
                 </div>
                 <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pr-4">
                     Markdown Editor Active

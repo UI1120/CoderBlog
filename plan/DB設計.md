@@ -6,11 +6,12 @@
 ※型は概念レベルで記載し、具体的な長さや制約は詳細設計で確定。
 
 ### (1) accounts：アカウント（ログイン主体）
+※1 つのアカウントに対し、必ず 1 つの個人クリエイター（creators）が作成される運用とする。
 
 - account_id : PK
 - login_name : ログイン用 ID（ユニーク）
 - email : メールアドレス（ユニーク）
-- role : `admin` / `creator`
+- role : `admin` / `user`
 - status : `active` / `banned` / `deleted`
 - password_hash : パスワードハッシュ
 - icon_path : アイコン画像パス（任意）
@@ -20,6 +21,7 @@
 - last_login_at : 最終ログイン日時
 
 ### (2) creators：クリエイター（個人・グループ）
+※`creator_type = 'individual'` の場合、`account_id` と 1:1 で紐付く。
 
 - creator_id : PK
 - creator_type : `individual` / `group`
@@ -129,7 +131,7 @@ erDiagram
         INT account_id PK
         VARCHAR login_name
         VARCHAR email
-        ENUM role "admin/creator"
+        ENUM role "admin/user"
         ENUM status "active/banned/deleted"
         VARCHAR password_hash
         VARCHAR icon_path

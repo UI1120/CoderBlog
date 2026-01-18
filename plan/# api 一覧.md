@@ -8,7 +8,11 @@
 | :--- | :--- | :--- | :--- |
 | POST | `/login` | ログイン。セッション作成。 | `accounts` (読込), `sessions` (書込) |
 | POST | `/logout` | ログアウト。セッション削除。 | `sessions` (削除/無効化) |
-| GET | `/me` | 自身のログイン状態・権限取得。 | `sessions`, `accounts`, `creators` |
+| GET | `/me` | 自身のログイン状態・権限取得。 (実装済エンドポイント: `/api/auth`) | `sessions`, `accounts`, `creators` |
+
+> **実装メモ: `useAdminAuth.ts`**
+> フロントエンドでは共通フック `useAdminAuth` を使用して `/api/auth` からユーザー情報を取得している。取得に失敗、または未ログインの場合は自動的に `/baduser` へリダイレクトする。
+
 
 ---
 
