@@ -3,13 +3,15 @@ import rehypeSanitize from "rehype-sanitize";
 
 interface ArticleContentProps {
   content: string;
+  className?: string;
 }
 
 export function ArticleContent({
   content,
+  className = "bg-white rounded-lg shadow-md p-8",
 }: ArticleContentProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-8">
+    <div className={className}>
       <div className="max-w-none">
         <ReactMarkdown
           rehypePlugins={[rehypeSanitize]}

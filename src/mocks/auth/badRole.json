@@ -1,0 +1,5 @@
+{
+    "user": null,
+    "error": "Unauthorized",
+    "message": "認証に失敗しました。再ログインが必要です。"
+}

@@ -1,0 +1,7 @@
+{
+    "user": {
+        "id": "admin_user",
+        "name": "管理者ユーザー",
+        "role": "admin"
+    }
+}

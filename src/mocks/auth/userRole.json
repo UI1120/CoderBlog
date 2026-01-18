@@ -1,0 +1,7 @@
+{
+    "user": {
+        "id": "standard_user",
+        "name": "一般ユーザー",
+        "role": "user"
+    }
+}

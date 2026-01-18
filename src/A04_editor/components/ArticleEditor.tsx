@@ -1,10 +1,8 @@
-import { Button } from "@/P00_common/ui/button";
-import { Input } from "@/P00_common/ui/input";
-import { Label } from "@/P00_common/ui/label";
-import { Textarea } from "@/P00_common/ui/textarea";
-import { Upload } from "lucide-react";
+import { ImageIcon, FileText } from "lucide-react";
 import MDEditor from '@uiw/react-md-editor';
 import { API_BASE_URL } from "@/constants";
+import { AdminCard } from "@/A00_common/components/AdminCard";
+import { AdminButton } from "@/A00_common/components/AdminButton";
 
 interface ArticleEditorProps {
     title: string;
@@ -66,44 +64,45 @@ export function ArticleEditor({
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
-            <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="title">タイトル</Label>
-                    <Input
-                        id="title"
+        <div className="flex flex-col gap-8">
+            <AdminCard className="p-8 space-y-6">
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">タイトル</label>
+                    <input
                         value={title}
                         onChange={(e) => onTitleChange(e.target.value)}
-                        placeholder="記事のタイトルを入力してください"
-                        className="text-lg"
+                        placeholder="記事のタイトルを入力を入力してください"
+                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 text-lg"
                     />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="summary">要約</Label>
-                    <Textarea
-                        id="summary"
-                        value={summary}
-                        onChange={(e) => onSummaryChange(e.target.value)}
-                        placeholder="記事の要約を入力してください"
-                        rows={3}
-                    />
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">要約</label>
+                        <textarea
+                            value={summary}
+                            onChange={(e) => onSummaryChange(e.target.value)}
+                            placeholder="記事の要約を入力してください"
+                            rows={3}
+                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
+                        />
+                    </div>
 
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="keywords">キーワード</Label>
-                    <Textarea
-                        id="keywords"
-                        value={keywords}
-                        onChange={(e) => onKeywordsChange(e.target.value)}
-                        placeholder="キーワードをカンマ区切りで入力してください"
-                        rows={2}
-                    />
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">キーワード (SEO)</label>
+                        <textarea
+                            value={keywords}
+                            onChange={(e) => onKeywordsChange(e.target.value)}
+                            placeholder="キーワードをカンマ区切りで入力してください"
+                            rows={3}
+                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
+                        />
+                    </div>
                 </div>
-            </div>
+            </AdminCard>
 
-            <div className="flex justify-between items-center">
-                <div className="flex gap-2">
+            <div className="flex justify-between items-center bg-white/50 backdrop-blur-sm p-4 rounded-3xl border border-gray-100">
+                <div className="flex gap-3">
                     <input
                         type="file"
                         id="file-upload"
@@ -112,12 +111,9 @@ export function ArticleEditor({
                         onChange={handleFileUpload}
                     />
                     <label htmlFor="file-upload">
-                        <Button asChild>
-                            <span className="cursor-pointer">
-                                <Upload className="w-4 h-4 mr-2" />
-                                mdファイルのアップロード
-                            </span>
-                        </Button>
+                        <AdminButton variant="secondary" icon={<FileText className="w-4 h-4" />} className="cursor-pointer">
+                            Markdown読込
+                        </AdminButton>
                     </label>
 
                     <input
@@ -128,24 +124,27 @@ export function ArticleEditor({
                         onChange={handleImageUpload}
                     />
                     <label htmlFor="image-upload">
-                        <Button asChild variant="outline">
-                            <span className="cursor-pointer">
-                                <Upload className="w-4 h-4 mr-2" />
-                                画像を追加
-                            </span>
-                        </Button>
+                        <AdminButton variant="secondary" icon={<ImageIcon className="w-4 h-4" />} className="cursor-pointer">
+                            画像追加
+                        </AdminButton>
                     </label>
+                </div>
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pr-4">
+                    Markdown Editor Active
                 </div>
             </div>
 
-            <div data-color-mode="light">
-                <MDEditor
-                    value={content}
-                    onChange={(val) => onContentChange(val || '')}
-                    height={600}
-                    preview="edit"
-                />
-            </div>
+            <AdminCard className="p-1">
+                <div data-color-mode="light">
+                    <MDEditor
+                        value={content}
+                        onChange={(val) => onContentChange(val || '')}
+                        height={600}
+                        preview="edit"
+                        style={{ border: 'none', borderRadius: '1.8rem' }}
+                    />
+                </div>
+            </AdminCard>
         </div>
     );
 }
