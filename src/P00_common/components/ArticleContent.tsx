@@ -1,5 +1,31 @@
 ﻿import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
+import mermaid from "mermaid";
+import { useEffect, useRef } from "react";
+
+interface MermaidProps {
+  content: string;
+}
+
+const Mermaid: React.FC<MermaidProps> = ({ content }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+    });
+    if (ref.current) {
+      // Clear previous content
+      ref.current.innerHTML = content;
+      mermaid.contentLoaded();
+    }
+  }, [content]);
+
+  return <div className="mermaid flex justify-center my-8 overflow-x-auto" ref={ref}>{content}</div>;
+};
 
 interface ArticleContentProps {
   content: string;
@@ -14,8 +40,31 @@ export function ArticleContent({
     <div className={className}>
       <div className="max-w-none">
         <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeSanitize]}
           components={{
+            table: ({ children }) => (
+              <div className="overflow-x-auto mb-8">
+                <table className="w-full border-collapse border border-gray-200 text-sm">
+                  {children}
+                </table>
+              </div>
+            ),
+            thead: ({ children }) => (
+              <thead className="bg-gray-50">
+                {children}
+              </thead>
+            ),
+            th: ({ children }) => (
+              <th className="border border-gray-200 px-4 py-2 font-bold text-left">
+                {children}
+              </th>
+            ),
+            td: ({ children }) => (
+              <td className="border border-gray-200 px-4 py-2 text-gray-700">
+                {children}
+              </td>
+            ),
             h1: ({ children }) => (
               <h1 className="text-5xl mb-8 font-bold">
                 {children}
@@ -70,18 +119,22 @@ export function ArticleContent({
 
             code: ({ className, children }) => {
               const isBlock = className?.includes("language-");
+              const language = className?.replace("language-", "");
+
+              if (language === "mermaid") {
+                return <Mermaid content={String(children).replace(/\n$/, "")} />;
+              }
+
               if (isBlock) {
                 return (
-                  <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
-                    {" "}
-                    {children}{" "}
+                  <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm leading-relaxed">
+                    {children}
                   </code>
                 );
               }
               return (
-                <code className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm">
-                  {" "}
-                  {children}{" "}
+                <code className="bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono">
+                  {children}
                 </code>
               );
             },
