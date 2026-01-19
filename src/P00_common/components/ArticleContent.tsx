@@ -30,11 +30,17 @@ const Mermaid: React.FC<MermaidProps> = ({ content }) => {
 interface ArticleContentProps {
   content: string;
   className?: string;
+  writer?: string;
+  writerId?: string | number;
+  writerIcon?: string;
 }
 
 export function ArticleContent({
   content,
   className = "bg-white rounded-lg shadow-md p-8",
+  writer,
+  writerId,
+  writerIcon
 }: ArticleContentProps) {
   return (
     <div className={className}>
@@ -142,6 +148,29 @@ export function ArticleContent({
         >
           {content}
         </ReactMarkdown>
+
+        {(writer || writerIcon) && (
+          <div className="mt-16 pt-8 border-t border-gray-100 flex items-center justify-end">
+            <a
+              href={writerId ? `/creator?cid=${writerId}` : undefined}
+              className="group flex items-center gap-4 hover:bg-gray-50 p-2 rounded-2xl transition-all"
+            >
+              <div className="text-right">
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-1">Written by</p>
+                <p className="text-sm font-black text-gray-700 group-hover:text-emerald-500 transition-colors">{writer}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white shadow-md group-hover:shadow-lg transition-all group-hover:-translate-y-0.5">
+                {writerIcon ? (
+                  <img src={writerIcon} alt={writer} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <span className="text-lg font-black">{writer?.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

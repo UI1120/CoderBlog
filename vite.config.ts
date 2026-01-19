@@ -43,6 +43,8 @@ export default defineConfig({
               req.url = req.url.replace('/account_management', '/src/A07_account_management/index.html');
             } else if (req.url === '/baduser' || req.url.startsWith('/baduser?')) {
               req.url = req.url.replace('/baduser', '/src/P98_baduser/index.html');
+            } else if (req.url === '/creator' || req.url.startsWith('/creator?')) {
+              req.url = req.url.replace('/creator', '/src/P05_creator/creator.html');
             }
           }
           next();
@@ -111,6 +113,7 @@ export default defineConfig({
         creator_management: path.resolve(__dirname, 'src/A06_creator_management/index.html'),
         account_management: path.resolve(__dirname, 'src/A07_account_management/index.html'),
         baduser: path.resolve(__dirname, 'src/P98_baduser/index.html'),
+        creator: path.resolve(__dirname, 'src/P05_creator/creator.html'),
       },
     },
   },

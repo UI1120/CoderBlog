@@ -36,14 +36,16 @@ export default function App() {
     const [groupFormData, setGroupFormData] = useState<any>({});
 
     const fetchData = async () => {
+        if (!user) return;
         setLoading(true);
         try {
-            const creRes = await fetch(`${API_BASE_URL}/admin/creators`);
+            const query = isAdmin ? "" : `?account_id=${user.id}`;
+            const creRes = await fetch(`${API_BASE_URL}/admin/creators${query}`);
             const creData = await creRes.json();
             const allCreators = creData.creators || [];
             setCreators(allCreators);
 
-            const accRes = await fetch(`${API_BASE_URL}/admin/accounts`);
+            const accRes = await fetch(`${API_BASE_URL}/admin/accounts${query}`);
             const accData = await accRes.json();
             const allAccounts = accData.accounts || [];
             setAccounts(allAccounts);
@@ -56,7 +58,7 @@ export default function App() {
                         handleSelectIndividual(refreshed, allAccounts);
                     }
                 } else if (allCreators.length > 0) {
-                    const myProfile = allCreators.find((c: any) => c.account_id === user?.id && c.creator_type === 'individual');
+                    const myProfile = allCreators.find((c: any) => String(c.account_id) === String(user?.id) && c.creator_type === 'individual');
                     if (myProfile) {
                         handleSelectIndividual(myProfile, allAccounts);
                     } else {
@@ -96,7 +98,7 @@ export default function App() {
 
     const handleIndividualSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!isAdmin && selectedIndividual?.account_id !== user?.id) return;
+        if (!isAdmin && String(selectedIndividual?.account_id) !== String(user?.id)) return;
 
         if (individualFormData.password || confirmPassword) {
             if (individualFormData.password !== confirmPassword) {
@@ -190,7 +192,7 @@ export default function App() {
                 subtitle={activeTab === 'individual' ? "Identity & Profile Integration" : "Group Collaboration"}
                 userInfo={user}
                 rightElement={
-                    <div className="flex items-center gap-4">
+                    <>
                         <div className="relative group text-sans">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-emerald-500 transition-colors w-4 h-4" />
                             <input
@@ -198,7 +200,7 @@ export default function App() {
                                 placeholder="検索..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-60 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
+                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-full sm:w-60 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
                             />
                         </div>
                         {isAdmin && activeTab === 'group' && (
@@ -210,7 +212,7 @@ export default function App() {
                                 新規グループ
                             </AdminButton>
                         )}
-                    </div>
+                    </>
                 }
                 navElement={
                     <AdminTabGroup>

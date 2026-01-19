@@ -95,9 +95,9 @@ export default function App() {
                 subtitle="Article Editor Terminal"
                 userInfo={user}
                 rightElement={
-                    <div className="flex items-center gap-4">
+                    <>
                         <div className={cn(
-                            "flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-4 py-1.5 transition-all",
+                            "flex flex-col sm:flex-row sm:items-center gap-3 bg-gray-50 border border-emerald-100/30 rounded-3xl px-4 py-2 transition-all",
                             canChangePublishSettings && "focus-within:ring-4 focus-within:ring-emerald-500/5 hover:border-emerald-100"
                         )}>
                             {/* Status Select with Premium Styling */}
@@ -106,7 +106,7 @@ export default function App() {
                                     <button
                                         disabled={!canChangePublishSettings || !!publishedAt}
                                         className={cn(
-                                            "flex items-center gap-2 hover:bg-white p-1 rounded-xl transition-colors group",
+                                            "flex items-center gap-2 hover:bg-white p-2 rounded-xl transition-colors group",
                                             (!canChangePublishSettings || !!publishedAt) && "opacity-80 cursor-not-allowed"
                                         )}
                                     >
@@ -139,9 +139,10 @@ export default function App() {
                                 </PopoverContent>
                             </Popover>
 
-                            <div className="w-px h-6 bg-gray-200" />
+                            <div className="hidden sm:block w-px h-6 bg-gray-200" />
+                            <div className="sm:hidden w-full h-px bg-gray-100" />
 
-                            <div className={cn("flex items-center gap-2 group", !canChangePublishSettings && "cursor-not-allowed opacity-60")}>
+                            <div className={cn("flex items-center gap-3 px-2 py-1 group", !canChangePublishSettings && "cursor-not-allowed opacity-60")}>
                                 <Clock className="w-3.5 h-3.5 text-gray-400 group-hover:text-emerald-500 transition-colors" />
                                 <input
                                     type="datetime-local"
@@ -155,7 +156,7 @@ export default function App() {
                                         }
                                     }}
                                     className={cn(
-                                        "bg-transparent border-none focus:outline-none text-[10px] font-black uppercase tracking-widest text-gray-600",
+                                        "bg-transparent border-none focus:outline-none text-[10px] font-black uppercase tracking-widest text-gray-600 w-full",
                                         canChangePublishSettings ? "cursor-pointer" : "cursor-not-allowed"
                                     )}
                                 />
@@ -165,7 +166,7 @@ export default function App() {
                         <AdminButton onClick={handleSave} icon={<Save className="w-4 h-4" />}>
                             完成/保存
                         </AdminButton>
-                    </div>
+                    </>
                 }
                 navElement={
                     <AdminTabGroup>

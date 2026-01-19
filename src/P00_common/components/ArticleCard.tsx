@@ -8,9 +8,11 @@ interface ArticleCardProps {
   title: string;
   date: string;
   writer: string;
+  writerId?: string | number;
+  writerIcon?: string;
 }
 
-export function ArticleCard({ id, image, category, title, date, writer }: ArticleCardProps) {
+export function ArticleCard({ id, image, category, title, date, writer, writerId, writerIcon }: ArticleCardProps) {
   return (
     <a href={`/article?id=${id}`} className="flex flex-col transform hover:scale-[1.02] transition-transform h-full">
       <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-200 w-full max-w-[320px] h-full flex flex-col">
@@ -33,10 +35,18 @@ export function ArticleCard({ id, image, category, title, date, writer }: Articl
               <Calendar className="w-3 h-3" />
               <span>{date}</span>
             </div>
-            <div className="flex items-center gap-1 truncate">
-              <User className="w-3 h-3 flex-shrink-0" />
+            <a
+              href={writerId ? `/creator?cid=${writerId}` : undefined}
+              className="flex items-center gap-1 truncate hover:text-emerald-500 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {writerIcon ? (
+                <img src={writerIcon} alt="" className="w-4 h-4 rounded-full object-cover flex-shrink-0" />
+              ) : (
+                <User className="w-3 h-3 flex-shrink-0" />
+              )}
               <span className="truncate">{writer}</span>
-            </div>
+            </a>
           </div>
         </div>
       </div>

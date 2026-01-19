@@ -9,7 +9,6 @@ import {
     Clock,
     EyeOff
 } from "lucide-react";
-import { AdminButton } from "@/A00_common/components/AdminButton";
 import { cn } from "@/P00_common/ui/utils";
 
 interface Article {
@@ -41,7 +40,7 @@ const statusConfig = {
 
 export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, onChangeStatus, onDelete, isAdmin }) => {
     return (
-        <div className="w-full overflow-hidden bg-white rounded-3xl border border-gray-100 shadow-sm">
+        <div className="w-full overflow-x-auto bg-white rounded-3xl border border-gray-100 shadow-sm">
             <table className="w-full text-left border-collapse">
                 <thead>
                     <tr className="bg-gray-50/50 border-b border-gray-100">
@@ -116,22 +115,22 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, on
                                     </div>
                                 </td>
                                 <td className="px-6 py-5">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <AdminButton
-                                            variant="ghost"
+                                    <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                                        <button
                                             onClick={() => onEdit(article)}
-                                            className="w-10 h-10 p-0 rounded-xl"
+                                            className="p-2.5 bg-white border border-gray-100 hover:border-emerald-200 text-emerald-500 rounded-xl transition-all shadow-sm"
+                                            title="編集"
                                         >
-                                            <Edit2 className="w-4 h-4 text-gray-400 group-hover:text-amber-500" />
-                                        </AdminButton>
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
                                         {isAdmin && (
-                                            <AdminButton
-                                                variant="ghost"
+                                            <button
                                                 onClick={() => onDelete(article)}
-                                                className="w-10 h-10 p-0 rounded-xl hover:bg-rose-50"
+                                                className="p-2.5 bg-white border border-gray-100 hover:border-red-200 text-red-500 rounded-xl transition-all shadow-sm"
+                                                title="削除"
                                             >
-                                                <Trash2 className="w-4 h-4 text-gray-400 group-hover:text-rose-500" />
-                                            </AdminButton>
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         )}
                                     </div>
                                 </td>

@@ -164,7 +164,7 @@ export default function App() {
                                 placeholder="検索..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
+                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-full sm:w-64 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
                             />
                         </div>
                         {isAdmin && (
@@ -221,7 +221,7 @@ export default function App() {
                                             <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">説明</th>
                                         )}
                                         {isAdmin && (
-                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black text-right">アクション</th>
+                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black text-right">操作</th>
                                         )}
                                     </tr>
                                 </thead>
@@ -248,7 +248,7 @@ export default function App() {
                                                     )}
                                                     {isAdmin && (
                                                         <td className="px-8 py-6 text-right">
-                                                            <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={() => handleOpenModal(item)}
                                                                     className="p-2.5 bg-white border border-gray-100 hover:border-emerald-200 text-emerald-500 rounded-xl transition-all shadow-sm"

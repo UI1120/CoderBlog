@@ -6,6 +6,8 @@ interface Article {
     category: string;
     date: string;
     writer: string;
+    writerId?: string | number;
+    writerIcon?: string;
     image: string;
 }
 
@@ -26,6 +28,8 @@ export function CardMatrix({ articles }: CardMatrixProps) {
                         title={article.title}
                         date={article.date}
                         writer={article.writer}
+                        writerId={article.writerId}
+                        writerIcon={article.writerIcon}
                     />
                 ))}
             </div>

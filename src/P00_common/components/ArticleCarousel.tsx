@@ -11,6 +11,8 @@ interface Article {
   title: string;
   date: string;
   writer: string;
+  writerId?: string | number;
+  writerIcon?: string;
 }
 
 interface ArticleCarouselProps {
@@ -75,6 +77,8 @@ export function ArticleCarousel({
                 title={article.title}
                 date={article.date}
                 writer={article.writer}
+                writerId={article.writerId}
+                writerIcon={article.writerIcon}
               />
             </div>
           ))}

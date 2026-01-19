@@ -11,7 +11,11 @@ interface Article {
   category: string;
   category_id: string;
   writer: string;
+  writer_id?: string | number;
+  writer_icon?: string;
   group: string;
+  group_id?: string | number;
+  group_icon?: string;
   published_date: string;
   good_count: number;
   thumbnail: string;
@@ -35,7 +39,11 @@ export function ArticleDetail({
           category={article.category}
           categoryId={article.category_id}
           writer={article.writer}
+          writerId={article.writer_id}
+          writerIcon={article.writer_icon}
           group={article.group}
+          groupId={article.group_id}
+          groupIcon={article.group_icon}
           publishedDate={article.published_date}
           goodCount={article.good_count}
         />
@@ -52,7 +60,12 @@ export function ArticleDetail({
 
       {/* 記事本文 */}
       <div className="mb-8">
-        <ArticleContent content={article.content} />
+        <ArticleContent
+          content={article.content}
+          writer={article.writer}
+          writerId={article.writer_id}
+          writerIcon={article.writer_icon}
+        />
       </div>
 
       {/* アクションボタン */}

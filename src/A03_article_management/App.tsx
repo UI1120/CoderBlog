@@ -145,7 +145,7 @@ export default function App() {
                 subtitle={activeTab === 'article' ? "Content Management & Publishing" : "Community Interaction Control"}
                 userInfo={user}
                 rightElement={
-                    <div className="flex items-center gap-4">
+                    <>
                         <div className="relative group">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-emerald-500 transition-colors w-4 h-4" />
                             <input
@@ -153,7 +153,7 @@ export default function App() {
                                 placeholder="検索..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-60 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
+                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-full sm:w-60 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
                             />
                         </div>
                         {activeTab === 'article' && (
@@ -161,7 +161,7 @@ export default function App() {
                                 新規記事
                             </AdminButton>
                         )}
-                    </div>
+                    </>
                 }
                 navElement={
                     <AdminTabGroup>

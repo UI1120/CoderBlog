@@ -7,7 +7,11 @@ interface ArticleHeaderProps {
   category: string;
   categoryId: string;
   writer: string;
+  writerId?: string | number;
+  writerIcon?: string;
   group: string;
+  groupId?: string | number;
+  groupIcon?: string;
   publishedDate: string;
   goodCount: number;
 }
@@ -18,7 +22,11 @@ export function ArticleHeader({
   category,
   categoryId,
   writer,
+  writerId,
+  writerIcon,
   group,
+  groupId,
+  groupIcon,
   publishedDate,
   goodCount
 }: ArticleHeaderProps) {
@@ -57,8 +65,36 @@ export function ArticleHeader({
             <span>{goodCount}</span>
           </div>
         </div>
-        <div className="text-gray-600">
-          {writer} / {group}
+        <div className="flex items-center gap-4 text-gray-600 text-sm">
+          <div className="flex items-center gap-3">
+            <a
+              href={groupId ? `/creator?gid=${groupId}` : undefined}
+              className="flex items-center gap-2 hover:text-emerald-500 transition-colors"
+            >
+              {groupIcon ? (
+                <img src={groupIcon} alt="" className="w-6 h-6 rounded-lg object-cover border border-gray-100 shadow-sm" />
+              ) : (
+                <div className="w-6 h-6 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <span className="text-[10px] font-bold">G</span>
+                </div>
+              )}
+              <span className="font-bold">{group}</span>
+            </a>
+            <span className="text-gray-300">/</span>
+            <a
+              href={writerId ? `/creator?cid=${writerId}` : undefined}
+              className="flex items-center gap-2 hover:text-emerald-500 transition-colors"
+            >
+              {writerIcon ? (
+                <img src={writerIcon} alt="" className="w-6 h-6 rounded-full object-cover border border-gray-100 shadow-sm" />
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                  <span className="text-[10px] font-bold">W</span>
+                </div>
+              )}
+              <span className="font-bold">{writer}</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

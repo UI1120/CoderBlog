@@ -143,7 +143,7 @@ export default function App() {
                                 placeholder="ユーザー検索..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-64 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
+                                className="bg-gray-100 border border-transparent focus:bg-white focus:border-emerald-200 rounded-full py-2 pl-10 pr-4 w-full sm:w-64 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm placeholder-gray-400 font-sans"
                             />
                         </div>
                         {isAdmin && (
@@ -275,7 +275,7 @@ export default function App() {
                                                     <td className="px-8 py-6 text-right">
                                                         <button
                                                             onClick={() => handleConfirmDeleteAccount(acc)}
-                                                            className="p-2.5 bg-white border border-gray-100 hover:border-red-200 text-red-500 rounded-xl transition-all shadow-sm opacity-0 group-hover:opacity-100"
+                                                            className="p-2.5 bg-white border border-gray-100 hover:border-red-200 text-red-500 rounded-xl transition-all shadow-sm opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
                                                             title="Delete Account"
                                                         >
                                                             <Trash2 className="w-4 h-4" />

@@ -9,6 +9,8 @@ const articles = [
     date: "2025/01/20",
     title: "Unity ECSで高速化してみた",
     writer: "こうち",
+    writerId: "c1",
+    writerIcon: "https://api.dicebear.com/7.x/avataaars/svg?seed=kouchi"
   },
   {
     id: 2,
@@ -18,6 +20,8 @@ const articles = [
     date: "2025/01/18",
     title: "機械学習モデルの軽量化Tips",
     writer: "山田",
+    writerId: "c2",
+    writerIcon: "https://api.dicebear.com/7.x/avataaars/svg?seed=yamada"
   },
   {
     id: 3,
@@ -27,6 +31,8 @@ const articles = [
     date: "2025/01/14",
     title: "サークルブログ開発ログ",
     writer: "Ogata",
+    writerId: "c3",
+    writerIcon: "https://api.dicebear.com/7.x/avataaars/svg?seed=ogata"
   },
   {
     id: 4,
@@ -36,6 +42,7 @@ const articles = [
     date: "2025/01/12",
     title: "センサー統合システムの実装",
     writer: "鈴木",
+    writerId: "c4"
   },
   {
     id: 5,
@@ -45,6 +52,7 @@ const articles = [
     date: "2025/01/09",
     title: "PyTorchでニューラルネット構築",
     writer: "高橋",
+    writerId: "c5"
   },
   {
     id: 6,
@@ -54,6 +62,7 @@ const articles = [
     date: "2025/01/06",
     title: "React × TypeScriptのベストプラクティス",
     writer: "渡辺",
+    writerId: "c6"
   },
 ];
 

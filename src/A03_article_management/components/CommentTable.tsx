@@ -131,14 +131,14 @@ export const CommentTable: React.FC<CommentTableProps> = ({ comments, onStatusCh
                                     </AdminButton>
                                 )}
                                 {isAdmin && (
-                                    <div className="md:mt-auto">
-                                        <AdminButton
-                                            variant="ghost"
+                                    <div className="md:mt-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                                        <button
                                             onClick={() => onDelete(comment)}
-                                            className="w-10 h-10 p-0 rounded-xl text-gray-300 hover:text-rose-600 hover:bg-rose-50"
+                                            className="p-2.5 bg-white border border-gray-100 hover:border-red-200 text-red-500 rounded-xl transition-all shadow-sm"
+                                            title="削除"
                                         >
                                             <Trash2 className="w-4 h-4" />
-                                        </AdminButton>
+                                        </button>
                                     </div>
                                 )}
                             </div>

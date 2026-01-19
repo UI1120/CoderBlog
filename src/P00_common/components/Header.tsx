@@ -78,7 +78,9 @@ export function Header() {
     // Fetch writer items
     fetch(`${API_BASE_URL}/header/writers`)
       .then(res => res.json())
-      .then(data => setWriterItems(data))
+      .then(data => {
+        setWriterItems([...data, { label: "すべて見る", href: "/creator" }]);
+      })
       .catch(err => console.error(err));
 
     // Fetch category items
@@ -160,7 +162,7 @@ export function Header() {
               />
               <DropdownMenu label="Tags" items={tagItems} />
               <DropdownMenu
-                label="Writers"
+                label="Creators"
                 items={writerItems}
               />
             </nav>
@@ -268,7 +270,7 @@ export function Header() {
                   onToggle={() => toggleSection('tags')}
                 />
                 <MobileSection
-                  label="Writers"
+                  label="Creators"
                   items={writerItems}
                   isOpen={mobileOpenSections['writers']}
                   onToggle={() => toggleSection('writers')}

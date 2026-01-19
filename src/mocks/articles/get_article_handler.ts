@@ -29,6 +29,8 @@ export const get_article_handler = [
     http.get('/api/articles', ({ request }) => {
         const url = new URL(request.url);
         const id = url.searchParams.get('id');
+        const cid = url.searchParams.get('cid');
+        const gid = url.searchParams.get('gid');
         const query = url.searchParams.get('q')?.toLowerCase();
 
         // 1. ID指定による単一取得
@@ -38,17 +40,29 @@ export const get_article_handler = [
             return new HttpResponse(null, { status: 404 });
         }
 
-        // 2. 検索・一覧 (公開済みのみ返すのが本来だが、モックなので全件)
+        let filtered = [...articlesList];
+
+        // 2. Creator ID による絞り込み
+        if (cid) {
+            // Mock logic: some articles match specific cid
+            filtered = filtered.filter((a: any) => a.writer_id === parseInt(cid) || a.writer_id === cid);
+        }
+
+        // 3. Group ID による絞り込み
+        if (gid) {
+            filtered = filtered.filter((a: any) => a.group_id === parseInt(gid) || a.group_id === gid);
+        }
+
+        // 4. 検索 (公開済みのみ返すのが本来だが、モックなので全件)
         if (query) {
-            const filtered = articlesList.filter((article: any) =>
+            filtered = filtered.filter((article: any) =>
                 article.title.toLowerCase().includes(query) ||
                 article.category_name.toLowerCase().includes(query) ||
                 article.writer_name.toLowerCase().includes(query)
             );
-            return HttpResponse.json(filtered);
         }
 
-        return HttpResponse.json(articlesList);
+        return HttpResponse.json(filtered);
     }),
 
     // --- 管理画面用 API ---
@@ -58,8 +72,8 @@ export const get_article_handler = [
         const url = new URL(request.url);
         const keyword = url.searchParams.get('keyword')?.toLowerCase();
         const status = url.searchParams.get('status');
-        const categoryId = url.searchParams.get('category_id');
-        const writerId = url.searchParams.get('writer_id');
+        // const categoryId = url.searchParams.get('category_id');
+        // const writerId = url.searchParams.get('writer_id');
 
         let filtered = [...articlesList];
 
