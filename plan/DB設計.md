@@ -83,8 +83,10 @@
 - article_id : FK → articles
 - guest_name : 投稿者名（任意）
 - content : コメント本文
+- status : `pending` (承認待ち) / `approved` (承認済み) / `rejected` (拒否)
 - ip_address : 投稿元 IP アドレス
 - created_at : 作成日時
+- approved_at : 承認日時（任意）
 
 ### (11) article_likes：いいね履歴
 
@@ -221,8 +223,10 @@ erDiagram
         INT article_id FK
         VARCHAR guest_name
         TEXT content
+        ENUM status "pending/approved/rejected"
         VARCHAR ip_address
         DATETIME created_at
+        DATETIME approved_at
     }
 
     article_likes {

@@ -23,7 +23,7 @@ export function AdminHeader({
     const currentPath = window.location.pathname;
 
     const navLinks = [
-        { label: "エディター", path: "/editor", icon: <FileText className="w-3.5 h-3.5" /> },
+        { label: "記事・コメント管理", path: "/article_management", icon: <FileText className="w-3.5 h-3.5" /> },
         { label: "マスタ管理", path: "/master_management", icon: <Settings className="w-3.5 h-3.5" /> },
         { label: "クリエイター", path: "/creator_management", icon: <UserCircle className="w-3.5 h-3.5" /> },
         { label: "アカウント", path: "/account_management", icon: <Users className="w-3.5 h-3.5" />, adminOnly: true },

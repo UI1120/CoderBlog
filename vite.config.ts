@@ -31,6 +31,8 @@ export default defineConfig({
               req.url = req.url.replace('/project', '/src/P04_project/project.html');
             } else if (req.url === '/login' || req.url.startsWith('/login?')) {
               req.url = req.url.replace('/login', '/src/A01_login/login.html');
+            } else if (req.url === '/article_management' || req.url.startsWith('/article_management?')) {
+              req.url = req.url.replace('/article_management', '/src/A03_article_management/index.html');
             } else if (req.url === '/editor' || req.url.startsWith('/editor?')) {
               req.url = req.url.replace('/editor', '/src/A04_editor/editor.html');
             } else if (req.url === '/master_management' || req.url.startsWith('/master_management?')) {
@@ -102,6 +104,7 @@ export default defineConfig({
         search: path.resolve(__dirname, 'src/P03_search/search.html'),
         project: path.resolve(__dirname, 'src/P04_project/project.html'),
         login: path.resolve(__dirname, 'src/A01_login/login.html'),
+        article_management: path.resolve(__dirname, 'src/A03_article_management/index.html'),
         editor: path.resolve(__dirname, 'src/A04_editor/editor.html'),
         notfound: path.resolve(__dirname, 'src/P99_notfound/PageNotFound.html'),
         master_management: path.resolve(__dirname, 'src/A05_master_management/index.html'),
