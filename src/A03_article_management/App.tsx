@@ -22,7 +22,10 @@ import { CommentTable } from "./components/CommentTable";
 
 export default function App() {
     const { user, isAdmin, loading: authLoading } = useAdminAuth();
-    const [activeTab, setActiveTab] = useState<'article' | 'comment'>('article');
+    
+    // URLパラメータから初期タブを判定
+    const initialTab = new URLSearchParams(window.location.search).get('tab') === 'comment' ? 'comment' : 'article';
+    const [activeTab, setActiveTab] = useState<'article' | 'comment'>(initialTab);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -85,14 +88,18 @@ export default function App() {
     // Set default filters based on role
     useEffect(() => {
         if (!authLoading && user && !isInitialized) {
-            if (isAdmin) {
-                setStatusFilter("draft");
+            if (activeTab === 'comment') {
+                setStatusFilter(isAdmin ? 'pending' : 'approved');
             } else {
-                setWriterFilter(String(user.id));
+                if (isAdmin) {
+                    setStatusFilter("draft");
+                } else {
+                    setWriterFilter(String(user.id));
+                }
             }
             setIsInitialized(true);
         }
-    }, [authLoading, user, isAdmin, isInitialized]);
+    }, [authLoading, user, isAdmin, isInitialized, activeTab]);
 
     useEffect(() => {
         if (!authLoading && isInitialized) {

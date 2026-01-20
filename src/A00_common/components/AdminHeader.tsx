@@ -1,5 +1,5 @@
 import React from "react";
-import { User, ShieldCheck, FileText, Settings, UserCircle, Users, LogOut, Menu } from "lucide-react";
+import { User, ShieldCheck, FileText, Settings, UserCircle, Users, LogOut, Menu, LayoutDashboard } from "lucide-react";
 import { UserInfo } from "../hooks/useAdminAuth";
 import { cn } from "@/P00_common/ui/utils";
 import {
@@ -47,6 +47,7 @@ export function AdminHeader({
     };
 
     const navLinks = [
+        { label: "ダッシュボード", path: "/dashboard", icon: <LayoutDashboard className="w-3.5 h-3.5" /> },
         { label: "記事・コメント管理", path: "/article_management", icon: <FileText className="w-3.5 h-3.5" /> },
         { label: "マスタ管理", path: "/master_management", icon: <Settings className="w-3.5 h-3.5" /> },
         { label: "クリエイター管理", path: "/creator_management", icon: <UserCircle className="w-3.5 h-3.5" />, adminOnly: true },

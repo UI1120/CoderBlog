@@ -1,7 +1,7 @@
 ﻿import { http, HttpResponse } from 'msw';
-import projectHighlights from './ProjectHighlights.json';
-import relatedArticles from './RelatedArticles.json';
-import projects from './projectsArticles.json';
+import projectHighlights from '../articleLists/ProjectHighlights.json';
+import relatedArticles from '../articleLists/RelatedArticles.json';
+import projects from '../articleLists/projectsArticles.json';
 
 export const get_article_lists_handler = [
     http.get('/api/article-lists/project-highlights', () => {

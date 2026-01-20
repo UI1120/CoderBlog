@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import projectMaster from './project_master.json';
+import projectMaster from '../projects/project_master.json';
 
 export const get_projects_handler = [
     http.get('/api/projects', ({ request }) => {

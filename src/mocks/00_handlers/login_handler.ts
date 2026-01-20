@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
-import adminRole from './adminRole.json';
-import userRole from './userRole.json';
-import badRole from './badRole.json';
+import adminRole from '../auth/adminRole.json';
+import userRole from '../auth/userRole.json';
+import badRole from '../auth/badRole.json';
 
 export const login_handler = [
     http.post('/api/login', async ({ request }) => {
@@ -27,7 +27,7 @@ export const login_handler = [
     }),
     http.get('/api/auth', () => {
         // --- モックデータの切り替え ---
-        const roleid = 1;
+        const roleid = 0;
         const role = ["admin", "user", "bad"];
         switch (role[roleid]) {
             case "admin":

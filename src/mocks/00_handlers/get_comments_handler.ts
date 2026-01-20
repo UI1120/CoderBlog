@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import comments001 from './article_001.json';
-import comments002 from './article_002.json';
+import comments001 from '../comments/article_001.json';
+import comments002 from '../comments/article_002.json';
 import adminCommentsData from '../admin/comments.json';
 
 const commentsMap: Record<string, any> = {
@@ -8,7 +8,7 @@ const commentsMap: Record<string, any> = {
     '2': comments002,
 };
 
-let adminComments = [...adminCommentsData];
+export let adminComments = [...adminCommentsData];
 
 export const get_comments_handler = [
     // 一般公開用：記事ごとのコメント取得

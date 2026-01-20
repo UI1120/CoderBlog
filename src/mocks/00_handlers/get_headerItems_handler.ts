@@ -1,9 +1,9 @@
 import { http, HttpResponse } from 'msw';
-import projectItems from './projectItems.json';
-import tagItems from './tagItems.json';
-import writerItems from './writerItems.json';
-import categoryItems from './categoryItems.json';
-import groupItems from './groupItems.json';
+import projectItems from '../HeaderItems/projectItems.json';
+import tagItems from '../HeaderItems/tagItems.json';
+import writerItems from '../HeaderItems/writerItems.json';
+import categoryItems from '../HeaderItems/categoryItems.json';
+import groupItems from '../HeaderItems/groupItems.json';
 
 export const get_headerItems_handler = [
     http.get('/api/header/projects', () => {

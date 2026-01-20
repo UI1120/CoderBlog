@@ -1,14 +1,14 @@
 ﻿import { http, HttpResponse } from 'msw';
-import article001 from './article_001.json';
-import article002 from './article_002.json';
-import articlesData from './articles_list.json';
+import article001 from '../articles/article_001.json';
+import article002 from '../articles/article_002.json';
+import articlesData from '../articles/articles_list.json';
 
 const articles: Record<string, any> = {
     '1': article001,
     '2': article002,
 };
 
-let articlesList = [...articlesData];
+export let articlesList = [...articlesData];
 
 export const get_article_handler = [
     // --- 一般・公開用 API ---

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import searchResults from './search_results.json';
+import searchResults from '../search/search_results.json';
 import projectsArticles from '../articleLists/projectsArticles.json';
 
 export const get_search_handler = [

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import accountsData from './accounts.json';
-import creatorsData from './creators.json';
+import accountsData from '../admin/accounts.json';
+import creatorsData from '../admin/creators.json';
 
 export const management_handlers = [
     // アカウント管理
