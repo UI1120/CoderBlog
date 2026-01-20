@@ -34,6 +34,9 @@ export default function App() {
     const [categories, setCategories] = useState<any[]>([]);
     const [writers, setWriters] = useState<any[]>([]);
 
+    // Initialization flag
+    const [isInitialized, setIsInitialized] = useState(false);
+
     // Delete Modal State
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState<{ type: 'article' | 'comment', data: any } | null>(null);
@@ -79,11 +82,23 @@ export default function App() {
         }
     }, [activeTab, searchTerm, statusFilter, categoryFilter, writerFilter, categories.length, writers.length]);
 
+    // Set default filters based on role
     useEffect(() => {
-        if (!authLoading) {
+        if (!authLoading && user && !isInitialized) {
+            if (isAdmin) {
+                setStatusFilter("draft");
+            } else {
+                setWriterFilter(String(user.id));
+            }
+            setIsInitialized(true);
+        }
+    }, [authLoading, user, isAdmin, isInitialized]);
+
+    useEffect(() => {
+        if (!authLoading && isInitialized) {
             fetchData();
         }
-    }, [authLoading, fetchData]);
+    }, [authLoading, isInitialized, fetchData]);
 
     const handleStatusChange = async (type: 'article' | 'comment', id: number, newStatus: string) => {
         try {
@@ -180,7 +195,7 @@ export default function App() {
                             isActive={activeTab === 'comment'}
                             onClick={() => {
                                 setActiveTab('comment');
-                                setStatusFilter('pending'); // Default to pending for comments
+                                setStatusFilter(isAdmin ? 'pending' : 'approved');
                             }}
                         />
                     </AdminTabGroup>

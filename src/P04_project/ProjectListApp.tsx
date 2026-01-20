@@ -2,6 +2,7 @@ import { Header } from '@/P00_common/components/Header';
 import { Footer } from '@/P00_common/components/Footer';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
+import { PROJECT_LIST_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 
 export default function ProjectListApp() {
     const [projects, setProjects] = useState<any[]>([]);
@@ -29,16 +30,16 @@ export default function ProjectListApp() {
             <section
                 className="relative bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1080')`,
+                    backgroundImage: `url('${PROJECT_LIST_CONFIG.hero.backgroundImage}')`,
                 }}
             >
                 <div className="container mx-auto px-6 py-24 md:py-32">
                     <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
                         <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                            Our Projects
+                            <span className="text-[#67e0b8]">{PROJECT_LIST_CONFIG.hero.title.substring(0, 6)}</span>{PROJECT_LIST_CONFIG.hero.title.substring(6)}
                         </h1>
                         <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md text-xl">
-                            Explore the various initiatives and technical projects by OPUCoder.
+                            {PROJECT_LIST_CONFIG.hero.description}
                         </p>
                     </div>
                 </div>
@@ -46,7 +47,7 @@ export default function ProjectListApp() {
 
             <main className="container mx-auto px-6 py-12">
                 {loading ? (
-                    <div className="text-center text-gray-500">Loading...</div>
+                    <div className="text-center text-gray-500">{COMMON_CONFIG.loadingText}</div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
                         {projects.map((project) => (
@@ -59,7 +60,7 @@ export default function ProjectListApp() {
                                     {/* Left: Thumbnail */}
                                     <div className="md:w-1/3 lg:w-1/4 relative overflow-hidden">
                                         <img
-                                            src={project.thumbnail || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1080'}
+                                            src={project.thumbnail || PROJECT_LIST_CONFIG.hero.backgroundImage}
                                             alt={project.project_name}
                                             className="w-full h-48 md:h-full object-cover transition-transform duration-500 hover:scale-110"
                                         />
@@ -84,7 +85,7 @@ export default function ProjectListApp() {
 
                                         <div className="mt-6 flex items-center justify-between">
                                             <div className="flex items-center gap-2 text-[#2d7a5f] font-bold text-lg group-hover:translate-x-1 transition-transform">
-                                                <span>詳細をチェック</span>
+                                                <span>{PROJECT_LIST_CONFIG.projectCard.detailText}</span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                                 </svg>

@@ -76,7 +76,7 @@ export const CommentTable: React.FC<CommentTableProps> = ({ comments, onStatusCh
                                         {comment.article_title}
                                     </h4>
                                     <a
-                                        href={`/article/${comment.article_id}`}
+                                        href={`/article?id=${comment.article_id}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-bold mt-2 hover:underline"

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { DropdownMenu } from "./DropdownMenu";
 import { FRONT_ROOT_PATH, API_BASE_URL } from "@/constants";
+import logo from "@/R02_mediasrc/OpuCoder_logo.webp";
 
 function MobileSection({ label, items, isOpen, onToggle }: { label: string, items: any[], isOpen: boolean, onToggle: () => void }) {
   return (
@@ -112,7 +113,7 @@ export function Header() {
             }}
           >
             <img
-              src="https://images.unsplash.com/photo-1708634421109-18f3309dffa2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNoJTIwbG9nbyUyMG1pbmltYWx8ZW58MXx8fHwxNzY0NTY3MDk3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+              src={logo}
               alt="Opu Coder Logo"
               className="w-10 h-10 rounded-lg object-cover"
             />

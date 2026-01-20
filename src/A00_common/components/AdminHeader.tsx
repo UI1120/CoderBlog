@@ -82,7 +82,7 @@ export function AdminHeader({
                                     <div className="p-4 space-y-2">
                                         <p className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Main Navigation</p>
                                         {navLinks.map((link) => {
-                                            const isActive = currentPath === link.path;
+                                            const isActive = currentPath === link.path || (link.path === "/article_management" && currentPath.startsWith("/editor"));
                                             if (link.adminOnly && userInfo?.role !== 'admin') return null;
 
                                             return (
@@ -133,7 +133,7 @@ export function AdminHeader({
                         {/* PC Navigation Items (Hidden on mobile) */}
                         <nav className="hidden lg:flex items-center gap-1 bg-gray-50 p-1 rounded-2xl border border-gray-100/50">
                             {navLinks.map((link) => {
-                                const isActive = currentPath === link.path;
+                                const isActive = currentPath === link.path || (link.path === "/article_management" && currentPath.startsWith("/editor"));
                                 if (link.adminOnly && userInfo?.role !== 'admin') return null;
 
                                 return (

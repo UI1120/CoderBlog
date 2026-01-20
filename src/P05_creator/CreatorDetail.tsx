@@ -5,6 +5,7 @@ import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
 import { Users, Sparkles, ArrowLeft } from 'lucide-react';
+import { CREATOR_DETAIL_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 import { cn } from '@/P00_common/ui/utils';
 
 interface CreatorDetailProps {
@@ -69,7 +70,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                 <div className="container mx-auto px-6">
                     <a href="/creator" className="inline-flex items-center gap-2 text-emerald-600 font-black text-[10px] uppercase tracking-widest mb-12 hover:gap-3 transition-all">
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Creators
+                        {CREATOR_DETAIL_CONFIG.backButtonText}
                     </a>
 
                     <div className="flex flex-col md:flex-row gap-12 items-start">
@@ -80,7 +81,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                                 creator.creator_type === 'group' ? "rounded-[3rem]" : "rounded-full"
                             )}>
                                 <img
-                                    src={creator.icon_path || 'https://api.dicebear.com/7.x/avataaars/svg'}
+                                    src={creator.icon_path || COMMON_CONFIG.defaultIconUrl}
                                     alt={creator.display_name}
                                     className="w-full h-full object-cover"
                                 />
@@ -107,7 +108,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                             </div>
 
                             <p className="text-gray-500 text-lg max-w-2xl leading-relaxed mb-8 font-medium">
-                                {creator.profile || "This creator hasn't shared a profile description yet."}
+                                {creator.profile || CREATOR_DETAIL_CONFIG.defaultProfile}
                             </p>
 
                             <div className="flex flex-wrap gap-4">
@@ -118,11 +119,11 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                         {/* Stats Column (Desktop) */}
                         <div className="hidden lg:flex flex-col gap-4">
                             <div className="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 w-48">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Articles</p>
+                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{CREATOR_DETAIL_CONFIG.stats.articles}</p>
                                 <p className="text-4xl font-black text-gray-900">{articles.length}</p>
                             </div>
                             <div className="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 w-48 text-right">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Joined</p>
+                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{CREATOR_DETAIL_CONFIG.stats.joined}</p>
                                 <p className="text-lg font-black text-gray-900">2024.12</p>
                             </div>
                         </div>
@@ -131,7 +132,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                     {/* Members showcase for Groups */}
                     {creator.creator_type === 'group' && creator.members && creator.members.length > 0 && (
                         <div className="mt-16 pt-8 border-t border-gray-50">
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Group Members</p>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">{CREATOR_DETAIL_CONFIG.groups.membersLabel}</p>
                             <div className="flex flex-wrap gap-6">
                                 {creator.members.map((member: any) => (
                                     <a
@@ -154,7 +155,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
             {/* Articles Grid */}
             <main className="container mx-auto px-6 py-20">
                 <div className="flex items-center gap-4 mb-12">
-                    <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Recent Works</h2>
+                    <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight">{CREATOR_DETAIL_CONFIG.sectionTitle}</h2>
                     <div className="h-px flex-grow bg-gray-100" />
                 </div>
 
@@ -173,7 +174,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                     </>
                 ) : (
                     <div className="bg-white rounded-[3rem] p-20 text-center border-4 border-dashed border-gray-100">
-                        <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">No articles found for this creator.</p>
+                        <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">{CREATOR_DETAIL_CONFIG.emptyState}</p>
                     </div>
                 )}
             </main>

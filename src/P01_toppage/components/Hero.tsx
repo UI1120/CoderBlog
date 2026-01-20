@@ -1,4 +1,4 @@
-﻿import { HERO_CONFIG } from '@/config/siteConfig';
+﻿import { HERO_CONFIG } from '@/R01_config/siteConfig';
 
 export function Hero() {
   const handlePrimaryClick = () => {

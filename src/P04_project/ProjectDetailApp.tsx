@@ -4,6 +4,7 @@ import { CardMatrix } from '@/P00_common/components/CardMatrix';
 import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from '@/constants';
+import { PROJECT_DETAIL_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 
 export default function ProjectDetailApp() {
     const [projectDetails, setProjectDetails] = useState<{ project_name: string; description: string; thumbnail?: string } | null>(null);
@@ -84,16 +85,16 @@ export default function ProjectDetailApp() {
             <section
                 className="relative bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('${projectDetails?.thumbnail || 'https://images.unsplash.com/photo-1683813479742-4730f91fa3ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5JTIwY29kaW5nJTIwd29ya3NwYWNlfGVufDF8fHx8MTc2NDQ3NjM1OXww&ixlib=rb-4.1.0&q=80&w=1080'}' )`,
+                    backgroundImage: `url('${projectDetails?.thumbnail || PROJECT_DETAIL_CONFIG.hero.defaultBackgroundImage}' )`,
                 }}
             >
                 <div className="container mx-auto px-6 py-24 md:py-32">
                     <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
                         <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                            {projectDetails?.project_name || 'Projects'}
+                            {projectDetails?.project_name || PROJECT_DETAIL_CONFIG.hero.defaultTitle}
                         </h1>
                         <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md text-xl">
-                            {projectDetails?.description || 'Explore our latest work and innovative solutions.'}
+                            {projectDetails?.description || PROJECT_DETAIL_CONFIG.hero.defaultDescription}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             {/* <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">
@@ -113,7 +114,7 @@ export default function ProjectDetailApp() {
                 style={{ scrollMarginTop: '100px' }}
             >
                 {loading ? (
-                    <div className="text-center text-gray-500">Loading...</div>
+                    <div className="text-center text-gray-500">{COMMON_CONFIG.loadingText}</div>
                 ) : (
                     <>
                         <CardMatrix articles={displayedProjects} />

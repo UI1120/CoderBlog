@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FileEdit, Settings, Eye, Save, AlertCircle, Clock, Globe, ChevronsUpDown, Check } from "lucide-react";
 import { ArticleEditor } from "@/A04_editor/components/ArticleEditor";
 import { MetadataEditor } from "@/A04_editor/components/MetadataEditor";
@@ -16,6 +16,8 @@ import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
 
 type Tab = "edit" | "metadata" | "preview";
 type Status = "draft" | "published" | "scheduled" | "private";
+
+import { API_BASE_URL } from "@/constants";
 
 const statusConfig: Record<Status, { label: string; color: string }> = {
     draft: { label: "下書き", color: "text-gray-500" },
@@ -46,6 +48,55 @@ export default function App() {
     // Modal state for validation
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [missingFields, setMissingFields] = useState<string[]>([]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get("id");
+
+        if (id) {
+            // Use path parameter to get full content (including markdown body)
+            // Remove /api since API_BASE_URL already includes it (or expects /articles to follow)
+            fetch(`${API_BASE_URL}/articles/${id}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch article");
+                    return res.json();
+                })
+                .then(data => {
+                    setTitle(data.title || "");
+                    setSummary(data.summary || "");
+                    setKeywords(data.keywords || "");
+                    setContent(data.content || "");
+                    
+                    // ID conversion: ensure strings for select inputs
+                    setCategory(String(data.category_id || data.category || ""));
+                    
+                    const proj = Array.isArray(data.project_ids) ? data.project_ids[0] : (data.project_id || "");
+                    setProject(String(proj || ""));
+                    
+                    setGroup(String(data.group_id || data.group_creator_id || ""));
+                    setTags(data.tag_ids || data.tags || []);
+                    setThumbnail(data.thumbnail_url || data.thumbnail || data.image || "");
+                    setStatus(data.status as Status || "draft");
+                    
+                    // Handle date format for datetime-local input
+                    // Input expects "YYYY-MM-DDThh:mm"
+                    let pubDate = data.published_at || data.published_date || "";
+                    if (pubDate) {
+                        // If it's ISO string, slice it. If it's generic string, leave it (might be invalid for input but user can fix)
+                        if (pubDate.includes("T")) {
+                           pubDate = pubDate.slice(0, 16); 
+                        }
+                    }
+                    setPublishedAt(pubDate);
+                    
+                    toast.success("記事データを読み込みました");
+                })
+                .catch(err => {
+                    console.error(err);
+                    toast.error("記事の読み込みに失敗しました");
+                });
+        }
+    }, []);
 
     const handleSave = () => {
         const missing: string[] = [];

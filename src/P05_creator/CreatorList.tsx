@@ -4,6 +4,7 @@ import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
 import { Users, User, ChevronRight } from 'lucide-react';
+import { CREATOR_LIST_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 import { cn } from '@/P00_common/ui/utils';
 
 export default function CreatorList() {
@@ -40,20 +41,19 @@ export default function CreatorList() {
         <div className="min-h-screen bg-gray-50">
             <Header />
 
-            {/* Hero Section */}
             <section
                 className="relative bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80')`
+                    backgroundImage: `url('${CREATOR_LIST_CONFIG.hero.backgroundImage}')`
                 }}
             >
                 <div className="container mx-auto px-6 py-24 md:py-32">
                     <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
                         <h1 className="text-white text-4xl font-bold mb-4 drop-shadow-lg">
-                            Meet Our <span className="text-[#67e0b8]">Creators</span>
+                            <span className="text-[#67e0b8]">{CREATOR_LIST_CONFIG.hero.title.substring(0, 3)}</span>{CREATOR_LIST_CONFIG.hero.title.substring(3)}
                         </h1>
                         <p className="text-gray-200 text-xl font-medium leading-relaxed drop-shadow-md">
-                            Discover the talented individuals and passionate groups driving innovation at OPUCoder.
+                            {CREATOR_LIST_CONFIG.hero.description}
                         </p>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ export default function CreatorList() {
                             )}
                         >
                             <User className="w-4 h-4" />
-                            Individuals
+                            {CREATOR_LIST_CONFIG.tabs.individuals}
                         </button>
                         <button
                             onClick={() => { setActiveTab('group'); setPage(1); }}
@@ -85,7 +85,7 @@ export default function CreatorList() {
                             )}
                         >
                             <Users className="w-4 h-4" />
-                            Groups
+                            {CREATOR_LIST_CONFIG.tabs.groups}
                         </button>
                     </div>
                 </div>
@@ -93,7 +93,7 @@ export default function CreatorList() {
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin mb-4" />
-                        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Loading Creators...</p>
+                        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">{COMMON_CONFIG.loadingText}</p>
                     </div>
                 ) : (
                     <>
@@ -110,7 +110,7 @@ export default function CreatorList() {
                                             creator.creator_type === 'group' ? "rounded-[1.5rem]" : "rounded-full"
                                         )}>
                                             <img
-                                                src={creator.icon_path || 'https://api.dicebear.com/7.x/avataaars/svg'}
+                                                src={creator.icon_path || COMMON_CONFIG.defaultIconUrl}
                                                 alt={creator.display_name}
                                                 className="w-full h-full object-cover"
                                             />
@@ -140,7 +140,7 @@ export default function CreatorList() {
                                             ))}
                                         </div>
                                         <div className="flex items-center gap-1 text-emerald-600 font-black text-xs uppercase tracking-widest group-hover:gap-2 transition-all">
-                                            View Profile
+                                            {CREATOR_LIST_CONFIG.creatorCard.buttonText}
                                             <ChevronRight className="w-4 h-4" />
                                         </div>
                                     </div>

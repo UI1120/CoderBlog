@@ -1,4 +1,4 @@
-﻿import { ABOUT_CONFIG } from '@/config/siteConfig';
+﻿import { ABOUT_CONFIG } from '@/R01_config/siteConfig';
 
 export function About() {
   return (
