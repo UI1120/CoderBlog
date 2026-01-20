@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import CreatorDetail from "./CreatorDetail";
-import CreatorList from "./CreatorList";
+import CreatorDetail from "./components/CreatorDetail";
+import CreatorList from "./components/CreatorList";
 
-export default function CreatorApp() {
+export default function App() {
     const [cid, setCid] = useState<string | null>(null);
     const [gid, setGid] = useState<string | null>(null);
 

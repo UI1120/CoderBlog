@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
-import ProjectDetailApp from "./ProjectDetailApp";
-import ProjectListApp from "./ProjectListApp";
+import App from "./App";
 import "@/globals.css";
 
 async function enableMocking() {
@@ -15,10 +14,6 @@ async function enableMocking() {
     });
 }
 
-const pid = new URLSearchParams(window.location.search).get('pid');
-
 enableMocking().then(() => {
-    createRoot(document.getElementById("root")!).render(
-        pid ? <ProjectDetailApp /> : <ProjectListApp />
-    );
+    createRoot(document.getElementById("root")!).render(<App />);
 });
