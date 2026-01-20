@@ -1,22 +1,22 @@
 [
     {
         "label": "Game Dev",
-        "href": "/category/game-dev"
+        "href": "/search?q=game dev"
     },
     {
         "label": "Web Dev",
-        "href": "/category/web-dev"
+        "href": "/search?q=web dev"
     },
     {
         "label": "AI / ML",
-        "href": "/category/ai-ml"
+        "href": "/search?q=ai ml"
     },
     {
         "label": "Mobile",
-        "href": "/category/mobile"
+        "href": "/search?q=mobile"
     },
     {
         "label": "Design",
-        "href": "/category/design"
+        "href": "/search?q=design"
     }
 ]

@@ -23,7 +23,7 @@ export default function ProjectListApp() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
 
             {/* Hero Section */}
@@ -45,7 +45,7 @@ export default function ProjectListApp() {
                 </div>
             </section>
 
-            <main className="container mx-auto px-6 py-12">
+            <main className="container mx-auto px-6 py-12 flex-grow">
                 {loading ? (
                     <div className="text-center text-gray-500">{COMMON_CONFIG.loadingText}</div>
                 ) : (

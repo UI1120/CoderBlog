@@ -23,14 +23,20 @@ export default defineConfig({
               req.url = req.url.replace('/index', '/src/P01_toppage/index.html').replace(/^(\/)$/, '/src/P01_toppage/index.html');
             } else if (req.url === '/article' || req.url.startsWith('/article?')) {
               req.url = req.url.replace('/article', '/src/P02_article/article.html');
-            } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
-              req.url = req.url.replace('/notfound', '/src/P99_notfound/PageNotFound.html');
             } else if (req.url === '/search' || req.url.startsWith('/search?')) {
               req.url = req.url.replace('/search', '/src/P03_search/search.html');
             } else if (req.url === '/project' || req.url.startsWith('/project?')) {
               req.url = req.url.replace('/project', '/src/P04_project/project.html');
+            } else if (req.url === '/creator' || req.url.startsWith('/creator?')) {
+              req.url = req.url.replace('/creator', '/src/P05_creator/creator.html');
+            } else if (req.url === '/category' || req.url.startsWith('/category?')) {
+              req.url = req.url.replace('/category', '/src/P06_categories/index.html');
+            } else if (req.url === '/tag' || req.url.startsWith('/tag?')) {
+              req.url = req.url.replace('/tag', '/src/P07_tags/index.html');
             } else if (req.url === '/login' || req.url.startsWith('/login?')) {
               req.url = req.url.replace('/login', '/src/A01_login/login.html');
+            } else if (req.url === '/dashboard' || req.url.startsWith('/dashboard?')) {
+              req.url = req.url.replace('/dashboard', '/src/A02_dashboard/index.html');
             } else if (req.url === '/article_management' || req.url.startsWith('/article_management?')) {
               req.url = req.url.replace('/article_management', '/src/A03_article_management/index.html');
             } else if (req.url === '/editor' || req.url.startsWith('/editor?')) {
@@ -43,10 +49,8 @@ export default defineConfig({
               req.url = req.url.replace('/account_management', '/src/A07_account_management/index.html');
             } else if (req.url === '/baduser' || req.url.startsWith('/baduser?')) {
               req.url = req.url.replace('/baduser', '/src/P98_baduser/index.html');
-            } else if (req.url === '/creator' || req.url.startsWith('/creator?')) {
-              req.url = req.url.replace('/creator', '/src/P05_creator/creator.html');
-            } else if (req.url === '/dashboard' || req.url.startsWith('/dashboard?')) {
-              req.url = req.url.replace('/dashboard', '/src/A02_dashboard/index.html');
+            } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
+              req.url = req.url.replace('/notfound', '/src/P99_notfound/PageNotFound.html');
             }
           }
           next();
@@ -117,6 +121,8 @@ export default defineConfig({
         baduser: path.resolve(__dirname, 'src/P98_baduser/index.html'),
         creator: path.resolve(__dirname, 'src/P05_creator/creator.html'),
         dashboard: path.resolve(__dirname, 'src/A02_dashboard/index.html'),
+        category: path.resolve(__dirname, 'src/P06_categories/index.html'),
+        tag: path.resolve(__dirname, 'src/P07_tags/index.html'),
       },
     },
   },

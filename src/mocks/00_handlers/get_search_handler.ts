@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import searchResults from '../search/search_results.json';
+import articlesData from '../articles/articles_list.json';
 import projectsArticles from '../articleLists/projectsArticles.json';
 
 export const get_search_handler = [
@@ -16,15 +16,19 @@ export const get_search_handler = [
             return HttpResponse.json(projectsArticles);
         }
 
-        // Return only 2 items if query is 'testcase'
+        // Return only 100 items if query is 'testcase'
         if (query === 'testcase') {
-            return HttpResponse.json(searchResults.slice(0, 100));
+            return HttpResponse.json(articlesData.slice(0, 100));
         }
 
-        const filteredArticles = searchResults.filter((article: any) =>
+        // Filter only published articles for search
+        const publishedArticles = articlesData.filter((a: any) => a.status === 'published');
+
+        const filteredArticles = publishedArticles.filter((article: any) =>
             article.title.toLowerCase().includes(query) ||
             article.category.toLowerCase().includes(query) ||
-            article.writer.toLowerCase().includes(query)
+            article.writer.toLowerCase().includes(query) ||
+            (article.tags && article.tags.some((t: string) => t.toLowerCase().includes(query)))
         );
 
         return HttpResponse.json(filteredArticles);

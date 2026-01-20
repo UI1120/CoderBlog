@@ -38,7 +38,7 @@ export default function CreatorList() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
 
             <section
@@ -59,7 +59,7 @@ export default function CreatorList() {
                 </div>
             </section>
 
-            <main className="container mx-auto px-6 py-12">
+            <main className="container mx-auto px-6 py-12 flex-grow">
                 {/* Tab Switcher */}
                 <div className="flex justify-center mb-12">
                     <div className="bg-white p-1.5 rounded-[2rem] shadow-xl border border-gray-100 flex gap-2">

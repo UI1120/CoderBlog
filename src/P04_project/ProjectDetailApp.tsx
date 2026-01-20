@@ -78,7 +78,7 @@ export default function ProjectDetailApp() {
     const displayedProjects = projects.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
 
             {/* Hero Section */}
@@ -110,7 +110,7 @@ export default function ProjectDetailApp() {
 
             <main
                 ref={mainRef}
-                className="container mx-auto px-6 py-12"
+                className="container mx-auto px-6 py-12 flex-grow"
                 style={{ scrollMarginTop: '100px' }}
             >
                 {loading ? (

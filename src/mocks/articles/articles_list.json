@@ -14,7 +14,8 @@
         "writer_id": 2,
         "group_id": 11,
         "status": "published",
-        "comment_count": 5
+        "comment_count": 5,
+        "tags": ["React", "TypeScript", "Frontend"]
     },
     {
         "id": 2,
@@ -31,7 +32,8 @@
         "writer_id": 3,
         "group_id": 12,
         "status": "published",
-        "comment_count": 0
+        "comment_count": 0,
+        "tags": ["AI / ML", "Python"]
     },
     {
         "id": 3,
@@ -48,7 +50,8 @@
         "writer_id": 4,
         "group_id": 13,
         "status": "published",
-        "comment_count": 12
+        "comment_count": 12,
+        "tags": ["Docker", "Infrastructure", "Kubernetes"]
     },
     {
         "id": 4,
@@ -65,7 +68,8 @@
         "writer_id": 2,
         "group_id": 14,
         "status": "published",
-        "comment_count": 3
+        "comment_count": 3,
+        "tags": ["Python", "Data Science"]
     },
     {
         "id": 5,
@@ -82,7 +86,8 @@
         "writer_id": 4,
         "group_id": 16,
         "status": "published",
-        "comment_count": 8
+        "comment_count": 8,
+        "tags": ["Security", "Web Dev"]
     },
     {
         "id": 6,
@@ -99,7 +104,8 @@
         "writer_id": 3,
         "group_id": 12,
         "status": "published",
-        "comment_count": 2
+        "comment_count": 2,
+        "tags": ["Figma", "Design"]
     },
     {
         "id": 7,
@@ -116,7 +122,8 @@
         "writer_id": 1,
         "group_id": 10,
         "status": "published",
-        "comment_count": 15
+        "comment_count": 15,
+        "tags": ["Flutter", "Mobile", "Dart"]
     },
     {
         "id": 8,
@@ -133,7 +140,8 @@
         "writer_id": 4,
         "group_id": 17,
         "status": "published",
-        "comment_count": 4
+        "comment_count": 4,
+        "tags": ["Go", "Backend", "API"]
     },
     {
         "id": 9,
@@ -150,7 +158,8 @@
         "writer_id": 1,
         "group_id": 10,
         "status": "published",
-        "comment_count": 9
+        "comment_count": 9,
+        "tags": ["Next.js", "React"]
     },
     {
         "id": 10,
@@ -165,7 +174,8 @@
         "writer": "加藤 浩",
         "writer_name": "加藤 浩",
         "status": "published",
-        "comment_count": 1
+        "comment_count": 1,
+        "tags": ["Security", "Infrastructure"]
     },
     {
         "id": 11,
@@ -180,7 +190,8 @@
         "writer": "木村 さくら",
         "writer_name": "木村 さくら",
         "status": "published",
-        "comment_count": 6
+        "comment_count": 6,
+        "tags": ["Firebase", "DevOps"]
     },
     {
         "id": 12,
@@ -195,7 +206,8 @@
         "writer": "吉田 隆",
         "writer_name": "吉田 隆",
         "status": "published",
-        "comment_count": 22
+        "comment_count": 22,
+        "tags": ["AI / ML"]
     },
     {
         "id": 13,
@@ -210,7 +222,8 @@
         "writer": "山田 次郎",
         "writer_name": "山田 次郎",
         "status": "published",
-        "comment_count": 7
+        "comment_count": 7,
+        "tags": []
     },
     {
         "id": 14,
@@ -225,7 +238,8 @@
         "writer": "佐々木 あゆみ",
         "writer_name": "佐々木 あゆみ",
         "status": "published",
-        "comment_count": 11
+        "comment_count": 11,
+        "tags": ["PostgreSQL", "Database"]
     },
     {
         "id": 15,
@@ -240,7 +254,8 @@
         "writer": "山口 大介",
         "writer_name": "山口 大介",
         "status": "published",
-        "comment_count": 18
+        "comment_count": 18,
+        "tags": ["TypeScript"]
     },
     {
         "id": 16,
@@ -255,7 +270,8 @@
         "writer": "松本 理恵",
         "writer_name": "松本 理恵",
         "status": "published",
-        "comment_count": 3
+        "comment_count": 3,
+        "tags": ["UI / UX", "Career"]
     },
     {
         "id": 17,
@@ -270,7 +286,8 @@
         "writer": "井上 智也",
         "writer_name": "井上 智也",
         "status": "published",
-        "comment_count": 0
+        "comment_count": 0,
+        "tags": ["Web Dev", "Svelte"]
     },
     {
         "id": 18,
@@ -285,7 +302,8 @@
         "writer": "木下 優子",
         "writer_name": "木下 優子",
         "status": "published",
-        "comment_count": 13
+        "comment_count": 13,
+        "tags": ["Mobile", "iOS", "Swift"]
     },
     {
         "id": 19,
@@ -300,7 +318,8 @@
         "writer": "阿部 慎之助",
         "writer_name": "阿部 慎之助",
         "status": "published",
-        "comment_count": 2
+        "comment_count": 2,
+        "tags": []
     },
     {
         "id": 20,
@@ -315,7 +334,8 @@
         "writer": "三浦 健",
         "writer_name": "三浦 健",
         "status": "published",
-        "comment_count": 4
+        "comment_count": 4,
+        "tags": ["Web Dev", "WebAssembly"]
     },
     {
         "id": 21,
@@ -330,7 +350,8 @@
         "writer": "岡田 真理",
         "writer_name": "岡田 真理",
         "status": "published",
-        "comment_count": 6
+        "comment_count": 6,
+        "tags": ["Unity", "Game Dev"]
     },
     {
         "id": 22,
@@ -345,7 +366,8 @@
         "writer": "藤田 晋",
         "writer_name": "藤田 晋",
         "status": "published",
-        "comment_count": 3
+        "comment_count": 3,
+        "tags": ["Docker", "Terraform", "Cloud"]
     },
     {
         "id": 23,
@@ -360,7 +382,8 @@
         "writer": "中島 美穂",
         "writer_name": "中島 美穂",
         "status": "published",
-        "comment_count": 5
+        "comment_count": 5,
+        "tags": ["React", "API"]
     },
     {
         "id": 24,
@@ -375,7 +398,8 @@
         "writer": "後藤 圭介",
         "writer_name": "後藤 圭介",
         "status": "published",
-        "comment_count": 8
+        "comment_count": 8,
+        "tags": ["Web Dev", "Testing"]
     },
     {
         "id": 201,
@@ -390,6 +414,7 @@
         "writer": "田中 太郎",
         "writer_name": "田中 太郎",
         "status": "draft",
-        "comment_count": 0
+        "comment_count": 0,
+        "tags": ["Web Dev", "CSS"]
     }
 ]

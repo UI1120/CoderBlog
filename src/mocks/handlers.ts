@@ -10,6 +10,8 @@ import { admin_management_handler } from './00_handlers/admin_management_handler
 import { management_handlers } from './00_handlers/management_handler';
 import { get_creators_handler } from './00_handlers/get_creators_handler';
 import { dashboard_handler } from './00_handlers/dashboard_handler';
+import { get_categories_handler } from './00_handlers/get_categories_handler';
+import { get_tags_handler } from './00_handlers/get_tags_handler';
 
 export const handlers = [
     ...get_article_handler,
@@ -24,4 +26,6 @@ export const handlers = [
     ...admin_management_handler,
     ...get_creators_handler,
     ...dashboard_handler,
+    ...get_categories_handler,
+    ...get_tags_handler,
 ];

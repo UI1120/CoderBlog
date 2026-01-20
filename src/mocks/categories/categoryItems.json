@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "label": "Game Dev",
+        "articleCount": 24
+    },
+    {
+        "id": 2,
+        "label": "Web Dev",
+        "articleCount": 42
+    },
+    {
+        "id": 3,
+        "label": "AI / ML",
+        "articleCount": 18
+    },
+    {
+        "id": 4,
+        "label": "Mobile",
+        "articleCount": 12
+    },
+    {
+        "id": 5,
+        "label": "Design",
+        "articleCount": 15
+    },
+    {
+        "id": 6,
+        "label": "Robotics",
+        "articleCount": 9
+    }
+]

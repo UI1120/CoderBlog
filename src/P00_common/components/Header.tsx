@@ -42,7 +42,6 @@ function MobileSection({ label, items, isOpen, onToggle }: { label: string, item
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchActive, setIsSearchActive] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileOpenSections, setMobileOpenSections] = useState<Record<string, boolean>>({});
 
@@ -73,7 +72,9 @@ export function Header() {
     // Fetch tag items
     fetch(`${API_BASE_URL}/header/tags`)
       .then(res => res.json())
-      .then(data => setTagItems(data))
+      .then(data => {
+        setTagItems([...data, { label: "すべて見る", href: "/tag" }]);
+      })
       .catch(err => console.error(err));
 
     // Fetch writer items
@@ -87,7 +88,9 @@ export function Header() {
     // Fetch category items
     fetch(`${API_BASE_URL}/header/categories`)
       .then(res => res.json())
-      .then(data => setCategoryItems(data))
+      .then(data => {
+        setCategoryItems([...data, { label: "すべて見る", href: "/category" }]);
+      })
       .catch(err => console.error(err));
   }, []);
 
@@ -173,7 +176,7 @@ export function Header() {
                 placeholder="記事を検索..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setIsSearchActive(true)}
+                onFocus={() => {}}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleSearch();
                 }}
@@ -183,7 +186,6 @@ export function Header() {
                 onClick={() => {
                   if (searchQuery) {
                     setSearchQuery("");
-                    setIsSearchActive(false);
                   }
                 }}
                 className="absolute right-3 text-gray-700 hover:text-black transition-colors"

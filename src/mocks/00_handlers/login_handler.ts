@@ -27,7 +27,7 @@ export const login_handler = [
     }),
     http.get('/api/auth', () => {
         // --- モックデータの切り替え ---
-        const roleid = 0;
+        const roleid = 1;
         const role = ["admin", "user", "bad"];
         switch (role[roleid]) {
             case "admin":

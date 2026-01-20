@@ -1,26 +1,22 @@
 [
     {
         "label": "Unity",
-        "href": "#tag-unity"
+        "href": "/search?q=unity"
     },
     {
         "label": "React",
-        "href": "#tag-react"
+        "href": "/search?q=react"
     },
     {
         "label": "Python",
-        "href": "#tag-python"
+        "href": "/search?q=python"
     },
     {
         "label": "AI / ML",
-        "href": "#tag-ai"
+        "href": "/search?q=ai ml"
     },
     {
         "label": "TypeScript",
-        "href": "#tag-typescript"
-    },
-    {
-        "label": "すべてのタグ",
-        "href": "#all-tags"
+        "href": "/search?q=typescript"
     }
 ]

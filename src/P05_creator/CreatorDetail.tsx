@@ -61,7 +61,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
 
             {/* Profile Header Section */}
@@ -153,7 +153,7 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
             </div>
 
             {/* Articles Grid */}
-            <main className="container mx-auto px-6 py-20">
+            <main className="container mx-auto px-6 py-20 flex-grow">
                 <div className="flex items-center gap-4 mb-12">
                     <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight">{CREATOR_DETAIL_CONFIG.sectionTitle}</h2>
                     <div className="h-px flex-grow bg-gray-100" />

@@ -57,7 +57,7 @@ export function ActivityGraph({ data, activeMetric, aggregationMode, onModeChang
                 weekly_your_likes: item.your_likes || 0,
                 weekly_your_articles: weeklyYourArticles
             };
-        });
+        }).slice(1);
     }, [data]);
 
     if (!data || data.length === 0) return null;

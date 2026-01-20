@@ -38,11 +38,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
-      <article>
+      <main className="flex-grow">
         <ArticleDetail article={article} />
-      </article>
+      </main>
       <Footer />
     </div>
   );

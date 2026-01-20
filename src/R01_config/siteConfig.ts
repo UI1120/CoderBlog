@@ -106,3 +106,25 @@ export const CREATOR_DETAIL_CONFIG = {
     emptyState: "このクリエイターの記事が見つかりませんでした。",
     defaultProfile: "このクリエイターはまだプロフィール説明を共有していません。"
 };
+
+/**
+ * Category List configuration (P06_categories)
+ */
+export const CATEGORY_LIST_CONFIG = {
+    title: "カテゴリー一覧",
+    description: "興味のあるトピックから記事を探す",
+    bgImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2070&auto=format&fit=crop",
+    loadingText: "カテゴリーを読み込み中...",
+    emptyMessage: "カテゴリーが見つかりませんでした。"
+};
+
+/**
+ * Tag List configuration (P07_tags)
+ */
+export const TAG_LIST_CONFIG = {
+    title: "タグ一覧",
+    description: "キーワードから記事を探す",
+    bgImage: "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?q=80&w=2080&auto=format&fit=crop",
+    loadingText: "タグを読み込み中...",
+    emptyMessage: "タグが見つかりませんでした。"
+};
