@@ -13,6 +13,7 @@ import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
 import { IndividualEditor } from "./components/IndividualEditor";
 import { GroupManager } from "./components/GroupManager";
+import { Toaster, toast } from "sonner";
 
 export default function App() {
     const { user, isAdmin, loading: authLoading } = useAdminAuth();
@@ -105,6 +106,13 @@ export default function App() {
                 setPasswordError("パスワードが一致しません");
                 return;
             }
+
+            // Complexity check: 8-12 alphanumeric
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+            if (!passwordRegex.test(individualFormData.password)) {
+                setPasswordError("8-12文字の英数字混合で入力してください");
+                return;
+            }
         }
 
         try {
@@ -115,13 +123,17 @@ export default function App() {
             });
 
             if (response.ok) {
-                alert("プロフィール情報を保存しました");
+                toast.success("プロフィール情報を保存しました");
                 setPasswordError("");
                 setConfirmPassword("");
                 fetchData();
+            } else {
+                const errData = await response.json();
+                toast.error(errData.message || "保存に失敗しました");
             }
         } catch (error) {
             console.error("Failed to save individual profile:", error);
+            toast.error("サーバーエラーが発生しました");
         }
     };
 
@@ -186,6 +198,7 @@ export default function App() {
 
     return (
         <AdminLayout>
+            <Toaster richColors position="top-center" />
             <AdminHeader
                 icon={activeTab === 'individual' ? <UserCircle2 className="w-6 h-6" /> : <Users className="w-6 h-6" />}
                 title="クリエイター管理"

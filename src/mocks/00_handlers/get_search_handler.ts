@@ -2,6 +2,17 @@ import { http, HttpResponse } from 'msw';
 import articlesData from '../articles/articles_list.json';
 import projectsArticles from '../articleLists/projectsArticles.json';
 
+const mapArticle = (a: any) => {
+    const projectId = a.project_id || a.projectId || a.category_id || 1;
+    return {
+        ...a,
+        id: Number(a.id || a.article_id),
+        writerId: Number(a.writer_id || a.writerId),
+        project: a.project || a.category || "General",
+        projectId: Number(projectId)
+    };
+};
+
 export const get_search_handler = [
     http.get('/api/search', ({ request }) => {
         const url = new URL(request.url);
@@ -13,12 +24,12 @@ export const get_search_handler = [
 
         // Article overview (latest articles list)
         if (query === 'all') {
-            return HttpResponse.json(projectsArticles);
+            return HttpResponse.json(projectsArticles.map(mapArticle));
         }
 
         // Return only 100 items if query is 'testcase'
         if (query === 'testcase') {
-            return HttpResponse.json(articlesData.slice(0, 100));
+            return HttpResponse.json(articlesData.slice(0, 100).map(mapArticle));
         }
 
         // Filter only published articles for search
@@ -31,6 +42,6 @@ export const get_search_handler = [
             (article.tags && article.tags.some((t: string) => t.toLowerCase().includes(query)))
         );
 
-        return HttpResponse.json(filteredArticles);
+        return HttpResponse.json(filteredArticles.map(mapArticle));
     }),
 ];

@@ -77,7 +77,7 @@ export const PROJECT_DETAIL_CONFIG = {
  */
 export const CREATOR_LIST_CONFIG = {
     hero: {
-        title: "メンバ一覧",
+        title: "メンバー一覧",
         description: "OPUCoderでイノベーションを牽引する、才能あふれる個人や情熱的なグループをご紹介します。",
         backgroundImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80"
     },

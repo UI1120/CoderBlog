@@ -8,12 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/P00_common/ui/popover
 import { Checkbox } from "@/P00_common/ui/checkbox";
 
 interface MetadataEditorProps {
-    category: string;
     project: string;
     group: string;
     tags: string[];
     thumbnail: string;
-    onCategoryChange: (category: string) => void;
     onProjectChange: (project: string) => void;
     onGroupChange: (group: string) => void;
     onTagsChange: (tags: string[]) => void;
@@ -21,25 +19,21 @@ interface MetadataEditorProps {
 }
 
 export function MetadataEditor({
-    category,
     project,
     group,
     tags,
     thumbnail,
-    onCategoryChange,
     onProjectChange,
     onGroupChange,
     onTagsChange,
     onThumbnailChange,
 }: MetadataEditorProps) {
-    const [categories, setCategories] = useState<any[]>([]);
     const [projects, setProjects] = useState<any[]>([]);
     const [groups, setGroups] = useState<any[]>([]);
     const [tagsList, setTagsList] = useState<any[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/header/categories`).then(res => res.json()).then(setCategories).catch(console.error);
         fetch(`${API_BASE_URL}/header/projects`).then(res => res.json()).then(setProjects).catch(console.error);
         fetch(`${API_BASE_URL}/header/groups`).then(res => res.json()).then(setGroups).catch(console.error);
         fetch(`${API_BASE_URL}/header/tags`).then(res => res.json()).then(setTagsList).catch(console.error);
@@ -73,16 +67,6 @@ export function MetadataEditor({
             {/* Left Column: Data */}
             <div className="space-y-6">
                 <AdminCard className="p-8 space-y-6">
-                    <div>
-                        <label className={labelClass}>カテゴリー</label>
-                        <AdminSelect
-                            value={category}
-                            onChange={onCategoryChange}
-                            options={categories.map(c => ({ label: c.label, value: c.label }))}
-                            placeholder="カテゴリーを選択"
-                            title="Select Category"
-                        />
-                    </div>
 
                     <div>
                         <label className={labelClass}>プロジェクト</label>

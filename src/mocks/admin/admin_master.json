@@ -1,0 +1,43 @@
+{
+    "accounts": [
+        {
+            "account_id": 1,
+            "login_name": "admin",
+            "email": "admin@example.com",
+            "role": "admin",
+            "status": "active",
+            "needs_password_change": false
+        },
+        {
+            "account_id": 2,
+            "login_name": "user",
+            "email": "user@example.com",
+            "role": "user",
+            "status": "active",
+            "needs_password_change": false
+        }
+    ],
+    "projects": [
+        {
+            "project_id": 1,
+            "project_name": "ゲーム開発",
+            "description": "プロジェクトの説明文がここに入ります。",
+            "category_id": 1,
+            "default_thumbnail_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200"
+        },
+        {
+            "project_id": 2,
+            "project_name": "ロボット政策",
+            "description": "プロジェクトの説明文がここに入ります。",
+            "category_id": 2,
+            "default_thumbnail_url": ""
+        },
+        {
+            "project_id": 3,
+            "project_name": "Webサービス",
+            "description": "プロジェクトの説明文がここに入ります。",
+            "category_id": 3,
+            "default_thumbnail_url": ""
+        }
+    ]
+}

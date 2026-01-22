@@ -3,12 +3,25 @@ import article001 from '../articles/article_001.json';
 import article002 from '../articles/article_002.json';
 import articlesData from '../articles/articles_list.json';
 
-const articles: Record<string, any> = {
-    '1': article001,
-    '2': article002,
+const mapArticle = (a: any) => {
+    const projectId = a.project_id || a.projectId || a.category_id || 1;
+    return {
+        ...a,
+        id: Number(a.id || a.article_id),
+        article_id: Number(a.id || a.article_id),
+        writer_id: Number(a.writer_id || a.writerId),
+        project: a.project || a.category || "General",
+        projectId: Number(projectId),
+        project_id: Number(projectId)
+    };
 };
 
-export let articlesList = [...articlesData];
+export let articlesList = [...articlesData].map(mapArticle);
+
+const articles: Record<string, any> = {
+    '1': mapArticle(article001),
+    '2': mapArticle(article002),
+};
 
 export const get_article_handler = [
     // --- 一般・公開用 API ---

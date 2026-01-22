@@ -7,8 +7,8 @@ interface PreviewProps {
     summary: string;
     keywords: string;
     content: string;
-    category: string;
     project: string;
+    projectId: string | number;
     tags: string[];
     thumbnail: string;
 }
@@ -17,8 +17,9 @@ export function Preview({
     title,
     summary,
     content,
-    category,
     project,
+    projectId,
+    tags,
     thumbnail,
 }: PreviewProps) {
     // プレビュー用に現在の日付を使用
@@ -41,8 +42,11 @@ export function Preview({
                     <ArticleHeader
                         title={title || "無題の記事"}
                         summary={summary || "記事の概要がここに入ります"}
-                        category={category || "カテゴリ未指定"}
+                        category={"Project Content"}
                         categoryId="preview"
+                        project={project || "プロジェクト未指定"}
+                        projectId={projectId || "preview"}
+                        tags={tags || []}
                         writer="Editor User"
                         group={project || "プロジェクト未指定"}
                         publishedDate={currentDate}

@@ -17,6 +17,7 @@ import { AdminCard } from "@/A00_common/components/AdminCard";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 import { AdminSelect } from "@/A00_common/components/AdminSelect";
 import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
+import { Toaster, toast } from "sonner";
 import { AdminModal } from "@/A00_common/components/AdminModal";
 import { cn } from "@/P00_common/ui/utils";
 
@@ -40,7 +41,7 @@ export default function App() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [accountToDelete, setAccountToDelete] = useState<any>(null);
-    const [newAccountData, setNewAccountData] = useState({ login_name: "", email: "", password: "", role: "user" });
+    const [newAccountData, setNewAccountData] = useState({ login_name: "", email: "", role: "user" });
 
     const fetchData = async () => {
         setLoading(true);
@@ -104,6 +105,12 @@ export default function App() {
 
     const handleCreateAccount = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!newAccountData.login_name || !newAccountData.email) {
+            toast.error("全ての項目を入力してください");
+            return;
+        }
+
         try {
             const response = await fetch(`${API_BASE_URL}/admin/accounts`, {
                 method: "POST",
@@ -113,10 +120,12 @@ export default function App() {
             if (response.ok) {
                 fetchData();
                 setIsCreateModalOpen(false);
-                setNewAccountData({ login_name: "", email: "", password: "", role: "user" });
+                setNewAccountData({ login_name: "", email: "", role: "user" });
+                toast.success("アカウント招待を送信しました");
             }
         } catch (error) {
             console.error("Failed to create account:", error);
+            toast.error("サーバーエラーが発生しました");
         }
     };
 
@@ -129,6 +138,7 @@ export default function App() {
 
     return (
         <AdminLayout>
+            <Toaster richColors position="top-center" />
             <AdminHeader
                 icon={<Users className="w-6 h-6" />}
                 title="アカウント管理"
@@ -341,17 +351,6 @@ export default function App() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-400 uppercase tracking-widest text-[10px] font-black mb-2 pl-1">パスワード</label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={newAccountData.password}
-                                        onChange={(e) => setNewAccountData({ ...newAccountData, password: e.target.value })}
-                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700"
-                                        placeholder="••••••••"
-                                    />
-                                </div>
-                                <div>
                                     <label className="block text-gray-400 uppercase tracking-widest text-[10px] font-black mb-2 pl-1">ロール</label>
                                     <AdminSelect
                                         value={newAccountData.role}
@@ -363,6 +362,9 @@ export default function App() {
                                         placeholder="ロールを選択"
                                     />
                                 </div>
+                                <p className="text-[10px] text-gray-400 font-bold px-1 py-1">
+                                    ※ 登録後、入力されたメールアドレスにワンタイムパスワードが送信されます。
+                                </p>
                             </div>
                         </form>
                     </AdminModal>

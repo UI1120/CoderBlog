@@ -8,8 +8,11 @@ import {
     Trash2,
     Save,
     Search,
-    AlertTriangle,
-    Lock
+    Eye,
+    Upload,
+    X,
+    Lock,
+    AlertTriangle
 } from "lucide-react";
 import { API_BASE_URL } from "@/constants";
 import { AdminLayout } from "@/A00_common/components/AdminLayout";
@@ -18,7 +21,10 @@ import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { AdminCard } from "@/A00_common/components/AdminCard";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 import { AdminModal } from "@/A00_common/components/AdminModal";
+import { AdminSelect } from "@/A00_common/components/AdminSelect";
+import { Toaster, toast } from "sonner";
 import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
+import { useRef } from "react";
 
 type ResourceType = "categories" | "tags" | "projects";
 
@@ -26,6 +32,7 @@ export default function App() {
     const { user, isAdmin, loading: authLoading } = useAdminAuth();
     const [activeTab, setActiveTab] = useState<ResourceType>("categories");
     const [items, setItems] = useState<any[]>([]);
+    const [categoriesList, setCategoriesList] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -34,7 +41,9 @@ export default function App() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
     const [itemToDelete, setItemToDelete] = useState<any>(null);
+    const [viewingThumbnail, setViewingThumbnail] = useState<string | null>(null);
     const [formData, setFormData] = useState<any>({});
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Fetch data
     const fetchData = async () => {
@@ -43,6 +52,13 @@ export default function App() {
             const response = await fetch(`${API_BASE_URL}/admin/${activeTab}`);
             const data = await response.json();
             setItems(data[activeTab] || []);
+
+            // Also fetch categories if not yet loaded (needed for Project dropdown)
+            if (categoriesList.length === 0) {
+                const catRes = await fetch(`${API_BASE_URL}/admin/categories`);
+                const catData = await catRes.json();
+                setCategoriesList(catData.categories || []);
+            }
         } catch (error) {
             console.error("Failed to fetch data:", error);
         } finally {
@@ -62,7 +78,7 @@ export default function App() {
         if (item) {
             setFormData({ ...item });
         } else {
-            setFormData(activeTab === "projects" ? { project_name: "", description: "" } :
+            setFormData(activeTab === "projects" ? { project_name: "", description: "", category_id: "", default_thumbnail_url: "" } :
                 activeTab === "categories" ? { category_name: "" } : { tag_name: "" });
         }
         setIsModalOpen(true);
@@ -77,6 +93,22 @@ export default function App() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isAdmin) return;
+
+        // Validation
+        if (activeTab === "categories" && !formData.category_name) {
+            toast.error("カテゴリー名は必須です");
+            return;
+        }
+        if (activeTab === "tags" && !formData.tag_name) {
+            toast.error("タグ名は必須です");
+            return;
+        }
+        if (activeTab === "projects") {
+            if (!formData.project_name || !formData.description || !formData.category_id || !formData.default_thumbnail_url) {
+                toast.error("全ての項目が必須です");
+                return;
+            }
+        }
 
         const isUpdate = !!editingItem;
         const idField = activeTab === "projects" ? "project_id" :
@@ -96,9 +128,23 @@ export default function App() {
             if (response.ok) {
                 fetchData();
                 handleCloseModal();
+                toast.success("保存しました");
             }
         } catch (error) {
             console.error("Failed to save item:", error);
+            toast.error("保存に失敗しました");
+        }
+    };
+
+    const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target?.result as string;
+                setFormData({ ...formData, default_thumbnail_url: base64 });
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -115,10 +161,10 @@ export default function App() {
         const id = itemToDelete[idField];
 
         try {
-            const response = await fetch(`${API_BASE_URL}/admin/${activeTab}/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/admin/${activeTab}/${id}/delete`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ action: "delete" })
+                body: JSON.stringify({})
             });
 
             if (response.ok) {
@@ -138,8 +184,8 @@ export default function App() {
 
     const tabConfig = [
         { id: "categories", label: "カテゴリー", icon: FolderTree },
-        { id: "tags", label: "タグ", icon: TagIcon },
         { id: "projects", label: "プロジェクト", icon: Rocket },
+        { id: "tags", label: "タグ", icon: TagIcon },
     ];
 
     const getResourceLabel = () => {
@@ -150,6 +196,7 @@ export default function App() {
 
     return (
         <AdminLayout>
+            <Toaster richColors position="top-center" />
             <AdminHeader
                 icon={<FolderTree className="w-6 h-6" />}
                 title="分類・マスタ管理"
@@ -218,6 +265,12 @@ export default function App() {
                                                 activeTab === "categories" ? "カテゴリー名" : "タグ名"}
                                         </th>
                                         {activeTab === "projects" && (
+                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">カテゴリー</th>
+                                        )}
+                                        {activeTab === "projects" && (
+                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">デフォルトサムネイル</th>
+                                        )}
+                                        {activeTab === "projects" && (
                                             <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">説明</th>
                                         )}
                                         {isAdmin && (
@@ -243,6 +296,24 @@ export default function App() {
                                                 <tr key={id} className="group hover:bg-emerald-50/30 transition-colors">
                                                     <td className="px-8 py-6 font-mono text-emerald-600/60 text-sm">#{id}</td>
                                                     <td className="px-8 py-6 font-bold text-gray-700">{name}</td>
+                                                    {activeTab === "projects" && (
+                                                        <td className="px-8 py-6 text-emerald-600 font-bold text-sm">{item.category_name}</td>
+                                                    )}
+                                                    {activeTab === "projects" && (
+                                                        <td className="px-8 py-6">
+                                                            {item.default_thumbnail_url ? (
+                                                                <button 
+                                                                    onClick={() => setViewingThumbnail(item.default_thumbnail_url)}
+                                                                    className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold text-[10px] uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-full transition-colors"
+                                                                >
+                                                                    <Eye className="w-3 h-3" />
+                                                                    画像を見る
+                                                                </button>
+                                                            ) : (
+                                                                <span className="text-gray-300 text-[10px] font-black uppercase tracking-widest">No Image</span>
+                                                            )}
+                                                        </td>
+                                                    )}
                                                     {activeTab === "projects" && (
                                                         <td className="px-8 py-6 text-gray-500 text-sm max-w-2xl truncate">{item.description}</td>
                                                     )}
@@ -333,6 +404,59 @@ export default function App() {
                                     />
                                 </div>
                             )}
+
+                            {activeTab === "projects" && (
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-gray-400 uppercase tracking-widest text-[10px] font-black mb-3 pl-1">カテゴリー</label>
+                                            <AdminSelect
+                                                value={String(formData.category_id || "")}
+                                                onChange={(val) => setFormData({ ...formData, category_id: parseInt(val) })}
+                                                options={categoriesList.map(c => ({ label: c.category_name, value: String(c.category_id) }))}
+                                                placeholder="カテゴリーを選択..."
+                                                title="Select Category"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-gray-400 uppercase tracking-widest text-[10px] font-black mb-3 pl-1">デフォルトサムネイル</label>
+                                            <div className="flex items-center gap-4">
+                                                {formData.default_thumbnail_url ? (
+                                                    <div className="relative group w-20 h-20 rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                                                        <img src={formData.default_thumbnail_url} className="w-full h-full object-cover" />
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setFormData({ ...formData, default_thumbnail_url: "" })}
+                                                            className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
+                                                        >
+                                                            <X className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-20 h-20 rounded-xl bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center text-gray-300">
+                                                        <Upload className="w-6 h-6" />
+                                                    </div>
+                                                )}
+                                                <AdminButton 
+                                                    type="button" 
+                                                    variant="secondary" 
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                    className="rounded-xl h-10 px-4 text-xs font-black uppercase tracking-widest"
+                                                >
+                                                    画像をアップロード
+                                                </AdminButton>
+                                                <input
+                                                    type="file"
+                                                    ref={fileInputRef}
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={handleThumbnailUpload}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </form>
                     </AdminModal>
 
@@ -368,6 +492,27 @@ export default function App() {
                                     This action cannot be undone. System records will be updated immediately.
                                 </p>
                             </div>
+                        </div>
+                    </AdminModal>
+
+                    {/* Image Preview Modal */}
+                    <AdminModal
+                        isOpen={!!viewingThumbnail}
+                        onClose={() => setViewingThumbnail(null)}
+                        title="サムネイルプレビュー"
+                        subtitle="Project Default Thumbnail"
+                        footer={
+                            <AdminButton onClick={() => setViewingThumbnail(null)} className="w-full rounded-2xl">
+                                閉じる
+                            </AdminButton>
+                        }
+                    >
+                        <div className="rounded-3xl overflow-hidden border border-gray-100 shadow-2xl">
+                            <img 
+                                src={viewingThumbnail || ""} 
+                                alt="Thumbnail Preview" 
+                                className="w-full h-auto object-cover"
+                            />
                         </div>
                     </AdminModal>
                 </>

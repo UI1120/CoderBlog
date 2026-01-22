@@ -2,10 +2,16 @@
 import articlesData from '../articles/articles_list.json';
 
 // Helper to map articles to the frontend Article interface
-const mapArticle = (a: any) => ({
-    ...a,
-    writerId: a.writer_id // Ensure camelCase for React components
-});
+const mapArticle = (a: any) => {
+    const projectId = a.project_id || a.projectId || a.category_id || 1;
+    return {
+        ...a,
+        id: Number(a.id || a.article_id),
+        writerId: Number(a.writer_id || a.writerId),
+        project: a.project || a.category || "General",
+        projectId: Number(projectId)
+    };
+};
 
 export const get_article_lists_handler = [
     // Highlighted projects articles (e.g., top 6 latest published)

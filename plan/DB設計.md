@@ -1,4 +1,3 @@
-
 ## 5. データベース設計
 
 ### 5.1. テーブル一覧（主要カラムのみ）
@@ -6,6 +5,7 @@
 ※型は概念レベルで記載し、具体的な長さや制約は詳細設計で確定。
 
 ### (1) accounts：アカウント（ログイン主体）
+
 ※1 つのアカウントに対し、必ず 1 つの個人クリエイター（creators）が作成される運用とする。
 
 - account_id : PK
@@ -14,6 +14,8 @@
 - role : `admin` / `user`
 - status : `active` / `banned` / `deleted`
 - password_hash : パスワードハッシュ
+- otp_hash : ワンタイムパスワード（招待時等）のハッシュ
+- needs_password_change : 初回ログイン時のパスワード変更必須フラグ（デフォルト: true）
 - icon_path : アイコン画像パス（任意）
 - failed_logins : 連続ログイン失敗回数
 - locked_until : ロック解除予定時刻（一定時間ロックアウト用）
@@ -21,6 +23,7 @@
 - last_login_at : 最終ログイン日時
 
 ### (2) creators：クリエイター（個人・グループ）
+
 ※`creator_type = 'individual'` の場合、`account_id` と 1:1 で紐付く。
 
 - creator_id : PK
@@ -37,6 +40,8 @@
 
 ### (4) categories：カテゴリ
 
+※プロジェクトを分類するための大枠。
+
 - category_id : PK
 - category_name : カテゴリ名（例：ゲーム開発、ロボット、インフラ等）
 
@@ -47,9 +52,13 @@
 
 ### (6) projects：プロジェクト
 
+※同じ目的や活動の下に複数の記事が紐付く。必ず1つのカテゴリに属する。
+
 - project_id : PK
 - project_name : プロジェクト名
 - description : 説明文
+- category_id : FK → categories
+- default_thumbnail_path : デフォルトサムネイル画像パス（記事にサムネイルがない場合に使用）
 
 ### (7) articles：記事（メタ情報）
 
@@ -64,18 +73,13 @@
 - published_at : 公開日時（予約投稿にも使用）
 - writer_creator_id : FK → creators（個人、記事のライター）
 - group_creator_id : FK → creators（任意：グループタグ）
-- category_id : FK → categories
-- thumbnail_path : サムネイル画像パス（任意）
+- project_id : FK → projects
+- thumbnail_path : サムネイル画像パス（任意。未指定時はプロジェクトのデフォルトを使用）
 
 ### (8) article_tags：記事–タグ（多対多）
 
 - article_id : FK → articles
 - tag_id : FK → tags
-
-### (9) article_projects：記事–プロジェクト（多対多）
-
-- article_id : FK → articles
-- project_id : FK → projects
 
 ### (10) comments：コメント
 
@@ -136,6 +140,8 @@ erDiagram
         ENUM role "admin/user"
         ENUM status "active/banned/deleted"
         VARCHAR password_hash
+        VARCHAR otp_hash
+        BOOLEAN needs_password_change
         VARCHAR icon_path
         INT failed_logins
         DATETIME locked_until
@@ -188,7 +194,7 @@ erDiagram
         DATETIME published_at
         INT writer_creator_id FK
         INT group_creator_id FK
-        INT category_id FK
+        INT project_id FK
         VARCHAR thumbnail_path
     }
 
@@ -206,6 +212,8 @@ erDiagram
         INT project_id PK
         VARCHAR project_name
         TEXT description
+        INT category_id FK
+        VARCHAR default_thumbnail_path
     }
 
     article_tags {
@@ -213,10 +221,6 @@ erDiagram
         INT tag_id FK
     }
 
-    article_projects {
-        INT article_id FK
-        INT project_id FK
-    }
 
     comments {
         INT comment_id PK
@@ -254,13 +258,11 @@ erDiagram
     %% リレーション
     creators ||--o{ articles : "writer (writer_creator_id)"
     creators ||--o{ articles : "group_tag (group_creator_id)"
-    categories ||--o{ articles : "has"
+    categories ||--o{ projects : "contains"
+    projects ||--o{ articles : "includes"
 
     articles }o--o{ article_tags : "tagged_with"
     tags }o--o{ article_tags : "used_in"
-
-    articles }o--o{ article_projects : "part_of"
-    projects }o--o{ article_projects : "includes"
 
     articles ||--o{ comments : "has"
 

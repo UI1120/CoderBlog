@@ -7,11 +7,12 @@ import { useState, useRef } from "react";
 interface Article {
   id: number;
   image: string;
-  category: string;
+  project: string;
+  projectId: number;
   title: string;
   date: string;
   writer: string;
-  writerId?: string | number;
+  writerId?: number;
   writerIcon?: string;
 }
 
@@ -73,7 +74,8 @@ export function ArticleCarousel({
               <ArticleCard
                 id={article.id}
                 image={article.image}
-                category={article.category}
+                project={article.project}
+                projectId={article.projectId}
                 title={article.title}
                 date={article.date}
                 writer={article.writer}

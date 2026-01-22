@@ -226,7 +226,10 @@ export const IndividualEditor = ({
                                             </div>
                                         </div>
                                         <div className="space-y-4 pt-2">
-                                            <label className="block text-gray-400 uppercase tracking-widest text-[9px] font-black mb-0 pl-1">パスワード変更</label>
+                                            <div className="flex items-center justify-between mb-0 pl-1">
+                                                <label className="block text-gray-400 uppercase tracking-widest text-[9px] font-black">パスワード変更</label>
+                                                <span className="text-[8px] font-bold text-gray-300 uppercase tracking-widest">8-12文字・英数混合</span>
+                                            </div>
                                             <div className="grid grid-cols-1 gap-4">
                                                 <div className="relative">
                                                     <input

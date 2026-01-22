@@ -1,12 +1,13 @@
 import { ArticleCard } from "./ArticleCard";
 
 interface Article {
-    id: string | number;
+    id: number;
     title: string;
-    category: string;
+    project: string;
+    projectId: number;
     date: string;
     writer: string;
-    writerId?: string | number;
+    writerId?: number;
     writerIcon?: string;
     image: string;
 }
@@ -24,7 +25,8 @@ export function CardMatrix({ articles }: CardMatrixProps) {
                         key={article.id}
                         id={article.id}
                         image={article.image}
-                        category={article.category}
+                        project={article.project}
+                        projectId={article.projectId}
                         title={article.title}
                         date={article.date}
                         writer={article.writer}

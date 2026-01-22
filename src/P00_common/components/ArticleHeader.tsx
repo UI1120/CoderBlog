@@ -1,11 +1,14 @@
-﻿import { Heart } from "lucide-react";
+﻿import { Heart, Tag } from "lucide-react";
 import { Breadcrumb } from "./Breadcrumb";
 
 interface ArticleHeaderProps {
   title: string;
   summary: string;
   category: string;
-  categoryId: string;
+  categoryId: string | number;
+  project: string;
+  projectId: string | number;
+  tags: string[];
   writer: string;
   writerId?: string | number;
   writerIcon?: string;
@@ -21,6 +24,9 @@ export function ArticleHeader({
   summary,
   category,
   categoryId,
+  project,
+  projectId,
+  tags,
   writer,
   writerId,
   writerIcon,
@@ -33,21 +39,29 @@ export function ArticleHeader({
   return (
     <div className="bg-white rounded-lg shadow-md p-8">
       {/* パンくず */}
-      <div className="mb-6">
+      <div className="mb-4">
         <Breadcrumb
           items={[
-            { label: "Home", href: "/index" },
-            { label: category, href: `/category/${categoryId}` },
-            { label: "Article", href: "#" },
+            { label: "Home", href: "/" },
+            { label: category, href: `/project?category=${categoryId}` },
+            { label: project, href: `/project?pid=${projectId}` },
+            { label: "", href: "#" },
           ]}
         />
       </div>
 
       {/* タグ */}
-      <div className="mb-4">
-        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-          {category}
-        </span>
+      <div className="flex flex-wrap gap-2 mb-6">
+        {tags && tags.map((tag, index) => (
+          <a
+            key={index}
+            href={`/search?q=${tag}`}
+            className="px-3 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-1.5"
+          >
+            <Tag className="w-3 h-3" />
+            {tag}
+          </a>
+        ))}
       </div>
 
       {/* タイトル */}

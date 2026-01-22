@@ -35,8 +35,8 @@ export default function App() {
     const [summary, setSummary] = useState("");
     const [keywords, setKeywords] = useState("");
     const [content, setContent] = useState("");
-    const [category, setCategory] = useState("");
     const [project, setProject] = useState("");
+    const [projectId, setProjectId] = useState("");
     const [group, setGroup] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [thumbnail, setThumbnail] = useState("");
@@ -67,11 +67,9 @@ export default function App() {
                     setKeywords(data.keywords || "");
                     setContent(data.content || "");
                     
-                    // ID conversion: ensure strings for select inputs
-                    setCategory(String(data.category_id || data.category || ""));
-                    
                     const proj = Array.isArray(data.project_ids) ? data.project_ids[0] : (data.project_id || "");
-                    setProject(String(proj || ""));
+                    setProjectId(String(proj || ""));
+                    setProject(data.project || String(proj || ""));
                     
                     setGroup(String(data.group_id || data.group_creator_id || ""));
                     setTags(data.tag_ids || data.tags || []);
@@ -103,7 +101,7 @@ export default function App() {
 
         if (!title.trim()) missing.push("タイトル");
         if (!content.trim()) missing.push("本文");
-        if (!category) missing.push("カテゴリー");
+        if (!project || project === "none") missing.push("プロジェクト");
 
         if (missing.length > 0) {
             setMissingFields(missing);
@@ -116,8 +114,7 @@ export default function App() {
             summary,
             keywords,
             content,
-            category_id: category,
-            project_ids: [project],
+            project_id: project,
             group_creator_id: group,
             tag_ids: tags,
             status,
@@ -260,12 +257,10 @@ export default function App() {
 
                 {activeTab === "metadata" && (
                     <MetadataEditor
-                        category={category}
                         project={project}
                         group={group}
                         tags={tags}
                         thumbnail={thumbnail}
-                        onCategoryChange={setCategory}
                         onProjectChange={setProject}
                         onGroupChange={setGroup}
                         onTagsChange={setTags}
@@ -279,8 +274,8 @@ export default function App() {
                         summary={summary}
                         keywords={keywords}
                         content={content}
-                        category={category}
                         project={project}
+                        projectId={projectId || "preview-id"}
                         tags={tags}
                         thumbnail={thumbnail}
                     />

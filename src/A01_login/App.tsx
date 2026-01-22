@@ -26,7 +26,7 @@ const App: React.FC = () => {
 
             if (response.ok) {
                 // ログイン成功時
-                window.location.href = '/editor';
+                window.location.href = '/dashboard';
             } else {
                 const data = await response.json();
                 setError(data.message || 'ログインに失敗しました');

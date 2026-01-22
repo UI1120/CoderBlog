@@ -9,12 +9,15 @@ interface Article {
   title: string;
   summary: string;
   category: string;
-  category_id: string;
+  category_id: number;
+  project: string;
+  project_id: number;
+  tags: string[];
   writer: string;
-  writer_id?: string | number;
+  writer_id?: number;
   writer_icon?: string;
   group: string;
-  group_id?: string | number;
+  group_id?: number;
   group_icon?: string;
   published_date: string;
   good_count: number;
@@ -38,6 +41,9 @@ export function ArticleDetail({
           summary={article.summary}
           category={article.category}
           categoryId={article.category_id}
+          project={article.project}
+          projectId={article.project_id}
+          tags={article.tags}
           writer={article.writer}
           writerId={article.writer_id}
           writerIcon={article.writer_icon}

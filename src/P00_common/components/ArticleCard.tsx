@@ -2,17 +2,18 @@
 import { Calendar, User } from 'lucide-react';
 
 interface ArticleCardProps {
-  id: string | number;
+  id: number;
   image: string;
-  category: string;
+  project: string;
+  projectId: number;
   title: string;
   date: string;
   writer: string;
-  writerId?: string | number;
+  writerId?: number;
   writerIcon?: string;
 }
 
-export function ArticleCard({ id, image, category, title, date, writer, writerId, writerIcon }: ArticleCardProps) {
+export function ArticleCard({ id, image, project, projectId, title, date, writer, writerId, writerIcon }: ArticleCardProps) {
   return (
     <a href={`/article?id=${id}`} className="flex flex-col transform hover:scale-[1.02] transition-transform h-full">
       <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-200 w-full max-w-[320px] h-full flex flex-col">
@@ -24,9 +25,13 @@ export function ArticleCard({ id, image, category, title, date, writer, writerId
           />
         </div>
         <div className="p-4 flex flex-col flex-grow">
-          <div className="text-[#67e0b8] mb-2 text-[14px]">
-            {category}
-          </div>
+          <a
+            href={`/project?pid=${projectId}`}
+            className="text-[#67e0b8] mb-2 text-[14px] hover:underline transition-all z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {project}
+          </a>
           <h3 className="text-gray-900 mb-3 text-[16px] line-clamp-2 flex-grow">
             {title}
           </h3>

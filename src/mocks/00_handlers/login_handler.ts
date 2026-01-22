@@ -27,13 +27,13 @@ export const login_handler = [
     }),
     http.get('/api/auth', () => {
         // --- モックデータの切り替え ---
-        const roleid = 1;
+        const roleid = 0;
         const role = ["admin", "user", "bad"];
         switch (role[roleid]) {
             case "admin":
-                return HttpResponse.json(adminRole); // 管理者としてログイン中
+                return HttpResponse.json({ ...adminRole, needs_password_change: false }); // 管理者としてログイン中
             case "user":
-                return HttpResponse.json(userRole);  // 一般ユーザーとしてログイン中
+                return HttpResponse.json({ ...userRole, needs_password_change: false });  // 一般ユーザーとしてログイン中
             case "bad":
             default:
                 return HttpResponse.json(badRole);   // 未認証・エラー状態
