@@ -77,6 +77,7 @@ export function ArticleDetail({
       {/* アクションボタン */}
       <div className="mb-12">
         <ActionButtons
+          articleId={article.id}
           goodCount={article.good_count}
           articleTitle={article.title}
         />

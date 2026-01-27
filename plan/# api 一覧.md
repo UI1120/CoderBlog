@@ -1,86 +1,119 @@
-﻿# 🌐 API 一覧
+﻿# 🌐 API 一覧 (Unified & Physical Definitions)
 
-本ドキュメントでは、設計に基づき必要なAPIエンドポイントと、それらがアクセスするデータベース（MySQL）およびストレージ（S3等）の関係を定義する。
+本ドキュメントは、バックエンド実装用にAPIエンドポイントをリソース単位（フォルダ単位）で整理し、論理名・物理名を定義したものである。
 
-## 1. 認証 API (`/api/auth`)
+## 📁 1. エンドポイント・リソース一覧 (E-Table)
 
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| POST | `/login` | ログイン。セッション作成。 | `accounts` (読込), `sessions` (書込) |
-| POST | `/logout` | ログアウト。セッション削除。 | `sessions` (削除/無効化) |
-| GET | `/me` | 自身のログイン状態・権限取得。 (実装済エンドポイント: `/api/auth`) | `sessions`, `accounts`, `creators` |
+実装時のフォルダ構成（Blueprint/Router）の基準となる分類。
 
-> **実装メモ: `useAdminAuth.ts`**
-> フロントエンドでは共通フック `useAdminAuth` を使用して `/api/auth` からユーザー情報を取得している。取得に失敗、または未ログインの場合は自動的に `/baduser` へリダイレクトする。
-
-
----
-
-## 2. 一般ユーザー向け API (`/api/public`)
-
-### 2.1. 記事関連
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| GET | `/articles` | 記事一覧取得（新着順、絞り込み）。 | `articles` (status=published), `article_tags`, `article_projects`, `categories`, `creators` |
-| GET | `/articles/{id}` | 記事詳細（メタ情報）取得。 | `articles`, `categories`, `creators`, `tags`, `projects` |
-| GET | `/articles/{id}/content` | 本文（Markdown）取得。 | DB内の `articles.content_path` を元に **S3ストレージ** から取得 |
-| POST | `/articles/{id}/like` | いいね！の実行。 | `articles.good_count` (更新), `article_likes` (履歴書込) |
-| POST | `/articles/{id}/view` | PVカウントアップ。 | `article_views` (ログ書込) |
-
-### 2.2. マスタ・分類
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| GET | `/categories` | 全カテゴリ一覧取得。 | `categories` |
-| GET | `/tags` | 全タグ一覧取得。 | `tags` |
-| GET | `/projects` | プロジェクト一覧または詳細取得。 | `projects` |
-| GET | `/creators` | クリエイター（個人・グループ）取得。 | `creators`, `creator_members` |
-
-### 2.3. コメント
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| GET | `/articles/{id}/comments` | 指定記事のコメント一覧。 | `comments` |
-| POST | `/articles/{id}/comments` | ゲストコメントの投稿。 | `comments` (書込) |
+| E-No.   | 論理名 (Logical Name) | 物理名 (Folder Name) | 対象URLプレフィックス / 概要                         |
+| :------ | :-------------------- | :------------------- | :--------------------------------------------------- |
+| **E01** | 認証                  | `auth`               | `/api/login`, `/api/logout`, `/api/auth`             |
+| **E02** | アカウント            | `accounts`           | `/api/admin/accounts`                                |
+| **E03** | 記事                  | `articles`           | `/api/articles`, `/api/admin/articles`               |
+| **E04** | コメント              | `comments`           | `/api/articles/{id}/comments`, `/api/admin/comments` |
+| **E05** | カテゴリ              | `categories`         | `/api/categories`, `/api/admin/categories`           |
+| **E06** | タグ                  | `tags`               | `/api/tags`, `/api/admin/tags`                       |
+| **E07** | プロジェクト          | `projects`           | `/api/projects`, `/api/admin/projects`               |
+| **E08** | クリエイター          | `creators`           | `/api/creators`, `/api/admin/creators`               |
+| **E09** | メディア              | `media`              | `/api/admin/media`                                   |
+| **E10** | ヘッダーデータ        | `header`             | `/api/header`                                        |
 
 ---
 
-## 3. 管理画面用 API (`/api/admin`)
-※ 全てのAPIにおいて有効なセッション（運営・執筆者ロール）が必須。
+## 🛠 2. API詳細・実装関数一覧 (B-Table)
 
-### 3.1. 記事管理
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| GET | `/admin/articles` | 全ステータの記事一覧。 | `articles` (draft, scheduled含む全て) |
-| POST | `/admin/articles` | 新規記事作成（メタ情報登録）。 | `articles` (書込、初期status=draft) |
-| PUT | `/admin/articles/{id}` | 記事情報更新（メタ情報、タグ等）。 | `articles`, `article_tags`, `article_projects` (更新) |
-| PUT | `/admin/articles/{id}/content` | Markdown本文の保存。 | **S3ストレージ** へのアップロード、`articles.content_path` 更新 |
-| PATCH | `/admin/articles/{id}/status` | ステータス変更（Adminのみ）。 | `articles.status` 更新 (draft -> published 等) |
-| POST | `/admin/media` | 画像・メディアアップロード。 | **S3ストレージ** 保存、`article_files` 登録 |
+各API機能の詳細定義。`Physical Name` はバックエンドの関数名・メソッド名として使用する。
 
-### 3.2. マスタ管理 (Adminのみ)
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| POST/PUT | `/admin/categories`| カテゴリの作成・更新。 | `categories` |
-| POST/PUT | `/admin/tags` | タグの作成・更新。 | `tags` |
-| POST/PUT | `/admin/projects` | プロジェクト情報の更新。 | `projects` |
+### E01: 認証 (`auth`)
 
-### 3.3. ユーザー・権限管理 (Adminのみ)
-| メソッド | エンドポイント | 説明 | アクセスDB/ストレージ |
-| :--- | :--- | :--- | :--- |
-| GET | `/admin/accounts` | アカウント一覧取得。 | `accounts` |
-| POST/PUT | `/admin/accounts` | アカウント作成・編集・ロール変更。 | `accounts` |
-| POST/PUT| `/admin/creators` | クリエイター情報、メンバーシップ変更。 | `creators`, `creator_members` |
+| B-No.   | E-No. | 論理名 (Feature) | 物理名 (Function Name) | Method | Endpoint      | Auth   | Design Doc |
+| :------ | :---- | :--------------- | :--------------------- | :----- | :------------ | :----- | :--------- |
+| **B01** | E01   | ログイン実行     | `login`                | POST   | `/api/login`  | Public | A01        |
+| **B02** | E01   | 認証状態取得     | `get_auth_status`      | GET    | `/api/auth`   | Public | A01, A07   |
+| **B03** | E01   | ログアウト実行   | `logout`               | POST   | `/api/logout` | User   | A01        |
 
----
+### E02: アカウント (`accounts`)
 
-## 4. DBアクセス・実装方針メモ
+| B-No.   | E-No. | 論理名 (Feature)   | 物理名 (Function Name) | Method | Endpoint                            | Auth  | Design Doc |
+| :------ | :---- | :----------------- | :--------------------- | :----- | :---------------------------------- | :---- | :--------- |
+| **B04** | E02   | アカウント一覧取得 | `get_account_list`     | GET    | `/api/admin/accounts`               | Admin | A07        |
+| **B05** | E02   | アカウント作成     | `create_account`       | POST   | `/api/admin/accounts`               | Admin | A07        |
+| **B06** | E02   | アカウント更新     | `update_account`       | POST   | `/api/admin/accounts/{id}`          | Admin | A07        |
+| **B07** | E02   | パスワード変更     | `change_password`      | POST   | `/api/admin/accounts/{id}/password` | User  | A07        |
 
-1. **ハイブリッドデータ管理**:
-   - `published_at`, `status`, `title` などの検索・フィルタリング対象は `MySQL`。
-   - 大容量の `本文(Markdown)` および `メディアファイル` は `オブジェクトストレージ(S3)`。
-2. **予約投稿の仕組み**:
-   - バックエンドにバッチ、または定期的なタスクランナー（Cron相当）を設置。
-   - `SELECT * FROM articles WHERE status='scheduled' AND published_at <= NOW()`
-   - ヒットした記事を `status='published'` に一括更新する。
-3. **PVといいねの整合性**:
-   - いいね総数(`good_count`)は `articles` テーブルに物理カラムとして持ち、フロントエンドはここを参照する。
-   - `article_likes` への書き込み時にトリガーまたはトランザクションで同期を図る。
+### E03: 記事 (`articles`)
+
+| B-No.   | E-No. | 論理名 (Feature) | 物理名 (Function Name)  | Method | Endpoint                          | Auth   | Design Doc |
+| :------ | :---- | :--------------- | :---------------------- | :----- | :-------------------------------- | :----- | :--------- |
+| **B11** | E03   | 公開記事一覧取得 | `get_public_articles`   | GET    | `/api/articles`                   | Public | P01, P03   |
+| **B12** | E03   | 記事詳細取得     | `get_article_detail`    | GET    | `/api/articles/{id}`              | Public | P02        |
+| **B13** | E03   | 記事本文取得     | `get_article_content`   | GET    | `/api/articles/{id}/content`      | Public | P02        |
+| **B14** | E03   | PVカウントアップ | `increment_article_pv`  | POST   | `/api/articles/{id}/view`         | Public | P02        |
+| **B15** | E03   | いいね実行       | `like_article`          | POST   | `/api/articles/{id}/like`         | Public | P02        |
+| **B31** | E03   | 管理記事一覧取得 | `get_admin_articles`    | GET    | `/api/admin/articles`             | User   | A03        |
+| **B32** | E03   | 新規記事作成     | `create_article`        | POST   | `/api/admin/articles`             | User   | A04        |
+| **B33** | E03   | 編集用記事取得   | `get_edit_article`      | GET    | `/api/admin/articles/{id}`        | User   | A04        |
+| **B34** | E03   | 記事更新・削除   | `update_article`        | POST   | `/api/admin/articles/{id}`        | User   | A04, A03   |
+| **B35** | E03   | ステータス変更   | `update_article_status` | POST   | `/api/admin/articles/{id}/status` | Admin  | A03        |
+
+### E04: コメント (`comments`)
+
+| B-No.   | E-No. | 論理名 (Feature) | 物理名 (Function Name)  | Method | Endpoint                          | Auth   | Design Doc |
+| :------ | :---- | :--------------- | :---------------------- | :----- | :-------------------------------- | :----- | :--------- |
+| **B16** | E04   | 公開コメント取得 | `get_article_comments`  | GET    | `/api/articles/{id}/comments`     | Public | P02        |
+| **B17** | E04   | コメント投稿     | `post_comment`          | POST   | `/api/articles/{id}/comments`     | Public | P02        |
+| **B41** | E04   | 管理コメント一覧 | `get_admin_comments`    | GET    | `/api/admin/comments`             | User   | A03        |
+| **B42** | E04   | コメント状態更新 | `update_comment_status` | POST   | `/api/admin/comments/{id}/status` | User   | A03        |
+| **B43** | E04   | コメント削除     | `delete_comment`        | POST   | `/api/admin/comments/{id}`        | User   | A03        |
+
+### E05: カテゴリ (`categories`)
+
+| B-No.   | E-No. | 論理名 (Feature)   | 物理名 (Function Name) | Method | Endpoint                     | Auth   | Design Doc |
+| :------ | :---- | :----------------- | :--------------------- | :----- | :--------------------------- | :----- | :--------- |
+| **B21** | E05   | 全カテゴリ取得     | `get_categories`       | GET    | `/api/categories`            | Public | P06        |
+| **B51** | E05   | カテゴリ作成       | `create_category`      | POST   | `/api/admin/categories`      | Admin  | A05        |
+| **B52** | E05   | 管理カテゴリ一覧   | `get_admin_categories` | GET    | `/api/admin/categories`      | User   | A05        |
+| **B53** | E05   | カテゴリ更新・削除 | `update_category`      | POST   | `/api/admin/categories/{id}` | Admin  | A05        |
+
+### E06: タグ (`tags`)
+
+| B-No.   | E-No. | 論理名 (Feature) | 物理名 (Function Name) | Method | Endpoint               | Auth   | Design Doc |
+| :------ | :---- | :--------------- | :--------------------- | :----- | :--------------------- | :----- | :--------- |
+| **B22** | E06   | 全タグ取得       | `get_tags`             | GET    | `/api/tags`            | Public | P07        |
+| **B54** | E06   | タグ作成         | `create_tag`           | POST   | `/api/admin/tags`      | Admin  | A05        |
+| **B55** | E06   | 管理タグ一覧     | `get_admin_tags`       | GET    | `/api/admin/tags`      | User   | A05        |
+| **B56** | E06   | タグ更新・削除   | `update_tag`           | POST   | `/api/admin/tags/{id}` | Admin  | A05        |
+
+### E07: プロジェクト (`projects`)
+
+| B-No.   | E-No. | 論理名 (Feature)     | 物理名 (Function Name) | Method | Endpoint                   | Auth   | Design Doc |
+| :------ | :---- | :------------------- | :--------------------- | :----- | :------------------------- | :----- | :--------- |
+| **B23** | E07   | プロジェクト取得     | `get_projects`         | GET    | `/api/projects`            | Public | P04        |
+| **B57** | E07   | プロジェクト作成     | `create_project`       | POST   | `/api/admin/projects`      | Admin  | A05        |
+| **B58** | E07   | 管理プロジェクト一覧 | `get_admin_projects`   | GET    | `/api/admin/projects`      | User   | A05        |
+| **B59** | E07   | プロジェクト更新     | `update_project`       | POST   | `/api/admin/projects/{id}` | Admin  | A05        |
+
+### E08: クリエイター (`creators`)
+
+| B-No.   | E-No. | 論理名 (Feature)     | 物理名 (Function Name) | Method | Endpoint                   | Auth   | Design Doc |
+| :------ | :---- | :------------------- | :--------------------- | :----- | :------------------------- | :----- | :--------- |
+| **B24** | E08   | クリエイター取得     | `get_creators`         | GET    | `/api/creators`            | Public | P05        |
+| **B61** | E08   | クリエイター作成     | `create_creator`       | POST   | `/api/admin/creators`      | Admin  | A06        |
+| **B62** | E08   | 管理クリエイター一覧 | `get_admin_creators`   | GET    | `/api/admin/creators`      | User   | A06        |
+| **B63** | E08   | クリエイター更新     | `update_creator`       | POST   | `/api/admin/creators/{id}` | Admin  | A06        |
+
+### E09: メディア (`media`)
+
+| B-No.   | E-No. | 論理名 (Feature)     | 物理名 (Function Name) | Method | Endpoint           | Auth | Design Doc |
+| :------ | :---- | :------------------- | :--------------------- | :----- | :----------------- | :--- | :--------- |
+| **B36** | E09   | メディアアップロード | `upload_media`         | POST   | `/api/admin/media` | User | A04        |
+
+### E10: ヘッダーデータ (`header`)
+
+| B-No.   | E-No. | 論理名 (Feature)     | 物理名 (Function Name)  | Method | Endpoint                 | Auth   | Design Doc |
+| :------ | :---- | :------------------- | :---------------------- | :----- | :----------------------- | :----- | :--------- |
+| **B25** | E10   | ヘッダープロジェクト | `get_header_projects`   | GET    | `/api/header/projects`   | Public | P00        |
+| **B26** | E10   | ヘッダーカテゴリ     | `get_header_categories` | GET    | `/api/header/categories` | Public | P00        |
+| **B27** | E10   | ヘッダータグ         | `get_header_tags`       | GET    | `/api/header/tags`       | Public | P00        |
+| **B28** | E10   | ヘッダーライター     | `get_header_writers`    | GET    | `/api/header/writers`    | Public | P00        |

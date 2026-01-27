@@ -8,9 +8,10 @@ import { PROJECT_DETAIL_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 
 export default function ProjectDetailApp() {
     const [projectDetails, setProjectDetails] = useState<{ project_name: string; description: string; thumbnail?: string } | null>(null);
-    const [projects, setProjects] = useState<any[]>([]);
+    const [articles, setArticles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
     const ITEMS_PER_PAGE = 12;
     const mainRef = useRef<HTMLElement>(null);
 
@@ -20,8 +21,12 @@ export default function ProjectDetailApp() {
         const p = parseInt(urlParams.get('page') || '1');
 
         setPage(p);
-
         setLoading(true);
+
+        if (!pid) {
+           window.location.href = '/notfound'; // Basic validation
+           return;
+        }
 
         // Fetch individual project details
         const fetchProjectDetails = fetch(`${API_BASE_URL}/projects?pid=${pid}`)
@@ -31,16 +36,27 @@ export default function ProjectDetailApp() {
             })
             .then(data => setProjectDetails(data));
 
-        // Fetch articles associated with projects
-        const fetchArticles = fetch(`${API_BASE_URL}/articles`)
+        // Fetch articles associated with projects (Server-side Pagination)
+        const fetchArticles = fetch(`${API_BASE_URL}/articles?pid=${pid}&page=${p}&limit=${ITEMS_PER_PAGE}`)
             .then(res => res.json())
-            .then(data => setProjects(data));
+            .then(data => {
+                // Ensure backend response structure is handled (P03 style)
+                if (data.articles) {
+                    setArticles(data.articles);
+                    setTotalItems(data.total);
+                } else {
+                    // Fallback if backend API is not yet updated to P03 style perfectly in all mocks (defensive)
+                    setArticles(Array.isArray(data) ? data : []);
+                    setTotalItems(Array.isArray(data) ? data.length : 0);
+                }
+            });
 
         Promise.all([fetchProjectDetails, fetchArticles])
             .then(() => setLoading(false))
             .catch(err => {
                 console.error('Failed to fetch project data:', err);
-                window.location.href = '/notfound';
+                // window.location.href = '/notfound'; // Don't strict redirect on article fetch fail
+                setLoading(false);
             });
     }, []);
 
@@ -57,10 +73,8 @@ export default function ProjectDetailApp() {
 
     // Scroll to the main content top when page changes
     useEffect(() => {
-        // We use a flag to skip the very first render if we don't want to jump on initial load
-        // But usually, if page > 1, it's definitely a user action or back navigation.
-        console.log('Page changed to:', page);
-        if (mainRef.current) {
+        // console.log('Page changed to:', page);
+        if (mainRef.current && page > 1) {
             mainRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [page]);
@@ -71,11 +85,63 @@ export default function ProjectDetailApp() {
         url.searchParams.set('page', newPage.toString());
         // Use pushState to update URL without refreshing
         window.history.pushState({ page: newPage }, '', url.toString());
+        
+        // Trigger fetch somehow? 
+        // NOTE: In the current useEffect design using [] dependency with window.location, we need to trigger re-fetch.
+        // Actually, the cleanest way is to add [page] dependency to the main useEffect, 
+        // OR reload the page (bad UX), OR updating the useEffect dependencies.
+        // Let's refactor the useEffect to depend on [page] (and pid which is stable).
+        
+        // However, the previous implementation relied on component mounting mostly.
+        // Let's correct the useEffect dependency in the next step if strictly needed, 
+        // but since I'm rewriting the whole body, I can fix the dependency array now.
+        // But `window.history.pushState` does NOT trigger popstate or component update by itself unless we listen to it or use state.
+        // Since `page` state updates, if I put `page` in useEffect dependency, it will fetch.
     };
+    
+    // Refactored useEffect to trigger on page change
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('pid');
 
-    // Simple client-side pagination for prototype
-    const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
-    const displayedProjects = projects.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+        setLoading(true);
+
+        if (!pid) return;
+
+        // Fetch articles only when page changes (Project detail might be static but okay to refetch or separate)
+        fetch(`${API_BASE_URL}/articles?pid=${pid}&page=${page}&limit=${ITEMS_PER_PAGE}`)
+            .then(res => res.json())
+            .then(data => {
+                 if (data.articles) {
+                    setArticles(data.articles);
+                    setTotalItems(data.total);
+                } else {
+                    setArticles(Array.isArray(data) ? data : []);
+                    setTotalItems(Array.isArray(data) ? data.length : 0);
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+            
+    }, [page]); // Dependency on page
+
+    // Initial load for project details (run once)
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('pid');
+        if(pid) {
+             fetch(`${API_BASE_URL}/projects?pid=${pid}`)
+                .then(res => res.json())
+                .then(data => setProjectDetails(data))
+                .catch(err => console.error(err));
+        }
+    }, []);
+
+
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -96,14 +162,6 @@ export default function ProjectDetailApp() {
                         <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md text-xl">
                             {projectDetails?.description || PROJECT_DETAIL_CONFIG.hero.defaultDescription}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            {/* <button className="bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors">
-                                活動紹介を見る
-                            </button>
-                            <button className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg border border-white/30 hover:bg-white/30 transition-colors">
-                                お問い合わせ
-                            </button> */}
-                        </div>
                     </div>
                 </div>
             </section>
@@ -117,12 +175,23 @@ export default function ProjectDetailApp() {
                     <div className="text-center text-gray-500">{COMMON_CONFIG.loadingText}</div>
                 ) : (
                     <>
-                        <CardMatrix articles={displayedProjects} />
-                        <Pagination
-                            currentPage={page}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                        />
+                        <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-[#67e0b8] pl-3">
+                            関連技術記事 ({totalItems})
+                        </h2>
+                        {articles.length > 0 ? (
+                            <>
+                                <CardMatrix articles={articles} />
+                                <Pagination
+                                    currentPage={page}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                            </>
+                        ) : (
+                            <div className="text-center py-12 text-gray-500 bg-white rounded-xl shadow-sm">
+                                まだ記事がありません。
+                            </div>
+                        )}
                     </>
                 )}
             </main>

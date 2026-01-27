@@ -44,6 +44,10 @@ export const get_article_handler = [
         const id = url.searchParams.get('id');
         const cid = url.searchParams.get('cid');
         const gid = url.searchParams.get('gid');
+        const pid = url.searchParams.get('pid');
+        const type = url.searchParams.get('type');
+        const page = parseInt(url.searchParams.get('page') || '1');
+        const limit = parseInt(url.searchParams.get('limit') || '12');
         const query = url.searchParams.get('q')?.toLowerCase();
 
         // 1. ID指定による単一取得
@@ -66,6 +70,20 @@ export const get_article_handler = [
             filtered = filtered.filter((a: any) => a.group_id === parseInt(gid) || a.group_id === gid);
         }
 
+        // 3.5 Project ID による絞り込み
+        if (pid) {
+            filtered = filtered.filter((a: any) => a.project_id === parseInt(pid) || a.project_id === pid);
+        }
+
+        // 4. Type による絞り込み (Latest / Project Highlights)
+        if (type === 'latest') {
+             // Mock: return recent 5 articles
+             filtered = filtered.slice(0, 5);
+        } else if (type === 'project_highlights') {
+             // Mock: return specific project articles or just 3 random ones
+             filtered = filtered.slice(0, 3);
+        }
+
         // 4. 検索 (公開済みのみ返すのが本来だが、モックなので全件)
         if (query) {
             filtered = filtered.filter((article: any) =>
@@ -75,7 +93,17 @@ export const get_article_handler = [
             );
         }
 
-        return HttpResponse.json(filtered);
+        // Server-side pagination logic
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginated = filtered.slice(startIndex, endIndex);
+
+        return HttpResponse.json({
+            articles: paginated,
+            total: filtered.length,
+            page,
+            limit
+        });
     }),
 
     // --- 管理画面用 API ---
@@ -138,6 +166,26 @@ export const get_article_handler = [
             }
         }
 
+        return new HttpResponse(null, { status: 404 });
+    }),
+
+
+    // いいね（公開用）
+    http.post('/api/articles/:id/like', async ({ params }) => {
+        const { id } = params;
+        // Search in list first, if not find in 'articles' record object
+        let articleFound = articlesList.find(a => a.article_id === parseInt(id as string));
+        
+        if (!articleFound) {
+             const key = id as string;
+             if (articles[key]) articleFound = articles[key];
+        }
+
+        if (articleFound) {
+            articleFound.good_count = (articleFound.good_count || 0) + 1;
+            return HttpResponse.json({ status: 'success', good_count: articleFound.good_count });
+        }
+        
         return new HttpResponse(null, { status: 404 });
     }),
 ];

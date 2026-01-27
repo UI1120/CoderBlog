@@ -7,7 +7,7 @@ export function LatestArticles() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/article-lists/latest-articles`)
+    fetch(`${API_BASE_URL}/articles?type=latest`)
       .then(res => res.json())
       .then(data => {
         setArticles(data);

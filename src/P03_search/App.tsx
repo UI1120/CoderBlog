@@ -12,6 +12,7 @@ export default function App() {
     const [latestArticles, setLatestArticles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
     const [searchInputValue, setSearchInputValue] = useState('');
     const ITEMS_PER_PAGE = 12;
 
@@ -26,10 +27,11 @@ export default function App() {
         setPage(p);
 
         setLoading(true);
-        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(trimmedQuery)}`)
+        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(trimmedQuery)}&page=${p}&limit=${ITEMS_PER_PAGE}`)
             .then(res => res.json())
             .then(data => {
-                setArticles(data);
+                setArticles(data.articles);
+                setTotalItems(data.total);
                 setLoading(false);
             })
             .catch(err => {
@@ -38,7 +40,7 @@ export default function App() {
             });
 
         // 検索結果が空の場合に備えて最新記事も取得しておく
-        fetch(`${API_BASE_URL}/article-lists/latest-articles`)
+        fetch(`${API_BASE_URL}/articles?type=latest`)
             .then(res => res.json())
             .then(data => setLatestArticles(data))
             .catch(err => console.error('Failed to fetch latest articles:', err));
@@ -69,8 +71,8 @@ export default function App() {
         window.location.href = url.toString();
     };
 
-    const totalPages = Math.ceil(articles.length / ITEMS_PER_PAGE);
-    const displayedArticles = articles.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    const displayedArticles = articles; // Already paginated from server
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">

@@ -34,7 +34,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
   const [userName, setUserName] = useState("");
   const [commentText, setCommentText] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!userName.trim() || !commentText.trim()) {
@@ -42,23 +42,44 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       return;
     }
 
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      user: userName,
-      comment: commentText,
-      date: new Date().toLocaleString("ja-JP", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
+    try {
+      const res = await fetch(`${API_BASE_URL}/articles/${articleId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          guest_name: userName,
+          content: commentText
+        })
+      });
 
-    setComments([...comments, newComment]);
-    setUserName("");
-    setCommentText("");
-    toast.success("コメントを投稿しました");
+      if (res.ok) {
+        const data = await res.json();
+        const newComment: Comment = {
+             id: data.comment.id || Date.now().toString(),
+             user: data.comment.user || userName,
+             comment: data.comment.comment || commentText,
+             date: new Date(data.comment.date || Date.now()).toLocaleString("ja-JP", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+             })
+        };
+        
+        setComments([...comments, newComment]);
+        setUserName("");
+        setCommentText("");
+        toast.success("コメントを投稿しました");
+      } else {
+        toast.error("コメントの投稿に失敗しました");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("エラーが発生しました");
+    }
   };
 
   if (loading) {

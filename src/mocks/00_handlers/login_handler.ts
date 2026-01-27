@@ -12,11 +12,24 @@ export const login_handler = [
             return HttpResponse.json({
                 message: 'Login successful',
                 user: adminRole.user,
+                needs_password_change: false
             });
         } else if (userId === 'user' && password === 'password') {
             return HttpResponse.json({
                 message: 'Login successful',
                 user: userRole.user,
+                needs_password_change: false
+            });
+        } else if (userId === 'otp' && password === 'otp') {
+            return HttpResponse.json({
+                message: 'Login successful',
+                user: {
+                    account_id: 100,
+                    login_name: 'otp',
+                    display_name: 'OTP User',
+                    role: 'user'
+                },
+                needs_password_change: true
             });
         }
 

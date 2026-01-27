@@ -23,6 +23,40 @@ export const get_comments_handler = [
         return HttpResponse.json([]);
     }),
 
+    // 一般公開用：コメント投稿
+    http.post('/api/articles/:id/comments', async ({ params, request }) => {
+        const { id } = params;
+        const body = await request.json() as any;
+        
+        const newComment = {
+            id: Date.now().toString(),
+            comment_id: Date.now(), // admin uses number
+            article_id: parseInt(id as string),
+            user: body.guest_name,
+            guest_name: body.guest_name,
+            comment: body.content,
+            content: body.content,
+            date: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            status: 'pending', // Default status
+            article_title: "Mock Article Title", // Placeholder
+            ip_address: "127.0.0.1" // Placeholder
+        };
+
+        // Add to Mock storage (adminComments acts as master)
+        adminComments.push(newComment);
+        
+        // Also add to public view map for immediate feedback if we want (or wait for approval)
+        // Ideally P02 only shows approved, but for UX 'optimistic update' or 'showing pending' might be desired.
+        // For simple mock, let's push to the map so it appears on reload/re-fetch.
+        if (!commentsMap[id as string]) {
+            commentsMap[id as string] = [];
+        }
+        commentsMap[id as string].push(newComment);
+
+        return HttpResponse.json({ status: 'success', message: 'Comment submitted', comment: newComment });
+    }),
+
     // 管理画面用：全コメント取得
     http.get('/api/admin/comments', ({ request }) => {
         const url = new URL(request.url);

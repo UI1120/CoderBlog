@@ -26,13 +26,13 @@ export const admin_management_handler = [
         const { id } = params;
         const body = await request.json() as any;
         const targetId = parseInt(id as string);
+
+        if (body.action === 'delete') {
+            categories = categories.filter(c => c.category_id !== targetId);
+            return HttpResponse.json({ status: 'success' });
+        }
+
         categories = categories.map(c => c.category_id === targetId ? { ...c, ...body } : c);
-        return HttpResponse.json({ status: 'success' });
-    }),
-    http.post('/api/admin/categories/:id/delete', async ({ params }) => {
-        const { id } = params;
-        const targetId = parseInt(id as string);
-        categories = categories.filter(c => c.category_id !== targetId);
         return HttpResponse.json({ status: 'success' });
     }),
 
@@ -50,13 +50,13 @@ export const admin_management_handler = [
         const { id } = params;
         const body = await request.json() as any;
         const targetId = parseInt(id as string);
+
+        if (body.action === 'delete') {
+            tags = tags.filter(t => t.tag_id !== targetId);
+            return HttpResponse.json({ status: 'success' });
+        }
+
         tags = tags.map(t => t.tag_id === targetId ? { ...t, ...body } : t);
-        return HttpResponse.json({ status: 'success' });
-    }),
-    http.post('/api/admin/tags/:id/delete', async ({ params }) => {
-        const { id } = params;
-        const targetId = parseInt(id as string);
-        tags = tags.filter(t => t.tag_id !== targetId);
         return HttpResponse.json({ status: 'success' });
     }),
 
@@ -79,13 +79,13 @@ export const admin_management_handler = [
         const { id } = params;
         const body = await request.json() as any;
         const targetId = parseInt(id as string);
+
+        if (body.action === 'delete') {
+            projects = projects.filter(p => p.project_id !== targetId);
+            return HttpResponse.json({ status: 'success' });
+        }
+
         projects = projects.map(p => p.project_id === targetId ? { ...p, ...body } : p);
-        return HttpResponse.json({ status: 'success' });
-    }),
-    http.post('/api/admin/projects/:id/delete', async ({ params }) => {
-        const { id } = params;
-        const targetId = parseInt(id as string);
-        projects = projects.filter(p => p.project_id !== targetId);
         return HttpResponse.json({ status: 'success' });
     }),
 

@@ -4,23 +4,43 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface ActionButtonsProps {
+  articleId: number | string;
   goodCount: number;
   articleTitle: string;
 }
 
-export function ActionButtons({ goodCount, articleTitle }: ActionButtonsProps) {
+export function ActionButtons({ articleId, goodCount, articleTitle }: ActionButtonsProps) {
   const [liked, setLiked] = useState(false);
   const [currentGoodCount, setCurrentGoodCount] = useState(goodCount);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!liked) {
-      setLiked(true);
-      setCurrentGoodCount(prev => prev + 1);
-      toast.success("いいねしました");
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/articles/${articleId}/like`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        
+        if (res.ok) {
+           const data = await res.json();
+           setLiked(true);
+           setCurrentGoodCount(data.good_count);
+           toast.success("いいねしました");
+        } else {
+           toast.error("失敗しました");
+        }
+      } catch (e) {
+        console.error(e);
+        toast.error("エラーが発生しました");
+      }
     } else {
-      setLiked(false);
-      setCurrentGoodCount(prev => prev - 1);
-      toast.success("いいねを取り消しました");
+      // Currently API doesn't support 'unlike', only increment.
+      // Reverting local state for UI feedback but effectively it's one-way in this design for now.
+      // Or we can simulate toggle if backend supported it.
+      // Based on design, it's just 'like' endpoint.
+      // Let's just allow toggling off locally or show message.
+      toast.info("いいねを取り消す機能は未実装です");
     }
   };
 
