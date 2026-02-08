@@ -5,20 +5,22 @@ import writerItems from '../HeaderItems/writerItems.json';
 import categoryItems from '../HeaderItems/categoryItems.json';
 import groupItems from '../HeaderItems/groupItems.json';
 
-export const get_headerItems_handler = [
-    http.get('/api/header/projects', () => {
-        return HttpResponse.json(projectItems);
-    }),
-    http.get('/api/header/tags', () => {
-        return HttpResponse.json(tagItems);
-    }),
-    http.get('/api/header/writers', () => {
-        return HttpResponse.json(writerItems);
-    }),
-    http.get('/api/header/categories', () => {
-        return HttpResponse.json(categoryItems);
-    }),
-    http.get('/api/header/groups', () => {
-        return HttpResponse.json(groupItems);
-    }),
-];
+// export const get_headerItems_handler = [
+//     http.get('/api/header/projects', () => {
+//         return HttpResponse.json(projectItems);
+//     }),
+//     http.get('/api/header/tags', () => {
+//         return HttpResponse.json(tagItems);
+//     }),
+//     http.get('/api/header/writers', () => {
+//         return HttpResponse.json(writerItems);
+//     }),
+//     http.get('/api/header/categories', () => {
+//         return HttpResponse.json(categoryItems);
+//     }),
+//     http.get('/api/header/groups', () => {
+//         return HttpResponse.json(groupItems);
+//     }),
+// ];
+
+export const get_headerItems_handler = [];

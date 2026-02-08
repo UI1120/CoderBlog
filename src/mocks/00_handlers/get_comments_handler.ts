@@ -12,22 +12,22 @@ export let adminComments = [...adminCommentsData];
 
 export const get_comments_handler = [
     // 一般公開用：記事ごとのコメント取得
-    http.get('/api/articles/:id/comments', ({ params }) => {
-        const { id } = params;
-        const comments = commentsMap[id as string];
+    // http.get('/api/articles/:id/comments', ({ params }) => {
+    //     const { id } = params;
+    //     const comments = commentsMap[id as string];
 
-        if (comments) {
-            return HttpResponse.json(comments);
-        }
+    //     if (comments) {
+    //         return HttpResponse.json(comments);
+    //     }
 
-        return HttpResponse.json([]);
-    }),
+    //     return HttpResponse.json([]);
+    // }),
 
     // 一般公開用：コメント投稿
     http.post('/api/articles/:id/comments', async ({ params, request }) => {
         const { id } = params;
         const body = await request.json() as any;
-        
+
         const newComment = {
             id: Date.now().toString(),
             comment_id: Date.now(), // admin uses number
@@ -45,7 +45,7 @@ export const get_comments_handler = [
 
         // Add to Mock storage (adminComments acts as master)
         adminComments.push(newComment);
-        
+
         // Also add to public view map for immediate feedback if we want (or wait for approval)
         // Ideally P02 only shows approved, but for UX 'optimistic update' or 'showing pending' might be desired.
         // For simple mock, let's push to the map so it appears on reload/re-fetch.

@@ -5,8 +5,8 @@ import { API_BASE_URL } from "@/constants";
 
 interface Comment {
   id: string;
-  user: string;
-  comment: string;
+  user_name: string;
+  content: string;
   date: string;
 }
 
@@ -57,18 +57,18 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       if (res.ok) {
         const data = await res.json();
         const newComment: Comment = {
-             id: data.comment.id || Date.now().toString(),
-             user: data.comment.user || userName,
-             comment: data.comment.comment || commentText,
-             date: new Date(data.comment.date || Date.now()).toLocaleString("ja-JP", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-             })
+          id: data.comment_id || Date.now().toString(),
+          user_name: data.guest_name || userName,
+          content: data.content || commentText,
+          date: new Date().toLocaleString("ja-JP", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
         };
-        
+
         setComments([...comments, newComment]);
         setUserName("");
         setCommentText("");
@@ -102,11 +102,11 @@ export function CommentSection({ articleId }: CommentSectionProps) {
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 bg-[#67e0b8] rounded-full flex items-center justify-center text-white">
-                  {comment.user.charAt(0)}
+                  {(comment.user_name || "G").charAt(0)}
                 </div>
                 <div>
                   <div className="text-gray-900">
-                    {comment.user}
+                    {comment.user_name}
                   </div>
                   <div className="text-sm text-gray-500">
                     {comment.date}
@@ -114,7 +114,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
                 </div>
               </div>
               <p className="text-gray-700 ml-13">
-                {comment.comment}
+                {comment.content}
               </p>
             </div>
           ))}
