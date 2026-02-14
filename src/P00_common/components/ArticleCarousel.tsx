@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 
 interface Article {
   id: number;
-  image: string;
+  thumbnail: string; // API returns 'thumbnail'
   project: string;
   projectId: number;
   title: string;
@@ -73,7 +73,7 @@ export function ArticleCarousel({
             <div key={article.id} className="w-[280px]">
               <ArticleCard
                 id={article.id}
-                image={article.image}
+                image={article.thumbnail}
                 project={article.project}
                 projectId={article.projectId}
                 title={article.title}

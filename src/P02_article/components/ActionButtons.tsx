@@ -1,46 +1,68 @@
-import { Heart, Share2, Link2 } from "lucide-react";
+import { Heart, Share2, Link2, Loader2 } from "lucide-react";
 import { Button } from "@/P00_common/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 interface ActionButtonsProps {
   articleId: number | string;
   goodCount: number;
   articleTitle: string;
+  onUpdateGoodCount?: (count: number) => void;
 }
 
-export function ActionButtons({ articleId, goodCount, articleTitle }: ActionButtonsProps) {
+export function ActionButtons({ articleId, goodCount, articleTitle, onUpdateGoodCount }: ActionButtonsProps) {
   const [liked, setLiked] = useState(false);
-  const [currentGoodCount, setCurrentGoodCount] = useState(goodCount);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // local state is kept for internal logic but display uses prop or synced state
+  // actually, let's trust prop goodCount if parent updates it
+
+  // Cookieキー
+  const likedKey = `liked_article_${articleId}`;
+
+  // 初期状態チェック
+  useEffect(() => {
+    const isLiked = document.cookie.split('; ').find(row => row.startsWith(`${likedKey}=`));
+    if (isLiked) {
+      setLiked(true);
+    }
+  }, [likedKey]);
 
   const handleLike = async () => {
-    if (!liked) {
+    if (!liked && !isSubmitting) {
+      setIsSubmitting(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/articles/${articleId}/like`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/articles/${articleId}/like`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({})
         });
-        
+
         if (res.ok) {
-           const data = await res.json();
-           setLiked(true);
-           setCurrentGoodCount(data.good_count);
-           toast.success("いいねしました");
+          const data = await res.json();
+          setLiked(true);
+
+          // 親コンポーネントへ通知 (ヘッダーの数字更新用)
+          if (onUpdateGoodCount) {
+            onUpdateGoodCount(data.good_count);
+          }
+
+          // Cookieセット (永続的: 365日)
+          const date = new Date();
+          date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+          document.cookie = `${likedKey}=true; expires=${date.toUTCString()}; path=/`;
+
+          toast.success("いいねしました");
         } else {
-           toast.error("失敗しました");
+          toast.error("失敗しました");
         }
       } catch (e) {
         console.error(e);
         toast.error("エラーが発生しました");
+      } finally {
+        setIsSubmitting(false);
       }
     } else {
-      // Currently API doesn't support 'unlike', only increment.
-      // Reverting local state for UI feedback but effectively it's one-way in this design for now.
-      // Or we can simulate toggle if backend supported it.
-      // Based on design, it's just 'like' endpoint.
-      // Let's just allow toggling off locally or show message.
-      toast.info("いいねを取り消す機能は未実装です");
+      if (liked) toast.info("既にいいね済みです");
     }
   };
 
@@ -67,10 +89,15 @@ export function ActionButtons({ articleId, goodCount, articleTitle }: ActionButt
           onClick={handleLike}
           variant={liked ? "default" : "outline"}
           className="flex items-center gap-2"
+          disabled={liked || isSubmitting}
         >
-          <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
+          {isSubmitting ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
+          )}
           <span>いいね</span>
-          <span className="ml-1">({currentGoodCount})</span>
+          <span className="ml-1">({goodCount})</span>
         </Button>
 
         <Button

@@ -7,10 +7,10 @@
             OPUCoder
           </div>
           <p className="text-gray-400 text-sm">
-            © 2025 OPUCoder - 岡山県立大学 技術系サークル
+            © 2026 OPUCoder - 岡山県立大学 技術系サークル
           </p>
         </div>
-        
+
         <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-bold">
           <a href="/search" className="text-gray-400 hover:text-[#67e0b8] transition-colors">
             記事一覧

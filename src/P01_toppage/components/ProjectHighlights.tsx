@@ -6,12 +6,12 @@ export function ProjectHighlights() {
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/articles?type=project_highlights`)
+    fetch(`${API_BASE_URL}/articles?type=project_highlights&limit=9`)
       .then(res => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
       })
-      .then(data => setProjects(data))
+      .then(data => setProjects(data.articles))
       .catch(err => console.error('Failed to fetch project highlights:', err));
   }, []);
 

@@ -33,9 +33,9 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
             .then(data => setCreator(data));
 
         // Fetch articles by this creator/group
-        const fetchArticles = fetch(`${API_BASE_URL}/articles?${query}`)
+        const fetchArticles = fetch(`${API_BASE_URL}/articles?${query}&limit=100`)
             .then(res => res.json())
-            .then(data => setArticles(data));
+            .then(data => setArticles(data.articles || []));
 
         Promise.all([fetchCreator, fetchArticles])
             .then(() => setLoading(false))

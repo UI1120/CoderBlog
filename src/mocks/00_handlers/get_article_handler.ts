@@ -170,22 +170,22 @@ export const get_article_handler = [
     }),
 
 
-    // いいね（公開用）
-    http.post('/api/articles/:id/like', async ({ params }) => {
-        const { id } = params;
-        // Search in list first, if not find in 'articles' record object
-        let articleFound = articlesList.find(a => a.article_id === parseInt(id as string));
+    // // いいね（公開用）
+    // http.post('/api/articles/:id/like', async ({ params }) => {
+    //     const { id } = params;
+    //     // Search in list first, if not find in 'articles' record object
+    //     let articleFound = articlesList.find(a => a.article_id === parseInt(id as string));
 
-        if (!articleFound) {
-            const key = id as string;
-            if (articles[key]) articleFound = articles[key];
-        }
+    //     if (!articleFound) {
+    //         const key = id as string;
+    //         if (articles[key]) articleFound = articles[key];
+    //     }
 
-        if (articleFound) {
-            articleFound.good_count = (articleFound.good_count || 0) + 1;
-            return HttpResponse.json({ status: 'success', good_count: articleFound.good_count });
-        }
+    //     if (articleFound) {
+    //         articleFound.good_count = (articleFound.good_count || 0) + 1;
+    //         return HttpResponse.json({ status: 'success', good_count: articleFound.good_count });
+    //     }
 
-        return new HttpResponse(null, { status: 404 });
-    }),
+    //     return new HttpResponse(null, { status: 404 });
+    // }),
 ];

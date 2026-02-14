@@ -9,7 +9,7 @@ interface Article {
     writer: string;
     writerId?: number;
     writerIcon?: string;
-    image: string;
+    thumbnail: string; // API returns 'thumbnail'
 }
 
 interface CardMatrixProps {
@@ -24,7 +24,7 @@ export function CardMatrix({ articles }: CardMatrixProps) {
                     <ArticleCard
                         key={article.id}
                         id={article.id}
-                        image={article.image}
+                        image={article.thumbnail}
                         project={article.project}
                         projectId={article.projectId}
                         title={article.title}

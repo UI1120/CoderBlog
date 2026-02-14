@@ -27,10 +27,12 @@ interface Article {
 
 interface ArticleDetailProps {
   article: Article;
+  onUpdateGoodCount?: (count: number) => void;
 }
 
 export function ArticleDetail({
   article,
+  onUpdateGoodCount
 }: ArticleDetailProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -80,6 +82,7 @@ export function ArticleDetail({
           articleId={article.id}
           goodCount={article.good_count}
           articleTitle={article.title}
+          onUpdateGoodCount={onUpdateGoodCount}
         />
       </div>
 

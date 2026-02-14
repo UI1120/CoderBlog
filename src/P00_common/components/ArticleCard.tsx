@@ -15,7 +15,10 @@ interface ArticleCardProps {
 
 export function ArticleCard({ id, image, project, projectId, title, date, writer, writerId, writerIcon }: ArticleCardProps) {
   return (
-    <a href={`/article?id=${id}`} className="flex flex-col transform hover:scale-[1.02] transition-transform h-full">
+    <div
+      onClick={() => window.location.href = `/article?id=${id}`}
+      className="flex flex-col transform hover:scale-[1.02] transition-transform h-full cursor-pointer"
+    >
       <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow border border-gray-200 w-full max-w-[320px] h-full flex flex-col">
         <div className="aspect-[4/3] w-full overflow-hidden bg-gray-100 flex-shrink-0">
           <ImageWithFallback
@@ -27,7 +30,7 @@ export function ArticleCard({ id, image, project, projectId, title, date, writer
         <div className="p-4 flex flex-col flex-grow">
           <a
             href={`/project?pid=${projectId}`}
-            className="text-[#67e0b8] mb-2 text-[14px] hover:underline transition-all z-10"
+            className="text-[#67e0b8] mb-2 text-[14px] hover:underline transition-all z-10 w-fit"
             onClick={(e) => e.stopPropagation()}
           >
             {project}
@@ -42,7 +45,7 @@ export function ArticleCard({ id, image, project, projectId, title, date, writer
             </div>
             <a
               href={writerId ? `/creator?cid=${writerId}` : undefined}
-              className="flex items-center gap-1 truncate hover:text-emerald-500 transition-colors"
+              className="flex items-center gap-1 truncate hover:text-emerald-500 transition-colors z-10"
               onClick={(e) => e.stopPropagation()}
             >
               {writerIcon ? (
@@ -55,6 +58,6 @@ export function ArticleCard({ id, image, project, projectId, title, date, writer
           </div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }

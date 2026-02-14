@@ -7,10 +7,10 @@ export function LatestArticles() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/articles?type=latest`)
+    fetch(`${API_BASE_URL}/articles?type=latest&limit=9`)
       .then(res => res.json())
       .then(data => {
-        setArticles(data);
+        setArticles(data.articles);
         setLoading(false);
       })
       .catch(err => {
@@ -35,7 +35,7 @@ export function LatestArticles() {
           <p className="text-center text-gray-500">記事が見つかりませんでした。</p>
         )}
         <div className="text-center mt-8">
-          <a 
+          <a
             href="/search"
             className="inline-block bg-[#67e0b8] text-gray-900 px-6 py-3 rounded-lg hover:bg-[#55c9a3] transition-colors font-bold"
           >

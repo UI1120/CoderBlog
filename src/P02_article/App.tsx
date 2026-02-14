@@ -17,6 +17,7 @@ export default function App() {
       return;
     }
 
+    // 記事データ取得
     fetch(`${API_BASE_URL}/articles/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Not Found');
@@ -27,6 +28,21 @@ export default function App() {
         console.error('Failed to fetch article:', err);
         window.location.href = "/notfound";
       });
+
+    // PVカウントアップ (Cookie制御: 1日1回)
+    const viewedKey = `viewed_article_${id}`;
+    const isViewed = document.cookie.split('; ').find(row => row.startsWith(viewedKey));
+
+    if (!isViewed) {
+      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/articles/${id}/view`, {
+        method: 'POST',
+      }).then(() => {
+        // Cookieセット (1日有効)
+        const date = new Date();
+        date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
+        document.cookie = `${viewedKey}=true; expires=${date.toUTCString()}; path=/`;
+      }).catch(err => console.error('Failed to increment PV:', err));
+    }
   }, []);
 
   if (!article) {
@@ -41,7 +57,10 @@ export default function App() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       <main className="flex-grow">
-        <ArticleDetail article={article} />
+        <ArticleDetail
+          article={article}
+          onUpdateGoodCount={(count: number) => setArticle({ ...article, good_count: count })}
+        />
       </main>
       <Footer />
     </div>
