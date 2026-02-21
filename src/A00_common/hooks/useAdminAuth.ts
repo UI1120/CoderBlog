@@ -26,7 +26,8 @@ export function useAdminAuth() {
             })
             .catch(err => {
                 console.error('Auth check failed:', err);
-                window.location.href = '/baduser';
+                // Do not redirect immediately on fetch error (might be temporary network issue or MSW init)
+                // window.location.href = '/baduser';
             })
             .finally(() => {
                 setLoading(false);

@@ -7,6 +7,7 @@ import { API_BASE_URL } from "@/constants";
 import { DashboardStats } from "./components/DashboardStats";
 import { RecentActivity } from "./components/RecentActivity";
 import { ActivityGraph } from "./components/ActivityGraph";
+import { RecentNotices } from "./components/RecentNotices";
 
 export default function App() {
     const { user, isAdmin, loading: authLoading } = useAdminAuth();
@@ -14,6 +15,7 @@ export default function App() {
     const [graphData, setGraphData] = useState<any[]>([]);
     const [drafts, setDrafts] = useState<any[]>([]);
     const [comments, setComments] = useState<any[]>([]);
+    const [notices, setNotices] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeMetric, setActiveMetric] = useState<'pv' | 'likes' | 'articles'>('pv');
     const [aggregationMode, setAggregationMode] = useState<'weekly' | 'cumulative'>('weekly');
@@ -21,13 +23,16 @@ export default function App() {
     useEffect(() => {
         if (!authLoading && user) {
             setLoading(true);
-            fetch(`${API_BASE_URL}/admin/dashboard/status`)
-                .then(res => res.json())
-                .then(data => {
-                    setStats(data.stats);
-                    setGraphData(data.graph_data || []);
-                    setDrafts(data.draft_articles || []);
-                    setComments(data.pending_comments || []);
+            Promise.all([
+                fetch(`${API_BASE_URL}/admin/dashboard/status`).then(res => res.json()),
+                fetch(`${API_BASE_URL}/admin/notices?page=1&limit=6`).then(res => res.json())
+            ])
+                .then(([dashData, noticesData]) => {
+                    setStats(dashData.stats);
+                    setGraphData(dashData.graph_data || []);
+                    setDrafts(dashData.draft_articles || []);
+                    setComments(dashData.pending_comments || []);
+                    setNotices(noticesData.notices || []);
                     setLoading(false);
                 })
                 .catch(err => {
@@ -66,20 +71,21 @@ export default function App() {
                     </div>
                 ) : (
                     <>
-                        <DashboardStats 
-                            stats={stats} 
-                            isAdmin={isAdmin} 
+                        <DashboardStats
+                            stats={stats}
+                            isAdmin={isAdmin}
                             activeMetric={activeMetric}
                             onMetricChange={setActiveMetric}
                         />
-                        <ActivityGraph 
-                            data={graphData} 
+                        <ActivityGraph
+                            data={graphData}
                             activeMetric={activeMetric}
                             aggregationMode={aggregationMode}
                             onModeChange={setAggregationMode}
                             isAdmin={isAdmin}
                         />
                         <RecentActivity drafts={drafts} comments={comments} isAdmin={isAdmin} />
+                        <RecentNotices notices={notices} isAdmin={isAdmin} />
                     </>
                 )}
             </main>

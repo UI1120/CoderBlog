@@ -11,7 +11,11 @@ export default function App() {
     const [articles, setArticles] = useState<any[]>([]);
     const [latestArticles, setLatestArticles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        const p = parseInt(params.get('page') || '1');
+        return isNaN(p) ? 1 : p;
+    });
     const [totalItems, setTotalItems] = useState(0);
     const [searchInputValue, setSearchInputValue] = useState('');
     const ITEMS_PER_PAGE = 12;
@@ -23,11 +27,9 @@ export default function App() {
 
     useEffect(() => {
         setSearchInputValue('');
-        const p = parseInt(new URLSearchParams(window.location.search).get('page') || '1');
-        setPage(p);
 
         setLoading(true);
-        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(trimmedQuery)}&page=${p}&limit=${ITEMS_PER_PAGE}`)
+        fetch(`${API_BASE_URL}/articles?q=${encodeURIComponent(trimmedQuery)}&page=${page}&limit=${ITEMS_PER_PAGE}`)
             .then(res => res.json())
             .then(data => {
                 setArticles(data.articles);
@@ -44,7 +46,7 @@ export default function App() {
             .then(res => res.json())
             .then(data => setLatestArticles(data))
             .catch(err => console.error('Failed to fetch latest articles:', err));
-    }, [query]);
+    }, [query, page]);
 
     useEffect(() => {
         const handlePopState = () => {
@@ -105,7 +107,7 @@ export default function App() {
                             <p className="text-gray-500 mb-10">
                                 キーワードを変えて再度検索するか、トップページに戻ってみてください。
                             </p>
-                            
+
                             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
                                 <a
                                     href="/"
@@ -114,7 +116,7 @@ export default function App() {
                                     <Home className="w-5 h-5" />
                                     トップページに戻る
                                 </a>
-                                
+
                                 <form onSubmit={handleSearch} className="relative w-full max-w-md group">
                                     <input
                                         type="text"

@@ -1,4 +1,162 @@
 [
-    "学祭展示は2025年11月に開催されます。詳しくはこちら。",
-    "次回のUnity勉強会は1/28に開催します。"
+    {
+        "notice_id": 1,
+        "date": "2025.11.01",
+        "category": "イベント",
+        "title": "学祭展示は2025年11月に開催されます。詳しくはこちら。",
+        "url": "http://localhost:3000/article?id=12",
+        "status": "published",
+        "expires_at": "2025-11-30T23:59:00Z"
+    },
+    {
+        "notice_id": 2,
+        "date": "2025.01.28",
+        "category": "勉強会",
+        "title": "次回のUnity勉強会は1/28に開催します。",
+        "status": "published",
+        "expires_at": "2025-01-31T23:59:00Z"
+    },
+    {
+        "notice_id": 3,
+        "date": "2025.12.01",
+        "category": "イベント",
+        "title": "OPUCoder Advent Calendar 2025 開始しました！",
+        "url": "http://localhost:3000/article?id=25",
+        "status": "published",
+        "expires_at": "2025-12-31T23:59:00Z"
+    },
+    {
+        "notice_id": 4,
+        "date": "2025.10.15",
+        "category": "勉強会",
+        "title": "競プロ練習会 (AtCoder Beginner Contest 対策) のご案内",
+        "status": "published"
+    },
+    {
+        "notice_id": 5,
+        "date": "2025.08.30",
+        "category": "お知らせ",
+        "title": "夏合宿の参加申し込み締め切りについて",
+        "url": "http://localhost:3000/article?id=20",
+        "status": "expired",
+        "expires_at": "2025-09-01T23:59:00Z"
+    },
+    {
+        "notice_id": 6,
+        "date": "2025.06.05",
+        "category": "お知らせ",
+        "title": "部室の場所が変更になりました（新棟3F）",
+        "status": "published"
+    },
+    {
+        "notice_id": 7,
+        "date": "2025.05.01",
+        "category": "お知らせ",
+        "title": "GW期間中の活動予定について",
+        "status": "expired"
+    },
+    {
+        "notice_id": 8,
+        "date": "2025.04.10",
+        "category": "イベント",
+        "title": "新入生歓迎会のお知らせ・参加登録フォーム",
+        "url": "http://localhost:3000/article?id=15",
+        "status": "draft"
+    },
+    {
+        "notice_id": 9,
+        "date": "2025.03.15",
+        "category": "重要",
+        "title": "サーバーメンテナンスのお知らせ (3/20 10:00-12:00)",
+        "status": "published",
+        "expires_at": "2025-03-20T12:00:00Z"
+    },
+    {
+        "notice_id": 10,
+        "date": "2025.02.20",
+        "category": "勉強会",
+        "title": "Web開発入門ハンズオン（React/Next.js）開催決定！",
+        "url": "http://localhost:3000/article?id=18",
+        "status": "published"
+    },
+    {
+        "notice_id": 11,
+        "date": "2025.11.01",
+        "category": "イベント",
+        "title": "学祭展示は2025年11月に開催されます。詳しくはこちら。",
+        "url": "http://localhost:3000/article?id=12",
+        "status": "published",
+        "expires_at": "2025-11-30T23:59:00Z"
+    },
+    {
+        "notice_id": 12,
+        "date": "2025.01.28",
+        "category": "勉強会",
+        "title": "次回のUnity勉強会は1/28に開催します。",
+        "status": "published",
+        "expires_at": "2025-01-31T23:59:00Z"
+    },
+    {
+        "notice_id": 13,
+        "date": "2025.12.01",
+        "category": "イベント",
+        "title": "OPUCoder Advent Calendar 2025 開始しました！",
+        "url": "http://localhost:3000/article?id=25",
+        "status": "published",
+        "expires_at": "2025-12-31T23:59:00Z"
+    },
+    {
+        "notice_id": 14,
+        "date": "2025.10.15",
+        "category": "勉強会",
+        "title": "競プロ練習会 (AtCoder Beginner Contest 対策) のご案内",
+        "status": "published"
+    },
+    {
+        "notice_id": 15,
+        "date": "2025.08.30",
+        "category": "お知らせ",
+        "title": "夏合宿の参加申し込み締め切りについて",
+        "url": "http://localhost:3000/article?id=20",
+        "status": "expired",
+        "expires_at": "2025-09-01T23:59:00Z"
+    },
+    {
+        "notice_id": 16,
+        "date": "2025.06.05",
+        "category": "お知らせ",
+        "title": "部室の場所が変更になりました（新棟3F）",
+        "status": "published"
+    },
+    {
+        "notice_id": 17,
+        "date": "2025.05.01",
+        "category": "お知らせ",
+        "title": "GW期間中の活動予定について",
+        "status": "expired"
+    },
+    {
+        "notice_id": 18,
+        "date": "2025.04.10",
+        "category": "イベント",
+        "title": "新入生歓迎会のお知らせ・参加登録フォーム",
+        "url": "http://localhost:3000/article?id=15",
+        "status": "draft"
+    },
+    {
+        "notice_id": 19,
+        "date": "2025.03.15",
+        "category": "重要",
+        "title": "サーバーメンテナンスのお知らせ (3/20 10:00-12:00)",
+        "status": "published",
+        "expires_at": "2025-03-20T12:00:00Z"
+    },
+    {
+        "notice_id": 20,
+        "date": "2025.02.20",
+        "category": "勉強会",
+        "title": "Web開発入門ハンズオン（React/Next.js）開催決定！",
+        "url": "http://localhost:3000/article?id=18",
+        "status": "published"
+    }
 ]

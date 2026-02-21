@@ -128,3 +128,14 @@ export const TAG_LIST_CONFIG = {
     loadingText: "タグを読み込み中...",
     emptyMessage: "タグが見つかりませんでした。"
 };
+
+/**
+ * Notice List configuration (P08_notices)
+ */
+export const NOTICE_LIST_CONFIG = {
+    title: "お知らせ 一覧",
+    description: "イベント、メンテナンス、重要情報などを確認できます。",
+    bgImage: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2080&auto=format&fit=crop",
+    loadingText: "お知らせを読み込み中...",
+    emptyMessage: "お知らせは見つかりませんでした。"
+};

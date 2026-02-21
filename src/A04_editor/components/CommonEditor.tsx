@@ -5,27 +5,35 @@ import { API_BASE_URL } from "@/constants";
 import { AdminCard } from "@/A00_common/components/AdminCard";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 
-interface ArticleEditorProps {
+interface CommonEditorProps {
     title: string;
-    summary: string;
-    keywords: string;
     content: string;
     onTitleChange: (title: string) => void;
-    onSummaryChange: (summary: string) => void;
-    onKeywordsChange: (keywords: string) => void;
     onContentChange: (content: string) => void;
+    // Optional props for Article mode specifics, can be ignored if not needed in other modes
+    summary?: string;
+    keywords?: string;
+    onSummaryChange?: (summary: string) => void;
+    onKeywordsChange?: (keywords: string) => void;
+    // Mode specific labels or hide flags
+    hideSummary?: boolean;
+    hideKeywords?: boolean;
+    targetId?: string; // ID for media upload directory structure
 }
 
-export function ArticleEditor({
+export function CommonEditor({
     title,
-    summary,
-    keywords,
     content,
     onTitleChange,
+    onContentChange,
+    summary = "",
+    keywords = "",
     onSummaryChange,
     onKeywordsChange,
-    onContentChange,
-}: ArticleEditorProps) {
+    hideSummary = false,
+    hideKeywords = false,
+    targetId = "",
+}: CommonEditorProps) {
     const markdownInputRef = useRef<HTMLInputElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,9 +54,11 @@ export function ArticleEditor({
         if (file && file.type.startsWith('image/')) {
             try {
                 const formData = new FormData();
-                formData.append('image', file);
+                formData.append('file', file); // Use 'file' instead of 'image' to match the spec
+                formData.append('purpose', 'articles'); // Add purpose key for backend sorting
+                formData.append('target_id', targetId || 'new');
 
-                const response = await fetch(`${API_BASE_URL}/upload/image`, {
+                const response = await fetch(`${API_BASE_URL}/admin/media`, {
                     method: 'POST',
                     body: formData,
                 });
@@ -75,34 +85,41 @@ export function ArticleEditor({
                     <input
                         value={title}
                         onChange={(e) => onTitleChange(e.target.value)}
-                        placeholder="記事のタイトルを入力を入力してください"
+                        placeholder="タイトルを入力してください"
                         className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 text-lg"
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">要約</label>
-                        <textarea
-                            value={summary}
-                            onChange={(e) => onSummaryChange(e.target.value)}
-                            placeholder="記事の要約を入力してください"
-                            rows={3}
-                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
-                        />
-                    </div>
+                {/* Article Specifics: Summary & Keywords */}
+                {(!hideSummary || !hideKeywords) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {!hideSummary && onSummaryChange && (
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">要約</label>
+                                <textarea
+                                    value={summary}
+                                    onChange={(e) => onSummaryChange(e.target.value)}
+                                    placeholder="要約を入力してください"
+                                    rows={3}
+                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
+                                />
+                            </div>
+                        )}
 
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">キーワード (SEO)</label>
-                        <textarea
-                            value={keywords}
-                            onChange={(e) => onKeywordsChange(e.target.value)}
-                            placeholder="キーワードをカンマ区切りで入力してください"
-                            rows={3}
-                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
-                        />
+                        {!hideKeywords && onKeywordsChange && (
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-1">キーワード (SEO)</label>
+                                <textarea
+                                    value={keywords}
+                                    onChange={(e) => onKeywordsChange(e.target.value)}
+                                    placeholder="キーワードをカンマ区切りで入力してください"
+                                    rows={3}
+                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all resize-none text-gray-700 text-sm"
+                                />
+                            </div>
+                        )}
                     </div>
-                </div>
+                )}
             </AdminCard>
 
             <div className="flex justify-between items-center bg-white/50 backdrop-blur-sm p-4 rounded-3xl border border-gray-100">

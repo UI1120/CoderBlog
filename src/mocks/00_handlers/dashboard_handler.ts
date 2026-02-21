@@ -12,11 +12,11 @@ const generateGraphData = () => {
 
     let totalArticles = 50;
     let yourTotalArticles = 5;
-    
+
     for (let i = 0; i < 52; i++) {
         const weekStart = new Date(startDate);
         weekStart.setDate(weekStart.getDate() + i * 7);
-        
+
         const newArticles = Math.floor(Math.random() * 3);
         const weeklyPV = Math.floor(Math.random() * 500) + 100;
         const weeklyLikes = Math.floor(Math.random() * 50) + 5;
@@ -42,7 +42,7 @@ const generateGraphData = () => {
 };
 
 export const dashboard_handler = [
-    http.get('/api/admin/dashboard/status', () => {
+    http.get('*/api/admin/dashboard/status', () => {
         // Dynamic counts based on shared mock state
         const drafts = articlesList.filter(a => a.status === 'draft');
         const pending = adminComments.filter(c => c.status === 'pending');

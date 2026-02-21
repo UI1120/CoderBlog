@@ -33,6 +33,8 @@ export default defineConfig({
               req.url = req.url.replace('/category', '/src/P06_categories/index.html');
             } else if (req.url === '/tag' || req.url.startsWith('/tag?')) {
               req.url = req.url.replace('/tag', '/src/P07_tags/index.html');
+            } else if (req.url === '/notices' || req.url.startsWith('/notices?')) {
+              req.url = req.url.replace('/notices', '/src/P08_notices/index.html');
             } else if (req.url === '/login' || req.url.startsWith('/login?')) {
               req.url = req.url.replace('/login', '/src/A01_login/index.html');
             } else if (req.url === '/dashboard' || req.url.startsWith('/dashboard?')) {
@@ -51,6 +53,8 @@ export default defineConfig({
               req.url = req.url.replace('/baduser', '/src/P98_baduser/index.html');
             } else if (req.url === '/notfound' || req.url.startsWith('/notfound?')) {
               req.url = req.url.replace('/notfound', '/src/P99_notfound/index.html');
+            } else if (req.url === '/new_editor' || req.url === '/new_editor/' || req.url.startsWith('/new_editor?') || req.url === '/new_editer' || req.url.startsWith('/new_editer?')) {
+              req.url = '/src/A04_editor/index.html';
             }
           }
           next();
@@ -114,6 +118,7 @@ export default defineConfig({
         creator: path.resolve(__dirname, 'src/P05_creator/index.html'),
         category: path.resolve(__dirname, 'src/P06_categories/index.html'),
         tag: path.resolve(__dirname, 'src/P07_tags/index.html'),
+        notices: path.resolve(__dirname, 'src/P08_notices/index.html'),
         baduser: path.resolve(__dirname, 'src/P98_baduser/index.html'),
         notfound: path.resolve(__dirname, 'src/P99_notfound/index.html'),
         login: path.resolve(__dirname, 'src/A01_login/index.html'),

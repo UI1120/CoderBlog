@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
-import { FileEdit, Settings, Eye, Save, AlertCircle, Clock, Globe, ChevronsUpDown, Check } from "lucide-react";
-import { ArticleEditor } from "@/A04_editor/components/ArticleEditor";
-import { MetadataEditor } from "@/A04_editor/components/MetadataEditor";
-import { Preview } from "@/A04_editor/components/Preview";
+import { FileText, Settings, Eye, Save, Globe, BookOpen, Bell, Check, ChevronsUpDown } from "lucide-react";
 import { Toaster } from "@/P00_common/ui/sonner";
 import { toast } from "sonner";
 import { AdminLayout } from "@/A00_common/components/AdminLayout";
 import { AdminHeader } from "@/A00_common/components/AdminHeader";
 import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { AdminButton } from "@/A00_common/components/AdminButton";
-import { AdminModal } from "@/A00_common/components/AdminModal";
+import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
+import { CommonEditor } from "@/A04_editor/components/CommonEditor";
+import { ArticleMetadataEditor } from "@/A04_editor/components/ArticleMetadataEditor";
+import { WikiMetadataEditor } from "@/A04_editor/components/WikiMetadataEditor";
+import { NoticeMetadataEditor } from "@/A04_editor/components/NoticeMetadataEditor";
+import { Preview } from "@/A04_editor/components/Preview";
 import { Popover, PopoverContent, PopoverTrigger } from "@/P00_common/ui/popover";
 import { cn } from "@/P00_common/ui/utils";
-import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
+import { API_BASE_URL } from "@/constants";
 
+type EditorMode = "article" | "wiki" | "notice";
 type Tab = "edit" | "metadata" | "preview";
 type Status = "draft" | "published" | "scheduled" | "private";
-
-import { API_BASE_URL } from "@/constants";
 
 const statusConfig: Record<Status, { label: string; color: string }> = {
     draft: { label: "下書き", color: "text-gray-500" },
@@ -27,292 +28,297 @@ const statusConfig: Record<Status, { label: string; color: string }> = {
 };
 
 export default function App() {
-    const { user, isAdmin, loading: authLoading } = useAdminAuth();
+    const { user, loading: authLoading } = useAdminAuth();
+    const [mode, setMode] = useState<EditorMode>("article");
     const [activeTab, setActiveTab] = useState<Tab>("edit");
 
-    // Article States
+    // Common States
     const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [status, setStatus] = useState<Status>("draft");
+    const [publishedAt, setPublishedAt] = useState("");
+
+    // Article Specifics
     const [summary, setSummary] = useState("");
     const [keywords, setKeywords] = useState("");
-    const [content, setContent] = useState("");
     const [project, setProject] = useState("");
-    const [projectId, setProjectId] = useState("");
     const [group, setGroup] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [thumbnail, setThumbnail] = useState("");
 
-    // Admin specific states according to design spec
-    const [status, setStatus] = useState<Status>("draft");
-    const [publishedAt, setPublishedAt] = useState("");
+    // Wiki Specifics
+    const [slug, setSlug] = useState("");
+    const [parentPageId, setParentPageId] = useState("");
+    const [wikiProjectId, setWikiProjectId] = useState("none");
 
-    // Modal state for validation
-    const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [missingFields, setMissingFields] = useState<string[]>([]);
+    // Notice Specifics
+    const [url, setUrl] = useState("");
+    const [category, setCategory] = useState("お知らせ");
+    const [expiresAt, setExpiresAt] = useState("");
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
         const id = searchParams.get("id");
+        const urlMode = searchParams.get("mode") as EditorMode | null;
+
+        if (urlMode && (['article', 'wiki', 'notice'] as EditorMode[]).includes(urlMode)) {
+            setMode(urlMode);
+            if (urlMode === 'notice') setActiveTab('metadata');
+        }
 
         if (id) {
-            // Use path parameter to get full content (including markdown body)
-            // Remove /api since API_BASE_URL already includes it (or expects /articles to follow)
-            fetch(`${API_BASE_URL}/articles/${id}`)
-                .then(res => {
-                    if (!res.ok) throw new Error("Failed to fetch article");
-                    return res.json();
-                })
-                .then(data => {
-                    setTitle(data.title || "");
-                    setSummary(data.summary || "");
-                    setKeywords(data.keywords || "");
-                    setContent(data.content || "");
-                    
-                    const proj = Array.isArray(data.project_ids) ? data.project_ids[0] : (data.project_id || "");
-                    setProjectId(String(proj || ""));
-                    setProject(data.project || String(proj || ""));
-                    
-                    setGroup(String(data.group_id || data.group_creator_id || ""));
-                    setTags(data.tag_ids || data.tags || []);
-                    setThumbnail(data.thumbnail_url || data.thumbnail || data.image || "");
-                    setStatus(data.status as Status || "draft");
-                    
-                    // Handle date format for datetime-local input
-                    // Input expects "YYYY-MM-DDThh:mm"
-                    let pubDate = data.published_at || data.published_date || "";
-                    if (pubDate) {
-                        // If it's ISO string, slice it. If it's generic string, leave it (might be invalid for input but user can fix)
-                        if (pubDate.includes("T")) {
-                           pubDate = pubDate.slice(0, 16); 
-                        }
-                    }
-                    setPublishedAt(pubDate);
-                    
-                    toast.success("記事データを読み込みました");
-                })
-                .catch(err => {
-                    console.error(err);
-                    toast.error("記事の読み込みに失敗しました");
-                });
+            const currentMode = urlMode || "article";
+
+            if (currentMode === "article") {
+                fetch(`${API_BASE_URL}/articles/${id}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error("Failed to fetch article");
+                        return res.json();
+                    })
+                    .then(data => {
+                        setTitle(data.title || "");
+                        setContent(data.content || "");
+                        setStatus((data.status as Status) || "draft");
+                        let pubDate = data.published_at || data.published_date || "";
+                        if (pubDate && pubDate.includes("T")) pubDate = pubDate.slice(0, 16);
+                        setPublishedAt(pubDate);
+
+                        setSummary(data.summary || "");
+                        setKeywords(data.keywords || "");
+                        const proj = Array.isArray(data.project_ids) ? data.project_ids[0] : (data.project_id || "");
+                        setProject(data.project || String(proj || ""));
+                        setGroup(String(data.group_id || data.group_creator_id || ""));
+                        setTags(data.tag_ids || data.tags || []);
+                        setThumbnail(data.thumbnail_url || data.thumbnail || data.image || "");
+
+                        toast.success("記事データを読み込みました");
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        toast.error("記事の読み込みに失敗しました");
+                    });
+            } else if (currentMode === "notice") {
+                fetch(`${API_BASE_URL}/admin/notices/${id}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error("Failed to fetch notice");
+                        return res.json();
+                    })
+                    .then(data => {
+                        setTitle(data.title || "");
+                        setStatus((data.status as Status) || "draft");
+                        setCategory(data.category || "お知らせ");
+                        setUrl(data.url || "");
+                        let expDate = data.expires_at || "";
+                        if (expDate && expDate.includes("T")) expDate = expDate.slice(0, 16);
+                        setExpiresAt(expDate);
+
+                        toast.success("お知らせデータを読み込みました");
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        toast.error("お知らせの読み込みに失敗しました");
+                    });
+            }
         }
     }, []);
 
     const handleSave = () => {
-        const missing: string[] = [];
+        // Validation logic based on mode...
+        if (!title.trim()) { toast.error("タイトルを入力してください"); return; }
 
-        if (!title.trim()) missing.push("タイトル");
-        if (!content.trim()) missing.push("本文");
-        if (!project || project === "none") missing.push("プロジェクト");
+        const payload: any = { mode, title, status, publishedAt };
 
-        if (missing.length > 0) {
-            setMissingFields(missing);
-            setIsAlertOpen(true);
-            return;
+        if (mode === "article") {
+            if (!content.trim()) { toast.error("本文を入力してください"); return; }
+            payload.content = content;
+            payload.summary = summary;
+            payload.project = project;
+            payload.tags = tags;
+        } else if (mode === "wiki") {
+            if (!content.trim()) { toast.error("本文を入力してください"); return; }
+            payload.content = content;
+            payload.slug = slug;
+            payload.parentPageId = parentPageId;
+        } else if (mode === "notice") {
+            payload.url = url;
+            payload.category = category;
+            payload.expiresAt = expiresAt;
         }
 
-        const formData = {
-            title,
-            summary,
-            keywords,
-            content,
-            project_id: project,
-            group_creator_id: group,
-            tag_ids: tags,
-            status,
-            published_at: publishedAt || null,
-            thumbnail_url: thumbnail,
-        };
-
-        console.log("Saving article data:", formData);
-        toast.success("記事を保存しました！");
+        console.log("Saving...", payload);
+        toast.success(`${mode.toUpperCase()} を保存しました`);
     };
 
     if (authLoading) return null;
-
-    // A04: published_at or status change is only allowed for Admin.
-    // However, status selection is ALREADY disabled if publishedAt is set.
-    // Now we add role-based restriction.
-    const canChangePublishSettings = isAdmin;
 
     return (
         <AdminLayout>
             <Toaster richColors position="top-center" />
 
             <AdminHeader
-                icon={<FileEdit className="w-6 h-6" />}
-                title="記事エディター"
-                subtitle="Article Editor Terminal"
+                icon={
+                    mode === 'article' ? <FileText className="w-6 h-6" /> :
+                        mode === 'wiki' ? <BookOpen className="w-6 h-6" /> :
+                            <Bell className="w-6 h-6" />
+                }
+                title={
+                    mode === 'article' ? "記事エディター" :
+                        mode === 'wiki' ? "Wikiエディター" :
+                            "お知らせエディター"
+                }
+                subtitle={`${mode.toUpperCase()} EDITOR TERMINAL`}
                 userInfo={user}
                 rightElement={
-                    <>
-                        <div className={cn(
-                            "flex flex-col sm:flex-row sm:items-center gap-3 bg-gray-50 border border-emerald-100/30 rounded-3xl px-4 py-2 transition-all",
-                            canChangePublishSettings && "focus-within:ring-4 focus-within:ring-emerald-500/5 hover:border-emerald-100"
-                        )}>
-                            {/* Status Select with Premium Styling */}
-                            <Popover>
-                                <PopoverTrigger asChild disabled={!canChangePublishSettings || !!publishedAt}>
-                                    <button
-                                        disabled={!canChangePublishSettings || !!publishedAt}
-                                        className={cn(
-                                            "flex items-center gap-2 hover:bg-white p-2 rounded-xl transition-colors group",
-                                            (!canChangePublishSettings || !!publishedAt) && "opacity-80 cursor-not-allowed"
-                                        )}
-                                    >
-                                        <Globe className={cn("w-3.5 h-3.5", statusConfig[status].color)} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">
-                                            {statusConfig[status].label}
-                                        </span>
-                                        {canChangePublishSettings && !publishedAt && <ChevronsUpDown className="w-3 h-3 text-gray-400 group-hover:text-emerald-500" />}
-                                    </button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-48 p-0 rounded-2xl border-gray-100 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                                    <div className="bg-gray-50 border-b border-gray-100 px-4 py-3">
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600">Publish Status</span>
-                                    </div>
-                                    <div className="p-1.5 space-y-1">
-                                        {(Object.entries(statusConfig) as [Status, typeof statusConfig[Status]][]).map(([key, cfg]) => (
-                                            <div
-                                                key={key}
-                                                className={cn(
-                                                    "flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all",
-                                                    status === key ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50 text-gray-600"
-                                                )}
-                                                onClick={() => setStatus(key)}
-                                            >
-                                                <span className="text-[10px] font-bold uppercase tracking-widest">{cfg.label}</span>
-                                                {status === key && <Check className="w-3.5 h-3.5 text-emerald-600" />}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-
-                            <div className="hidden sm:block w-px h-6 bg-gray-200" />
-                            <div className="sm:hidden w-full h-px bg-gray-100" />
-
-                            <div className={cn("flex items-center gap-3 px-2 py-1 group", !canChangePublishSettings && "cursor-not-allowed opacity-60")}>
-                                <Clock className="w-3.5 h-3.5 text-gray-400 group-hover:text-emerald-500 transition-colors" />
-                                <input
-                                    type="datetime-local"
-                                    value={publishedAt}
-                                    disabled={!canChangePublishSettings}
-                                    onChange={(e) => {
-                                        const val = e.target.value;
-                                        setPublishedAt(val);
-                                        if (val) {
-                                            setStatus("scheduled");
+                    <div className="flex items-center gap-4">
+                        {/* Mode Switcher */}
+                        <div className="hidden md:flex bg-gray-100 p-1 rounded-xl">
+                            {(['article', 'wiki', 'notice'] as EditorMode[]).map((m) => (
+                                <button
+                                    key={m}
+                                    onClick={() => {
+                                        setMode(m);
+                                        if (m === 'notice') {
+                                            setActiveTab('metadata');
+                                        } else {
+                                            setActiveTab('edit');
                                         }
                                     }}
                                     className={cn(
-                                        "bg-transparent border-none focus:outline-none text-[10px] font-black uppercase tracking-widest text-gray-600 w-full",
-                                        canChangePublishSettings ? "cursor-pointer" : "cursor-not-allowed"
+                                        "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
+                                        mode === m ? "bg-white text-emerald-600 shadow-sm" : "text-gray-400 hover:text-gray-600"
                                     )}
-                                />
-                            </div>
+                                >
+                                    {m}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="h-6 w-px bg-gray-200 hidden md:block" />
+
+                        {/* Status Select */}
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <button className="flex items-center gap-2 bg-gray-50 hover:bg-white border border-transparent hover:border-gray-200 p-2 rounded-xl transition-all">
+                                    <Globe className={cn("w-3.5 h-3.5", statusConfig[status].color)} />
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">
+                                        {statusConfig[status].label}
+                                    </span>
+                                    <ChevronsUpDown className="w-3 h-3 text-gray-400" />
+                                </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-48 p-1.5 rounded-2xl">
+                                {(Object.entries(statusConfig) as [Status, typeof statusConfig[Status]][]).map(([key, cfg]) => (
+                                    <div
+                                        key={key}
+                                        className={cn(
+                                            "flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all",
+                                            status === key ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50 text-gray-600"
+                                        )}
+                                        onClick={() => setStatus(key)}
+                                    >
+                                        <span className="text-[10px] font-bold uppercase tracking-widest">{cfg.label}</span>
+                                        {status === key && <Check className="w-3.5 h-3.5 text-emerald-600" />}
+                                    </div>
+                                ))}
+                            </PopoverContent>
+                        </Popover>
+
+                        {/* Published Date Input (Optional) */}
+                        <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-transparent hover:border-gray-200 transition-all">
+                            <input
+                                type="datetime-local"
+                                value={publishedAt}
+                                onChange={(e) => setPublishedAt(e.target.value)}
+                                className="bg-transparent text-[10px] font-black uppercase tracking-widest text-gray-600 focus:outline-none"
+                            />
                         </div>
 
                         <AdminButton onClick={handleSave} icon={<Save className="w-4 h-4" />}>
-                            完成/保存
+                            保存
                         </AdminButton>
-                    </>
+                    </div>
                 }
                 navElement={
                     <AdminTabGroup>
-                        <AdminTab
-                            label="記事編集"
-                            icon={<FileEdit className="w-4 h-4" />}
-                            isActive={activeTab === "edit"}
-                            onClick={() => setActiveTab("edit")}
-                        />
-                        <AdminTab
-                            label="メタデータ編集"
-                            icon={<Settings className="w-4 h-4" />}
-                            isActive={activeTab === "metadata"}
-                            onClick={() => setActiveTab("metadata")}
-                        />
-                        <AdminTab
-                            label="プレビュー"
-                            icon={<Eye className="w-4 h-4" />}
-                            isActive={activeTab === "preview"}
-                            onClick={() => setActiveTab("preview")}
-                        />
+                        {(mode === 'notice' ? ['metadata', 'preview'] : ['edit', 'metadata', 'preview']).map(tabKey => (
+                            <AdminTab
+                                key={tabKey}
+                                label={tabKey === 'edit' ? "本文編集" : tabKey === 'metadata' ? (mode === 'notice' ? "お知らせ編集" : "設定") : "プレビュー"}
+                                icon={tabKey === 'edit' ? <FileText className="w-4 h-4" /> : tabKey === 'metadata' ? <Settings className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                isActive={activeTab === tabKey}
+                                onClick={() => setActiveTab(tabKey as Tab)}
+                            />
+                        ))}
                     </AdminTabGroup>
                 }
             />
 
-            {/* メインコンテンツ */}
             <main className="max-w-7xl mx-auto px-6 py-8">
-                {activeTab === "edit" && (
-                    <ArticleEditor
+                {/* Notice Mode: Edit tab is hidden via navigation, but logic handles renders */}
+                {(activeTab === "edit" && mode !== "notice") && (
+                    <CommonEditor
                         title={title}
-                        summary={summary}
-                        keywords={keywords}
                         content={content}
                         onTitleChange={setTitle}
+                        onContentChange={setContent}
+                        summary={summary}
+                        keywords={keywords}
                         onSummaryChange={setSummary}
                         onKeywordsChange={setKeywords}
-                        onContentChange={setContent}
+                        hideSummary={mode !== 'article'}
+                        hideKeywords={mode !== 'article'}
                     />
                 )}
 
                 {activeTab === "metadata" && (
-                    <MetadataEditor
-                        project={project}
-                        group={group}
-                        tags={tags}
-                        thumbnail={thumbnail}
-                        onProjectChange={setProject}
-                        onGroupChange={setGroup}
-                        onTagsChange={setTags}
-                        onThumbnailChange={setThumbnail}
-                    />
+                    mode === "article" ? (
+                        <ArticleMetadataEditor
+                            project={project}
+                            group={group}
+                            tags={tags}
+                            thumbnail={thumbnail}
+                            onProjectChange={setProject}
+                            onGroupChange={setGroup}
+                            onTagsChange={setTags}
+                            onThumbnailChange={setThumbnail}
+                        />
+                    ) : mode === "wiki" ? (
+                        <WikiMetadataEditor
+                            slug={slug}
+                            parentPageId={parentPageId}
+                            projectId={wikiProjectId}
+                            onSlugChange={setSlug}
+                            onParentPageChange={setParentPageId}
+                            onProjectChange={setWikiProjectId}
+                        />
+                    ) : (
+                        <NoticeMetadataEditor
+                            title={title}
+                            category={category}
+                            url={url}
+                            expiresAt={expiresAt}
+                            onTitleChange={setTitle}
+                            onCategoryChange={setCategory}
+                            onUrlChange={setUrl}
+                            onExpiresAtChange={setExpiresAt}
+                        />
+                    )
                 )}
 
                 {activeTab === "preview" && (
                     <Preview
                         title={title}
                         summary={summary}
-                        keywords={keywords}
                         content={content}
                         project={project}
-                        projectId={projectId || "preview-id"}
                         tags={tags}
                         thumbnail={thumbnail}
+                        typeLabel={`${mode.toUpperCase()} PREVIEW`}
+                        category={category}
+                        url={url}
                     />
                 )}
             </main>
-
-            {/* Validation Alert Modal */}
-            <AdminModal
-                isOpen={isAlertOpen}
-                onClose={() => setIsAlertOpen(false)}
-                title="入力不備があります"
-                subtitle="Validation Error"
-                footer={
-                    <AdminButton onClick={() => setIsAlertOpen(false)} className="w-full rounded-2xl">
-                        確認しました
-                    </AdminButton>
-                }
-            >
-                <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
-                        <AlertCircle className="w-8 h-8" />
-                    </div>
-                    <div className="w-full">
-                        <p className="text-gray-700 font-bold mb-4">以下の必須項目が入力されていません：</p>
-                        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-6">
-                            <ul className="grid grid-cols-2 gap-2">
-                                {missingFields.map((field) => (
-                                    <li key={field} className="text-amber-800 font-bold text-sm flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                                        {field}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </AdminModal>
         </AdminLayout>
     );
 }
