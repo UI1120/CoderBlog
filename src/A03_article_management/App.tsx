@@ -7,7 +7,8 @@ import {
     Filter,
     LayoutGrid,
     AlertTriangle,
-    Trash2
+    Trash2,
+    Bell
 } from "lucide-react";
 import { API_BASE_URL } from "@/constants";
 import { AdminLayout } from "@/A00_common/components/AdminLayout";
@@ -15,25 +16,30 @@ import { AdminHeader } from "@/A00_common/components/AdminHeader";
 import { AdminButton } from "@/A00_common/components/AdminButton";
 import { AdminTabGroup, AdminTab } from "@/A00_common/components/AdminTab";
 import { AdminSelect } from "@/A00_common/components/AdminSelect";
+import { AdminMultiSelect } from "@/A00_common/components/AdminMultiSelect";
 import { AdminModal } from "@/A00_common/components/AdminModal";
 import { useAdminAuth } from "@/A00_common/hooks/useAdminAuth";
 import { ArticleTable } from "./components/ArticleTable";
 import { CommentTable } from "./components/CommentTable";
+import { NoticeTable } from "./components/NoticeTable";
 
 export default function App() {
     const { user, isAdmin, loading: authLoading } = useAdminAuth();
-    
+
     // URLパラメータから初期タブを判定
-    const initialTab = new URLSearchParams(window.location.search).get('tab') === 'comment' ? 'comment' : 'article';
-    const [activeTab, setActiveTab] = useState<'article' | 'comment'>(initialTab);
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialTab = searchParams.get('tab') === 'notice' ? 'notice' : searchParams.get('tab') === 'comment' ? 'comment' : 'article';
+    const [activeTab, setActiveTab] = useState<'article' | 'comment' | 'notice'>(initialTab);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all");
+    const initialStatusFilter = initialTab === 'notice' ? ['published', 'draft'] : initialTab === 'comment' ? ['pending'] : ['draft'];
+    const [statusFilter, setStatusFilter] = useState<string[]>(initialStatusFilter); // 初期値の動的設定
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [writerFilter, setWriterFilter] = useState("all");
 
     const [articles, setArticles] = useState<any[]>([]);
     const [comments, setComments] = useState<any[]>([]);
+    const [notices, setNotices] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [writers, setWriters] = useState<any[]>([]);
 
@@ -42,7 +48,7 @@ export default function App() {
 
     // Delete Modal State
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [deleteTarget, setDeleteTarget] = useState<{ type: 'article' | 'comment', data: any } | null>(null);
+    const [deleteTarget, setDeleteTarget] = useState<{ type: 'article' | 'comment' | 'notice', data: any } | null>(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -50,17 +56,25 @@ export default function App() {
             if (activeTab === 'article') {
                 const params = new URLSearchParams({
                     keyword: searchTerm,
-                    status: statusFilter,
+                    status: statusFilter.includes('all') ? 'all' : statusFilter.join(','),
                     category_id: categoryFilter,
                     writer_id: writerFilter
                 });
                 const res = await fetch(`${API_BASE_URL}/admin/articles?${params.toString()}`);
                 const data = await res.json();
                 setArticles(data.articles || []);
+            } else if (activeTab === 'notice') {
+                const params = new URLSearchParams({
+                    keyword: searchTerm,
+                    status: statusFilter.includes('all') ? 'all' : statusFilter.join(',')
+                });
+                const res = await fetch(`${API_BASE_URL}/admin/notices?${params.toString()}`);
+                const data = await res.json();
+                setNotices(data.notices || []);
             } else {
                 const params = new URLSearchParams({
                     keyword: searchTerm,
-                    status: statusFilter
+                    status: statusFilter.includes('all') ? 'all' : statusFilter.join(',')
                 });
                 const res = await fetch(`${API_BASE_URL}/admin/comments?${params.toString()}`);
                 const data = await res.json();
@@ -89,11 +103,14 @@ export default function App() {
     useEffect(() => {
         if (!authLoading && user && !isInitialized) {
             if (activeTab === 'comment') {
-                setStatusFilter(isAdmin ? 'pending' : 'approved');
+                setStatusFilter(isAdmin ? ['pending'] : ['approved']);
+            } else if (activeTab === 'notice') {
+                setStatusFilter(['published', 'draft']);
             } else {
                 if (isAdmin) {
-                    setStatusFilter("draft");
+                    setStatusFilter(['draft']);
                 } else {
+                    setStatusFilter(['draft']);
                     setWriterFilter(String(user.id));
                 }
             }
@@ -107,11 +124,12 @@ export default function App() {
         }
     }, [authLoading, isInitialized, fetchData]);
 
-    const handleStatusChange = async (type: 'article' | 'comment', id: number, newStatus: string) => {
+    const handleStatusChange = async (type: 'article' | 'comment' | 'notice', id: number, newStatus: string) => {
         try {
-            const endpoint = type === 'article'
-                ? `${API_BASE_URL}/admin/articles/${id}/status`
-                : `${API_BASE_URL}/admin/comments/${id}/status`;
+            let endpoint = "";
+            if (type === 'article') endpoint = `${API_BASE_URL}/admin/articles/${id}/status`;
+            else if (type === 'comment') endpoint = `${API_BASE_URL}/admin/comments/${id}/status`;
+            else endpoint = `${API_BASE_URL}/admin/notices/${id}/status`;
 
             const res = await fetch(endpoint, {
                 method: "POST",
@@ -131,10 +149,12 @@ export default function App() {
         if (!deleteTarget) return;
         try {
             const { type, data } = deleteTarget;
-            const id = type === 'article' ? data.article_id : data.comment_id;
-            const endpoint = type === 'article'
-                ? `${API_BASE_URL}/admin/articles/${id}`
-                : `${API_BASE_URL}/admin/comments/${id}`;
+            const id = type === 'article' ? (data.article_id || data.id) : type === 'comment' ? data.comment_id : data.notice_id;
+
+            let endpoint = "";
+            if (type === 'article') endpoint = `${API_BASE_URL}/admin/articles/${id}`;
+            else if (type === 'comment') endpoint = `${API_BASE_URL}/admin/comments/${id}`;
+            else endpoint = `${API_BASE_URL}/admin/notices/${id}`;
 
             const res = await fetch(endpoint, {
                 method: "POST",
@@ -152,19 +172,20 @@ export default function App() {
         }
     };
 
-    const confirmDelete = (type: 'article' | 'comment', data: any) => {
+    const confirmDelete = (type: 'article' | 'comment' | 'notice', data: any) => {
         setDeleteTarget({ type, data });
         setIsDeleteModalOpen(true);
     };
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>
             <AdminHeader
-                icon={activeTab === 'article' ? <FileText className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-                title={activeTab === 'article' ? "記事管理" : "コメント管理"}
-                subtitle={activeTab === 'article' ? "Content Management & Publishing" : "Community Interaction Control"}
+                icon={activeTab === 'article' ? <FileText className="w-6 h-6" /> : activeTab === 'comment' ? <MessageSquare className="w-6 h-6" /> : <Bell className="w-6 h-6" />}
+                title={activeTab === 'article' ? "記事管理" : activeTab === 'comment' ? "コメント管理" : "お知らせ管理"}
+                subtitle={activeTab === 'article' ? "Content Management & Publishing" : activeTab === 'comment' ? "Community Interaction Control" : "Notice and Event Settings"}
                 userInfo={user}
                 rightElement={
                     <>
@@ -179,8 +200,13 @@ export default function App() {
                             />
                         </div>
                         {activeTab === 'article' && (
-                            <AdminButton onClick={() => window.location.href = '/editor'} icon={<Plus className="w-4 h-4" />}>
+                            <AdminButton onClick={() => window.location.href = '/editor?mode=article'} icon={<Plus className="w-4 h-4" />}>
                                 新規記事
+                            </AdminButton>
+                        )}
+                        {activeTab === 'notice' && (
+                            <AdminButton onClick={() => window.location.href = '/editor?mode=notice'} icon={<Plus className="w-4 h-4" />}>
+                                新規お知らせ
                             </AdminButton>
                         )}
                     </>
@@ -193,7 +219,16 @@ export default function App() {
                             isActive={activeTab === 'article'}
                             onClick={() => {
                                 setActiveTab('article');
-                                setStatusFilter('all');
+                                setStatusFilter(['draft']);
+                            }}
+                        />
+                        <AdminTab
+                            label="お知らせ"
+                            icon={<Bell className="w-4 h-4" />}
+                            isActive={activeTab === 'notice'}
+                            onClick={() => {
+                                setActiveTab('notice');
+                                setStatusFilter(['published', 'draft']);
                             }}
                         />
                         <AdminTab
@@ -202,7 +237,7 @@ export default function App() {
                             isActive={activeTab === 'comment'}
                             onClick={() => {
                                 setActiveTab('comment');
-                                setStatusFilter(isAdmin ? 'pending' : 'approved');
+                                setStatusFilter(isAdmin ? ['pending'] : ['approved']);
                             }}
                         />
                     </AdminTabGroup>
@@ -217,22 +252,31 @@ export default function App() {
                         <span className="text-xs font-black uppercase tracking-widest italic">Filters</span>
                     </div>
 
-                    <AdminSelect
-                        value={statusFilter}
+                    <AdminMultiSelect
+                        values={statusFilter}
                         onChange={setStatusFilter}
-                        options={activeTab === 'article' ? [
+                        title="Status Filter"
+                        placeholder="ステータスを選択"
+                        options={activeTab === 'notice' ? [
                             { value: 'all', label: '全てのステータス' },
                             { value: 'published', label: '公開中' },
                             { value: 'draft', label: '下書き' },
                             { value: 'scheduled', label: '予約中' },
                             { value: 'private', label: '非公開' },
+                            { value: 'expired', label: '掲載終了' }
+                        ] : activeTab === 'article' ? [
+                            { value: 'all', label: '全てのステータス' },
+                            { value: 'published', label: '公開中' },
+                            { value: 'draft', label: '下書き' },
+                            { value: 'scheduled', label: '予約中' },
+                            { value: 'private', label: '非公開' }
                         ] : [
                             { value: 'all', label: '全ての状態' },
                             { value: 'pending', label: '承認待ち' },
                             { value: 'approved', label: '承認済み' },
-                            { value: 'rejected', label: '却下' },
+                            { value: 'rejected', label: '却下' }
                         ]}
-                        className="w-44"
+                        className="w-56"
                     />
 
                     {activeTab === 'article' && (
@@ -260,7 +304,7 @@ export default function App() {
 
                     <div className="ml-auto flex items-center gap-2 text-[10px] text-gray-400 font-mono">
                         <LayoutGrid className="w-3.5 h-3.5" />
-                        SHOWING {activeTab === 'article' ? articles.length : comments.length} ITEMS
+                        SHOWING {activeTab === 'article' ? articles.length : activeTab === 'notice' ? notices.length : comments.length} ITEMS
                     </div>
                 </div>
 
@@ -273,9 +317,17 @@ export default function App() {
                 ) : activeTab === 'article' ? (
                     <ArticleTable
                         articles={articles}
-                        onEdit={(a) => window.location.href = `/editor?id=${a.article_id}`}
-                        onChangeStatus={(a, s) => handleStatusChange('article', a.article_id, s)}
+                        onEdit={(a) => window.location.href = `/editor?mode=article&id=${a.article_id || a.id}`}
+                        onChangeStatus={(a, s) => handleStatusChange('article', (a.article_id || a.id) as number, s)}
                         onDelete={(a) => confirmDelete('article', a)}
+                        isAdmin={isAdmin}
+                    />
+                ) : activeTab === 'notice' ? (
+                    <NoticeTable
+                        notices={notices}
+                        onEdit={(n) => window.location.href = `/editor?mode=notice&id=${n.notice_id}`}
+                        onChangeStatus={(n, s) => handleStatusChange('notice', n.notice_id, s)}
+                        onDelete={(n) => confirmDelete('notice', n)}
                         isAdmin={isAdmin}
                     />
                 ) : (
@@ -292,7 +344,7 @@ export default function App() {
             <AdminModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
-                title={deleteTarget?.type === 'article' ? "記事の削除" : "コメントの削除"}
+                title={deleteTarget?.type === 'article' ? "記事の削除" : deleteTarget?.type === 'notice' ? "お知らせの削除" : "コメントの削除"}
                 subtitle="DANGEROUS ACTION"
                 footer={
                     <>
@@ -315,7 +367,7 @@ export default function App() {
                         <div className="mt-6 px-4 py-3 bg-gray-50 rounded-2xl w-full">
                             <p className="text-xs text-gray-400 font-black uppercase tracking-widest mb-1">対象内容</p>
                             <p className="text-sm font-bold text-gray-600 line-clamp-2 italic">
-                                "{deleteTarget?.type === 'article' ? deleteTarget.data.title : deleteTarget?.data.content}"
+                                "{deleteTarget?.type === 'article' || deleteTarget?.type === 'notice' ? deleteTarget.data.title : deleteTarget?.data.content}"
                             </p>
                         </div>
                     </div>

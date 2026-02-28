@@ -29,20 +29,11 @@ export default function App() {
         window.location.href = "/notfound";
       });
 
-    // PVカウントアップ (Cookie制御: 1日1回)
-    const viewedKey = `viewed_article_${id}`;
-    const isViewed = document.cookie.split('; ').find(row => row.startsWith(viewedKey));
-
-    if (!isViewed) {
-      fetch(`${import.meta.env.VITE_API_BASE_URL || '/api'}/articles/${id}/view`, {
-        method: 'POST',
-      }).then(() => {
-        // Cookieセット (1日有効)
-        const date = new Date();
-        date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
-        document.cookie = `${viewedKey}=true; expires=${date.toUTCString()}; path=/`;
-      }).catch(err => console.error('Failed to increment PV:', err));
-    }
+    // PVカウントアップ
+    // ページアクセス時にAPIを呼んでカウントアップする
+    fetch(`${API_BASE_URL}/articles/${id}/view`, {
+      method: 'POST',
+    }).catch(err => console.error('Failed to increment PV:', err));
   }, []);
 
   if (!article) {

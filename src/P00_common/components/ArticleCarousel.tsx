@@ -5,15 +5,15 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef } from "react";
 
 interface Article {
-  id: number;
-  thumbnail: string; // API returns 'thumbnail'
-  project: string;
-  projectId: number;
+  article_id: number;
+  thumbnail: string;
+  project_name: string;
+  project_id: number;
   title: string;
-  date: string;
-  writer: string;
-  writerId?: number;
-  writerIcon?: string;
+  published_at: string;
+  writer_name: string;
+  writer_id?: number;
+  writer_icon?: string;
 }
 
 interface ArticleCarouselProps {
@@ -70,17 +70,17 @@ export function ArticleCarousel({
           style={{ width: "max-content" }}
         >
           {articles.map((article) => (
-            <div key={article.id} className="w-[280px]">
+            <div key={article.article_id} className="w-[280px]">
               <ArticleCard
-                id={article.id}
-                image={article.thumbnail}
-                project={article.project}
-                projectId={article.projectId}
+                article_id={article.article_id}
+                thumbnail={article.thumbnail}
+                project_name={article.project_name}
+                project_id={article.project_id}
                 title={article.title}
-                date={article.date}
-                writer={article.writer}
-                writerId={article.writerId}
-                writerIcon={article.writerIcon}
+                published_at={article.published_at}
+                writer_name={article.writer_name}
+                writer_id={article.writer_id}
+                writer_icon={article.writer_icon}
               />
             </div>
           ))}

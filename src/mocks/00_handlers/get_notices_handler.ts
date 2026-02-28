@@ -27,7 +27,7 @@ export const get_notices_handler = [
 
         // B72: 公開済みまたは期限切れのもののみを取得対象とする
         const filteredNotices = notices.filter(n => n.status === 'published' || n.status === 'expired');
-        const sortedNotices = [...filteredNotices].sort(sortNotices);
+        const sortedNotices = [...filteredNotices].sort((a, b) => b.date.localeCompare(a.date));
 
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;
@@ -47,18 +47,26 @@ export const get_notices_handler = [
     http.get('*/api/notices/latest', ({ request }) => {
         const url = new URL(request.url);
         const split = url.searchParams.get('split');
+        let limit = 3; // default: 3
+        if (split) {
+            const parsed = parseInt(split, 10);
+            if (!isNaN(parsed) && parsed > 0) limit = parsed;
+        }
 
-        // B29: 現在公開中のもの（publishedのみ）に限定する
-        const filteredNotices = notices.filter(n => n.status === 'published');
+        const now = new Date();
+
+        // B29: 現在公開中のもの（publishedのみ）に限定し、expires_atが現在時刻を過ぎていないもの
+        const filteredNotices = notices.filter(n => {
+            if (n.status !== 'published') return false;
+            if (n.expires_at) {
+                const expiresAt = new Date(n.expires_at);
+                if (expiresAt < now) return false;
+            }
+            return true;
+        });
         const sortedNotices = [...filteredNotices].sort(sortNotices);
 
-        let result = sortedNotices;
-        if (split) {
-            const limit = parseInt(split, 10);
-            if (!isNaN(limit) && limit > 0) {
-                result = sortedNotices.slice(0, limit);
-            }
-        }
+        const result = sortedNotices.slice(0, limit);
 
         return HttpResponse.json(result);
     }),
@@ -68,8 +76,16 @@ export const get_notices_handler = [
         const url = new URL(request.url);
         const page = parseInt(url.searchParams.get('page') || '1', 10);
         const limit = parseInt(url.searchParams.get('limit') || '20', 10);
+        const status = url.searchParams.get('status');
 
-        const sortedNotices = [...notices].sort(sortNotices);
+        let filteredNotices = [...notices];
+
+        if (status && status !== 'all') {
+            const statusArray = status.split(',');
+            filteredNotices = filteredNotices.filter(n => statusArray.includes(n.status || 'published'));
+        }
+
+        const sortedNotices = filteredNotices.sort((a, b) => b.date.localeCompare(a.date));
 
         const startIndex = (page - 1) * limit;
         const endIndex = startIndex + limit;

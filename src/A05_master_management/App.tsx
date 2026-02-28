@@ -95,17 +95,26 @@ export default function App() {
         if (!isAdmin) return;
 
         // Validation
-        if (activeTab === "categories" && !formData.category_name) {
-            toast.error("カテゴリー名は必須です");
-            return;
+        if (activeTab === "categories") {
+            if (!formData.category_name) { toast.error("カテゴリー名は必須です"); return; }
+            if (formData.category_name.length > 20) { toast.error("カテゴリー名は20文字以内で入力してください"); return; }
         }
-        if (activeTab === "tags" && !formData.tag_name) {
-            toast.error("タグ名は必須です");
-            return;
+        if (activeTab === "tags") {
+            if (!formData.tag_name) { toast.error("タグ名は必須です"); return; }
+            if (formData.tag_name.length > 20) { toast.error("タグ名は20文字以内で入力してください"); return; }
+            if (/\s/.test(formData.tag_name) || /　/.test(formData.tag_name)) { toast.error("タグ名に空白文字を含めることはできません"); return; }
         }
         if (activeTab === "projects") {
             if (!formData.project_name || !formData.description || !formData.category_id || !formData.default_thumbnail_url) {
                 toast.error("全ての項目が必須です");
+                return;
+            }
+            if (formData.project_name.length > 20) {
+                toast.error("プロジェクト名は20文字以内で入力してください");
+                return;
+            }
+            if (formData.description.length > 500) {
+                toast.error("説明文は500文字以内で入力してください");
                 return;
             }
         }
@@ -193,6 +202,7 @@ export default function App() {
     };
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>
@@ -302,7 +312,7 @@ export default function App() {
                                                     {activeTab === "projects" && (
                                                         <td className="px-8 py-6">
                                                             {item.default_thumbnail_url ? (
-                                                                <button 
+                                                                <button
                                                                     onClick={() => setViewingThumbnail(item.default_thumbnail_url)}
                                                                     className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold text-[10px] uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-full transition-colors"
                                                                 >
@@ -379,6 +389,7 @@ export default function App() {
                                 <input
                                     type="text"
                                     required
+                                    maxLength={20}
                                     value={activeTab === "projects" ? formData.project_name :
                                         activeTab === "categories" ? formData.category_name : formData.tag_name}
                                     onChange={(e) => setFormData({
@@ -396,6 +407,7 @@ export default function App() {
                                     <label className="block text-gray-400 uppercase tracking-widest text-[10px] font-black mb-3 pl-1">説明文</label>
                                     <textarea
                                         required
+                                        maxLength={500}
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                         rows={4}
@@ -424,7 +436,7 @@ export default function App() {
                                                 {formData.default_thumbnail_url ? (
                                                     <div className="relative group w-20 h-20 rounded-xl overflow-hidden border border-gray-100 shadow-sm">
                                                         <img src={formData.default_thumbnail_url} className="w-full h-full object-cover" />
-                                                        <button 
+                                                        <button
                                                             type="button"
                                                             onClick={() => setFormData({ ...formData, default_thumbnail_url: "" })}
                                                             className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
@@ -437,9 +449,9 @@ export default function App() {
                                                         <Upload className="w-6 h-6" />
                                                     </div>
                                                 )}
-                                                <AdminButton 
-                                                    type="button" 
-                                                    variant="secondary" 
+                                                <AdminButton
+                                                    type="button"
+                                                    variant="secondary"
                                                     onClick={() => fileInputRef.current?.click()}
                                                     className="rounded-xl h-10 px-4 text-xs font-black uppercase tracking-widest"
                                                 >
@@ -508,9 +520,9 @@ export default function App() {
                         }
                     >
                         <div className="rounded-3xl overflow-hidden border border-gray-100 shadow-2xl">
-                            <img 
-                                src={viewingThumbnail || ""} 
-                                alt="Thumbnail Preview" 
+                            <img
+                                src={viewingThumbnail || ""}
+                                alt="Thumbnail Preview"
                                 className="w-full h-auto object-cover"
                             />
                         </div>

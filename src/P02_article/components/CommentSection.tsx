@@ -37,8 +37,16 @@ export function CommentSection({ articleId }: CommentSectionProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!userName.trim() || !commentText.trim()) {
-      toast.error("ユーザー名とコメントを入力してください");
+    if (!commentText.trim()) {
+      toast.error("コメントを入力してください");
+      return;
+    }
+    if (userName.length > 20) {
+      toast.error("ユーザー名は20文字以内で入力してください");
+      return;
+    }
+    if (commentText.length > 500) {
+      toast.error("コメントは500文字以内で入力してください");
       return;
     }
 
@@ -49,7 +57,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          guest_name: userName,
+          guest_name: userName.trim() || "匿名",
           content: commentText
         })
       });
@@ -136,6 +144,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
               <input
                 id="userName"
                 type="text"
+                maxLength={20}
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="名前を入力してください"
@@ -162,6 +171,7 @@ export function CommentSection({ articleId }: CommentSectionProps) {
             <textarea
               id="commentText"
               value={commentText}
+              maxLength={500}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="コメントを入力してください"
               rows={4}

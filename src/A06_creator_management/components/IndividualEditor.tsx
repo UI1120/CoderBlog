@@ -41,7 +41,8 @@ export const IndividualEditor = ({
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const filtered = creators.filter(c => {
-        const matchesSearch = c.display_name.toLowerCase().includes(searchTerm.toLowerCase());
+        const dName = c.display_name || c.name || "";
+        const matchesSearch = dName.toLowerCase().includes((searchTerm || "").toLowerCase());
         const matchesTab = c.creator_type === 'individual';
         if (!isAdmin && user) {
             return matchesSearch && matchesTab && c.account_id === user.id;
@@ -144,6 +145,7 @@ export const IndividualEditor = ({
                                         <input
                                             type="text"
                                             required
+                                            maxLength={20}
                                             value={individualFormData.display_name || ""}
                                             onChange={(e) => onFormChange({ ...individualFormData, display_name: e.target.value })}
                                             className="text-3xl font-black text-gray-800 tracking-tight bg-gray-50/50 border-b-2 border-transparent focus:border-emerald-200 focus:bg-white focus:ring-0 p-2 -ml-2 rounded-xl w-full placeholder:text-gray-200 transition-all hover:bg-gray-100/50"
@@ -205,6 +207,7 @@ export const IndividualEditor = ({
                                             value={individualFormData.profile || ""}
                                             onChange={(e) => onFormChange({ ...individualFormData, profile: e.target.value })}
                                             rows={6}
+                                            maxLength={500}
                                             className="w-full bg-gray-50/50 border border-gray-100 shadow-inner rounded-3xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-sans text-gray-700 resize-none leading-relaxed"
                                             placeholder="ブログ等で公開される活動内容を入力してください"
                                         />
@@ -236,6 +239,7 @@ export const IndividualEditor = ({
                                                         type="password"
                                                         autoComplete="new-password"
                                                         value={individualFormData.password || ""}
+                                                        maxLength={12}
                                                         onChange={(e) => onFormChange({ ...individualFormData, password: e.target.value })}
                                                         className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 placeholder:font-normal"
                                                         placeholder="新しいパスワード"
@@ -246,6 +250,7 @@ export const IndividualEditor = ({
                                                         type="password"
                                                         autoComplete="new-password"
                                                         value={confirmPassword}
+                                                        maxLength={12}
                                                         onChange={(e) => onConfirmPasswordChange(e.target.value)}
                                                         className={cn(
                                                             "w-full bg-gray-50/50 border border-gray-100 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 placeholder:font-normal",

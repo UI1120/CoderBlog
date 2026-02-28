@@ -107,10 +107,10 @@ export default function App() {
                 return;
             }
 
-            // Complexity check: 8-12 alphanumeric
-            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+            // Complexity check: 8+ alphanumeric
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
             if (!passwordRegex.test(individualFormData.password)) {
-                setPasswordError("8-12文字の英数字混合で入力してください");
+                setPasswordError("8文字以上の英数字混合で入力してください");
                 return;
             }
         }
@@ -195,6 +195,7 @@ export default function App() {
     };
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>

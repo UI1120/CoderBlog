@@ -61,6 +61,7 @@ export function NoticeMetadataEditor({
                         <input
                             type="text"
                             value={title}
+                            maxLength={100}
                             onChange={(e) => onTitleChange(e.target.value)}
                             className={inputClass}
                             placeholder="例: 学祭展示は2025年11月に開催されます"
@@ -72,6 +73,7 @@ export function NoticeMetadataEditor({
                         <input
                             type="text"
                             value={category}
+                            maxLength={8}
                             onChange={(e) => onCategoryChange(e.target.value)}
                             className={inputClass}
                             placeholder="例: イベント, 勉強会, お知らせ"
@@ -82,8 +84,8 @@ export function NoticeMetadataEditor({
                                     key={cat}
                                     onClick={() => onCategoryChange(cat)}
                                     className={`px-3 py-1 rounded-full text-[10px] font-bold transition-colors whitespace-nowrap border ${cat.includes("重要")
-                                            ? "bg-red-50 text-red-600 border-red-100 hover:bg-red-100"
-                                            : "bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100"
+                                        ? "bg-red-50 text-red-600 border-red-100 hover:bg-red-100"
+                                        : "bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100"
                                         }`}
                                 >
                                     {cat}

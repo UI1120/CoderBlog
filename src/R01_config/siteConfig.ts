@@ -139,3 +139,10 @@ export const NOTICE_LIST_CONFIG = {
     loadingText: "お知らせを読み込み中...",
     emptyMessage: "お知らせは見つかりませんでした。"
 };
+
+/**
+ * Search List configuration (P03_search)
+ */
+export const SEARCH_LIST_CONFIG = {
+    bgImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop"
+};

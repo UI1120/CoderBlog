@@ -12,7 +12,8 @@ import {
 import { cn } from "@/P00_common/ui/utils";
 
 interface Article {
-    article_id: number;
+    article_id?: number;
+    id?: number;
     title: string;
     writer_name: string;
     category_name: string;
@@ -51,10 +52,11 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, on
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                    {articles.map((article) => {
+                    {articles.map((article, index) => {
                         const config = statusConfig[article.status];
+                        const uniqueKey = article.article_id || article.id || index;
                         return (
-                            <tr key={article.article_id} className="hover:bg-gray-50/50 transition-colors group">
+                            <tr key={uniqueKey} className="hover:bg-gray-50/50 transition-colors group">
                                 <td className="px-6 py-5">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">

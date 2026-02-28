@@ -1,15 +1,15 @@
 import { ArticleCard } from "./ArticleCard";
 
 interface Article {
-    id: number;
+    article_id: number;
     title: string;
-    project: string;
-    projectId: number;
-    date: string;
-    writer: string;
-    writerId?: number;
-    writerIcon?: string;
-    thumbnail: string; // API returns 'thumbnail'
+    project_name: string;
+    project_id: number;
+    published_at: string;
+    writer_name: string;
+    writer_id?: number;
+    writer_icon?: string;
+    thumbnail: string;
 }
 
 interface CardMatrixProps {
@@ -22,16 +22,16 @@ export function CardMatrix({ articles }: CardMatrixProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
                 {articles.map((article) => (
                     <ArticleCard
-                        key={article.id}
-                        id={article.id}
-                        image={article.thumbnail}
-                        project={article.project}
-                        projectId={article.projectId}
+                        key={article.article_id}
+                        article_id={article.article_id}
+                        thumbnail={article.thumbnail}
+                        project_name={article.project_name}
+                        project_id={article.project_id}
                         title={article.title}
-                        date={article.date}
-                        writer={article.writer}
-                        writerId={article.writerId}
-                        writerIcon={article.writerIcon}
+                        published_at={article.published_at}
+                        writer_name={article.writer_name}
+                        writer_id={article.writer_id}
+                        writer_icon={article.writer_icon}
                     />
                 ))}
             </div>

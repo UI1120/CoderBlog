@@ -68,9 +68,9 @@ const App: React.FC = () => {
             return;
         }
 
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if (!passwordRegex.test(newPassword)) {
-            setError('パスワードは8-12文字の英数混合である必要があります');
+            setError('パスワードは8文字以上の英数混合である必要があります');
             return;
         }
 
@@ -198,7 +198,7 @@ const App: React.FC = () => {
                                 <div className="space-y-6">
                                     <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-emerald-800 text-xs font-medium leading-relaxed">
                                         セキュリティ保護のため、新しいパスワードを設定してください。
-                                        <div className="mt-1 text-[10px] opacity-70 font-bold">※ 8-12文字・英数混合</div>
+                                        <div className="mt-1 text-[10px] opacity-70 font-bold">※ 8文字以上・英数混合</div>
                                     </div>
 
                                     <div className="space-y-2">

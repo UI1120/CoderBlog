@@ -1,0 +1,1 @@
+import{j as d}from"./createLucideIcon-ICXsEEVY.js";function a({children:r,className:o=""}){return d.jsx("div",{className:`bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-xl shadow-gray-200/50 ${o}`,children:r})}export{a as A};

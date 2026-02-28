@@ -78,7 +78,8 @@ export const get_comments_handler = [
         }
 
         if (status && status !== 'all') {
-            filtered = filtered.filter(c => c.status === status);
+            const statusArray = status.split(',');
+            filtered = filtered.filter(c => statusArray.includes(c.status));
         }
 
         return HttpResponse.json({

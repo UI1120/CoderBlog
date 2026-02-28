@@ -6,6 +6,7 @@ import { API_BASE_URL } from '@/constants';
 import { Users, User, ChevronRight } from 'lucide-react';
 import { CREATOR_LIST_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 import { cn } from '@/P00_common/ui/utils';
+import { FallbackImage } from '@/P00_common/components/FallbackImage';
 
 export default function CreatorList() {
     const [creators, setCreators] = useState<any[]>([]);
@@ -109,10 +110,12 @@ export default function CreatorList() {
                                             "w-20 h-20 overflow-hidden border-4 border-white shadow-xl transition-transform group-hover:rotate-3",
                                             creator.creator_type === 'group' ? "rounded-[1.5rem]" : "rounded-full"
                                         )}>
-                                            <img
-                                                src={creator.icon_path || COMMON_CONFIG.defaultIconUrl}
+                                            <FallbackImage
+                                                src={creator.icon_path}
                                                 alt={creator.display_name}
+                                                fallbackText={creator.display_name.charAt(0).toUpperCase()}
                                                 className="w-full h-full object-cover"
+                                                fallbackClassName="text-3xl text-gray-300 bg-gray-100"
                                             />
                                         </div>
                                         <div className="flex-grow pt-2">
@@ -134,8 +137,14 @@ export default function CreatorList() {
                                         <div className="flex -space-x-3">
                                             {/* Dummy avatars for groups or just a placeholder */}
                                             {creator.creator_type === 'group' && creator.members?.slice(0, 3).map((m: any, i: number) => (
-                                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 overflow-hidden ring-2 ring-emerald-50/50">
-                                                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${m.display_name}`} alt="" />
+                                                <div key={i} className="w-8 h-8 rounded-full flex items-center justify-center border-2 border-white bg-gray-100 overflow-hidden ring-2 ring-emerald-50/50">
+                                                    <FallbackImage
+                                                        src={m.icon_path}
+                                                        alt={m.display_name}
+                                                        fallbackText={m.display_name.charAt(0).toUpperCase()}
+                                                        className="w-full h-full object-cover"
+                                                        fallbackClassName="text-xs font-bold text-gray-400"
+                                                    />
                                                 </div>
                                             ))}
                                         </div>

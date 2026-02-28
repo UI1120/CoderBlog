@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Header } from '@/P00_common/components/Header';
 import { Footer } from '@/P00_common/components/Footer';
+import { HeroSection } from '@/P00_common/components/HeroSection';
 import { API_BASE_URL } from '@/constants';
 import { CATEGORY_LIST_CONFIG } from '@/R01_config/siteConfig';
 import { LayoutGrid, ArrowRight } from 'lucide-react';
@@ -25,26 +26,15 @@ export default function App() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
-            
+
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section
-                    className="relative bg-cover bg-center"
-                    style={{
-                        backgroundImage: `url('${CATEGORY_LIST_CONFIG.bgImage}')`,
-                    }}
-                >
-                    <div className="container mx-auto px-6 py-24 md:py-32">
-                        <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
-                            <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                                <span className="text-[#67e0b8]">{CATEGORY_LIST_CONFIG.title.substring(0, 5)}</span>{CATEGORY_LIST_CONFIG.title.substring(5)}
-                            </h1>
-                            <p className="text-gray-200 mb-0 max-w-2xl mx-auto drop-shadow-md text-xl">
-                                {CATEGORY_LIST_CONFIG.description}
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                <HeroSection
+                    title={CATEGORY_LIST_CONFIG.title}
+                    description={CATEGORY_LIST_CONFIG.description}
+                    bgImage={CATEGORY_LIST_CONFIG.bgImage}
+                    highlightCount={5}
+                />
 
                 <div className="container mx-auto px-6 py-16">
                     {loading ? (
@@ -55,7 +45,7 @@ export default function App() {
                     ) : categories.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {categories.map((cat) => (
-                                <a 
+                                <a
                                     key={cat.id}
                                     href={`/search?q=${encodeURIComponent(cat.label)}`}
                                     className="group bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex items-center justify-between"

@@ -5,6 +5,8 @@ import { Pagination } from '@/P00_common/components/Pagination';
 import { ArticleCarousel } from "@/P00_common/components/ArticleCarousel";
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
+import { SEARCH_LIST_CONFIG } from '@/R01_config/siteConfig';
+import { HeroSection } from '@/P00_common/components/HeroSection';
 import { Home, Search } from 'lucide-react';
 
 export default function App() {
@@ -79,11 +81,13 @@ export default function App() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
+            <HeroSection
+                title={isAllQuery ? '最新記事一覧' : `「${trimmedQuery}」の検索結果`}
+                description="探している記事を見つけよう"
+                bgImage={SEARCH_LIST_CONFIG.bgImage}
+                highlightCount={0}
+            />
             <main className="container mx-auto px-6 py-12 flex-grow">
-                <h1 className="text-3xl font-black text-gray-900 mb-12 text-center tracking-tight">
-                    {isAllQuery ? '最新記事一覧' : `「${trimmedQuery}」の検索結果`}
-                </h1>
-
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin mb-4" />

@@ -48,10 +48,10 @@ export const GroupManager = ({
 }: GroupManagerProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const filtered = creators.filter(c =>
-        c.display_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        c.creator_type === 'group'
-    );
+    const filtered = creators.filter(c => {
+        const dName = c.display_name || c.name || "";
+        return dName.toLowerCase().includes((searchTerm || "").toLowerCase()) && c.creator_type === 'group';
+    });
 
     const myGroups = !isAdmin ? filtered.filter(c => c.members?.some((m: any) => m.account_id === user?.id)) : [];
     const otherGroups = !isAdmin ? filtered.filter(c => !c.members?.some((m: any) => m.account_id === user?.id)) : [];
@@ -244,6 +244,7 @@ export const GroupManager = ({
                             <input
                                 type="text"
                                 required
+                                maxLength={20}
                                 value={groupFormData.display_name || ""}
                                 onChange={(e) => setGroupFormData({ ...groupFormData, display_name: e.target.value })}
                                 className="w-full bg-gray-50 border border-gray-100 shadow-inner rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700"
@@ -258,6 +259,7 @@ export const GroupManager = ({
                             value={groupFormData.profile || ""}
                             onChange={(e) => setGroupFormData({ ...groupFormData, profile: e.target.value })}
                             rows={5}
+                            maxLength={500}
                             className="w-full bg-gray-50 border border-gray-100 shadow-inner rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-sans text-gray-700 resize-none"
                             placeholder="グループの紹介文を入力してください"
                         />

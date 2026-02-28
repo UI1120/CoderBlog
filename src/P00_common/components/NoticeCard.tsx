@@ -25,12 +25,12 @@ export function NoticeCard({ notices, className }: NoticeCardProps) {
                         index > 0 && "mt-4 pt-4 border-t border-[#67e0b8]/20"
                     )}
                 >
-                    <div className="flex items-center gap-3 shrink-0 sm:w-40">
-                        <time className="text-sm text-gray-500 font-mono tracking-wide">
+                    <div className="flex items-center gap-3 shrink-0 sm:w-48 lg:w-56 pr-2">
+                        <time className="text-sm text-gray-500 font-mono tracking-wide whitespace-nowrap shrink-0">
                             {notice.date}
                         </time>
                         <span className={cn(
-                            "px-2.5 py-0.5 text-[11px] font-medium rounded-full border",
+                            "px-2.5 py-0.5 text-[11px] font-medium rounded-full border whitespace-nowrap shrink-0",
                             notice.category.includes("重要")
                                 ? "bg-red-50 text-red-600 border-red-100"
                                 : "bg-emerald-50 text-emerald-600 border-emerald-100"

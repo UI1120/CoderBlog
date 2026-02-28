@@ -1,0 +1,6 @@
+import{c,j as a}from"./createLucideIcon-ICXsEEVY.js";/**
+ * @license lucide-react v0.487.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const l=[["path",{d:"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",key:"oel41y"}],["path",{d:"m9 12 2 2 4-4",key:"dzmm74"}]],h=c("shield-check",l);function m({children:e}){return a.jsx("div",{className:"min-h-screen bg-[#f8faf9] text-gray-800 font-sans",children:e})}function b({variant:e="primary",icon:r,children:t,className:s="",...d}){const o="flex items-center justify-center gap-2 font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 shadow-lg",n={primary:"bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/10",secondary:"bg-emerald-50 hover:bg-emerald-100 text-emerald-600 shadow-emerald-50/50",danger:"bg-red-50 hover:bg-red-100 text-red-600 shadow-red-50/50",ghost:"bg-transparent hover:bg-gray-50 text-gray-500 shadow-none border border-transparent hover:border-gray-100"};return a.jsxs("button",{className:`${o} ${n[e]} ${s}`,...d,children:[r&&a.jsx("span",{className:"w-4 h-4",children:r}),t]})}export{m as A,h as S,b as a};

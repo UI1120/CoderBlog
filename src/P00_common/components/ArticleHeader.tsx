@@ -4,37 +4,39 @@ import { Breadcrumb } from "./Breadcrumb";
 interface ArticleHeaderProps {
   title: string;
   summary: string;
-  category: string;
-  categoryId: string | number;
-  project: string;
-  projectId: string | number;
+  category_name: string;
+  category_id: string | number;
+  project_name: string;
+  project_id: string | number;
   tags: string[];
-  writer: string;
-  writerId?: string | number;
-  writerIcon?: string;
-  group: string;
-  groupId?: string | number;
-  groupIcon?: string;
-  publishedDate: string;
-  goodCount: number;
+  writer_name: string;
+  writer_id?: string | number;
+  writer_icon?: string;
+  group_name: string;
+  group_id?: string | number;
+  group_icon?: string;
+  published_at: string;
+  updated_at?: string;
+  good_count: number;
 }
 
 export function ArticleHeader({
   title,
   summary,
-  category,
-  categoryId,
-  project,
-  projectId,
+  category_name,
+  category_id,
+  project_name,
+  project_id,
   tags,
-  writer,
-  writerId,
-  writerIcon,
-  group,
-  groupId,
-  groupIcon,
-  publishedDate,
-  goodCount
+  writer_name,
+  writer_id,
+  writer_icon,
+  group_name,
+  group_id,
+  group_icon,
+  published_at,
+  updated_at,
+  good_count
 }: ArticleHeaderProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-8">
@@ -43,8 +45,8 @@ export function ArticleHeader({
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
-            { label: category, href: `/project?category=${categoryId}` },
-            { label: project, href: `/project?pid=${projectId}` },
+            { label: category_name, href: `/project?category=${category_id}` },
+            { label: project_name, href: `/project?pid=${project_id}` },
             { label: "", href: "#" },
           ]}
         />
@@ -72,41 +74,47 @@ export function ArticleHeader({
 
       {/* 投稿日時・グループ | クリエイター */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600">{publishedDate}</span>
-          <div className="flex items-center gap-2 text-red-500">
-            <Heart className="w-5 h-5 fill-current" />
-            <span>{goodCount}</span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-4">
+            <span className="text-gray-600 font-medium">
+              {updated_at && updated_at !== published_at
+                ? `更新: ${updated_at}`
+                : `公開: ${published_at}`}
+            </span>
+            <div className="flex items-center gap-2 text-red-500">
+              <Heart className="w-5 h-5 fill-current" />
+              <span>{good_count}</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-4 text-gray-600 text-sm">
           <div className="flex items-center gap-3">
             <a
-              href={groupId ? `/creator?gid=${groupId}` : undefined}
+              href={group_id ? `/creator?gid=${group_id}` : undefined}
               className="flex items-center gap-2 hover:text-emerald-500 transition-colors"
             >
-              {groupIcon ? (
-                <img src={groupIcon} alt="" className="w-6 h-6 rounded-lg object-cover border border-gray-100 shadow-sm" />
+              {group_icon ? (
+                <img src={group_icon} alt="" className="w-6 h-6 rounded-lg object-cover border border-gray-100 shadow-sm" />
               ) : (
                 <div className="w-6 h-6 rounded-lg bg-gray-100 flex items-center justify-center">
                   <span className="text-[10px] font-bold">G</span>
                 </div>
               )}
-              <span className="font-bold">{group}</span>
+              <span className="font-bold">{group_name}</span>
             </a>
             <span className="text-gray-300">/</span>
             <a
-              href={writerId ? `/creator?cid=${writerId}` : undefined}
+              href={writer_id ? `/creator?cid=${writer_id}` : undefined}
               className="flex items-center gap-2 hover:text-emerald-500 transition-colors"
             >
-              {writerIcon ? (
-                <img src={writerIcon} alt="" className="w-6 h-6 rounded-full object-cover border border-gray-100 shadow-sm" />
+              {writer_icon ? (
+                <img src={writer_icon} alt="" className="w-6 h-6 rounded-full object-cover border border-gray-100 shadow-sm" />
               ) : (
                 <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
                   <span className="text-[10px] font-bold">W</span>
                 </div>
               )}
-              <span className="font-bold">{writer}</span>
+              <span className="font-bold">{writer_name}</span>
             </a>
           </div>
         </div>

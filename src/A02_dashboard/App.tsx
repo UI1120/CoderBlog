@@ -43,6 +43,7 @@ export default function App() {
     }, [authLoading, user]);
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>

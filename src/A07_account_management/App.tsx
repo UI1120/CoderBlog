@@ -110,6 +110,10 @@ export default function App() {
             toast.error("全ての項目を入力してください");
             return;
         }
+        if (newAccountData.login_name.length > 50) {
+            toast.error("ログインIDは50文字以内で入力してください");
+            return;
+        }
 
         try {
             const response = await fetch(`${API_BASE_URL}/admin/accounts`, {
@@ -135,6 +139,7 @@ export default function App() {
     );
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>
@@ -333,6 +338,7 @@ export default function App() {
                                     <input
                                         type="text"
                                         required
+                                        maxLength={50}
                                         value={newAccountData.login_name}
                                         onChange={(e) => setNewAccountData({ ...newAccountData, login_name: e.target.value })}
                                         className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700"

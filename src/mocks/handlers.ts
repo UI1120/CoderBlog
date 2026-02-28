@@ -13,11 +13,13 @@ import { dashboard_handler } from './00_handlers/dashboard_handler';
 import { get_categories_handler } from './00_handlers/get_categories_handler';
 import { get_tags_handler } from './00_handlers/get_tags_handler';
 
-export const handlers = [
+const enableMock = import.meta.env.VITE_ENABLE_MOCK === 'true';
+
+export const handlers = enableMock ? [
     ...get_article_handler,
     ...get_comments_handler,
     ...get_headerItems_handler,
-    ...get_notices_handler,
+    // ...get_notices_handler,
     ...get_projects_handler,
     ...login_handler,
     ...get_article_lists_handler,
@@ -28,4 +30,4 @@ export const handlers = [
     ...dashboard_handler,
     ...get_categories_handler,
     ...get_tags_handler,
-];
+] : [];

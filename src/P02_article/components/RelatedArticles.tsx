@@ -1,16 +1,9 @@
 import { ArticleCarousel } from "@/P00_common/components/ArticleCarousel";
-import { useState, useEffect } from "react";
-import { API_BASE_URL } from "@/constants";
+interface RelatedArticlesProps {
+  articles: any[];
+}
 
-export function RelatedArticles() {
-  const [articles, setArticles] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/article-lists/related-articles`)
-      .then(res => res.json())
-      .then(data => setArticles(data))
-      .catch(err => console.error('Failed to fetch related articles:', err));
-  }, []);
+export function RelatedArticles({ articles }: RelatedArticlesProps) {
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">

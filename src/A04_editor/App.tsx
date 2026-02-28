@@ -18,13 +18,14 @@ import { API_BASE_URL } from "@/constants";
 
 type EditorMode = "article" | "wiki" | "notice";
 type Tab = "edit" | "metadata" | "preview";
-type Status = "draft" | "published" | "scheduled" | "private";
+type Status = "draft" | "published" | "scheduled" | "private" | "expired";
 
 const statusConfig: Record<Status, { label: string; color: string }> = {
     draft: { label: "下書き", color: "text-gray-500" },
     published: { label: "公開", color: "text-emerald-500" },
     scheduled: { label: "予約投稿", color: "text-amber-500" },
     private: { label: "非公開", color: "text-red-500" },
+    expired: { label: "期限切れ", color: "text-amber-600" },
 };
 
 export default function App() {
@@ -68,9 +69,10 @@ export default function App() {
 
         if (id) {
             const currentMode = urlMode || "article";
+            const abortController = new AbortController();
 
             if (currentMode === "article") {
-                fetch(`${API_BASE_URL}/articles/${id}`)
+                fetch(`${API_BASE_URL}/articles/${id}`, { signal: abortController.signal })
                     .then(res => {
                         if (!res.ok) throw new Error("Failed to fetch article");
                         return res.json();
@@ -91,14 +93,15 @@ export default function App() {
                         setTags(data.tag_ids || data.tags || []);
                         setThumbnail(data.thumbnail_url || data.thumbnail || data.image || "");
 
-                        toast.success("記事データを読み込みました");
+                        toast.success("記事データを読み込みました", { id: 'fetch-success' });
                     })
                     .catch(e => {
+                        if (e.name === 'AbortError') return;
                         console.error(e);
                         toast.error("記事の読み込みに失敗しました");
                     });
             } else if (currentMode === "notice") {
-                fetch(`${API_BASE_URL}/admin/notices/${id}`)
+                fetch(`${API_BASE_URL}/admin/notices/${id}`, { signal: abortController.signal })
                     .then(res => {
                         if (!res.ok) throw new Error("Failed to fetch notice");
                         return res.json();
@@ -112,44 +115,104 @@ export default function App() {
                         if (expDate && expDate.includes("T")) expDate = expDate.slice(0, 16);
                         setExpiresAt(expDate);
 
-                        toast.success("お知らせデータを読み込みました");
+                        toast.success("お知らせデータを読み込みました", { id: 'fetch-success' });
                     })
                     .catch(e => {
+                        if (e.name === 'AbortError') return;
                         console.error(e);
                         toast.error("お知らせの読み込みに失敗しました");
                     });
             }
+
+            return () => {
+                abortController.abort();
+            };
         }
     }, []);
 
     const handleSave = () => {
         // Validation logic based on mode...
         if (!title.trim()) { toast.error("タイトルを入力してください"); return; }
+        if (title.length > 100) { toast.error("タイトルは100文字以内で入力してください"); return; }
 
-        const payload: any = { mode, title, status, publishedAt };
+        const payload: any = {
+            mode,
+            title,
+            status,
+            published_at: publishedAt || null
+        };
 
         if (mode === "article") {
             if (!content.trim()) { toast.error("本文を入力してください"); return; }
+            if (summary && summary.length > 300) { toast.error("概要は300文字以内で入力してください"); return; }
             payload.content = content;
             payload.summary = summary;
-            payload.project = project;
-            payload.tags = tags;
+            payload.keywords = keywords;
+            payload.project_id = project;
+            payload.group_id = group;
+            payload.tag_ids = tags;
+            payload.thumbnail_url = thumbnail;
         } else if (mode === "wiki") {
             if (!content.trim()) { toast.error("本文を入力してください"); return; }
             payload.content = content;
             payload.slug = slug;
-            payload.parentPageId = parentPageId;
+            payload.parent_page_id = parentPageId;
+            payload.project_id = wikiProjectId;
         } else if (mode === "notice") {
+            if (!category.trim()) { toast.error("カテゴリを入力してください"); return; }
+            if (category.length > 8) { toast.error("カテゴリは8文字以内で入力してください"); return; }
+            if (url) {
+                if (!/^https?:\/\//.test(url) && !url.startsWith('/')) {
+                    toast.error("有効なURL形式で入力してください (http://, https:// またはルート相対 /)"); return;
+                }
+            }
+            if (publishedAt && expiresAt) {
+                if (new Date(expiresAt) <= new Date(publishedAt)) {
+                    toast.error("掲載終了日時は公開日時より未来に設定してください"); return;
+                }
+            }
             payload.url = url;
             payload.category = category;
-            payload.expiresAt = expiresAt;
+            payload.expires_at = expiresAt || null;
         }
 
         console.log("Saving...", payload);
-        toast.success(`${mode.toUpperCase()} を保存しました`);
+
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get("id");
+
+        if (mode === "notice") {
+            const method = id ? 'PUT' : 'POST';
+            const endpoint = id ? `${API_BASE_URL}/admin/notices/${id}` : `${API_BASE_URL}/admin/notices`;
+
+            fetch(endpoint, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to save notice");
+                    return res.json();
+                })
+                .then(() => {
+                    toast.success(`お知らせを${id ? '更新' : '作成'}しました`);
+                    // 保存完了後に管理画面トップ（もしくは記事・コメント管理）へ遷移
+                    setTimeout(() => {
+                        window.location.href = "/article_management?tab=notices";
+                    }, 1000);
+                })
+                .catch(e => {
+                    console.error(e);
+                    toast.error("お知らせの保存に失敗しました");
+                });
+        } else {
+            // 他のモードの保存ロジック（未実装・または既存Mock）
+            toast.success(`${mode.toUpperCase()} を保存しました`);
+        }
     };
 
     if (authLoading) return null;
+    if (!user) return null;
 
     return (
         <AdminLayout>
@@ -207,19 +270,21 @@ export default function App() {
                                 </button>
                             </PopoverTrigger>
                             <PopoverContent className="w-48 p-1.5 rounded-2xl">
-                                {(Object.entries(statusConfig) as [Status, typeof statusConfig[Status]][]).map(([key, cfg]) => (
-                                    <div
-                                        key={key}
-                                        className={cn(
-                                            "flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all",
-                                            status === key ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50 text-gray-600"
-                                        )}
-                                        onClick={() => setStatus(key)}
-                                    >
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">{cfg.label}</span>
-                                        {status === key && <Check className="w-3.5 h-3.5 text-emerald-600" />}
-                                    </div>
-                                ))}
+                                {(Object.entries(statusConfig) as [Status, typeof statusConfig[Status]][])
+                                    .filter(([key]) => mode === 'notice' || key !== 'expired')
+                                    .map(([key, cfg]) => (
+                                        <div
+                                            key={key}
+                                            className={cn(
+                                                "flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all",
+                                                status === key ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50 text-gray-600"
+                                            )}
+                                            onClick={() => setStatus(key)}
+                                        >
+                                            <span className="text-[10px] font-bold uppercase tracking-widest">{cfg.label}</span>
+                                            {status === key && <Check className="w-3.5 h-3.5 text-emerald-600" />}
+                                        </div>
+                                    ))}
                             </PopoverContent>
                         </Popover>
 

@@ -4,15 +4,18 @@ import article002 from '../articles/article_002.json';
 import articlesData from '../articles/articles_list.json';
 
 const mapArticle = (a: any) => {
-    const projectId = a.project_id || a.projectId || a.category_id || 1;
     return {
         ...a,
-        id: Number(a.id || a.article_id),
         article_id: Number(a.id || a.article_id),
         writer_id: Number(a.writer_id || a.writerId),
-        project: a.project || a.category || "General",
-        projectId: Number(projectId),
-        project_id: Number(projectId)
+        writer_name: a.writer_name || a.writer,
+        writer_icon: a.writer_icon || a.writerIcon,
+        project_id: Number(a.project_id || a.projectId || a.category_id || 1),
+        project_name: a.project_name || a.project || a.category || "General",
+        category_id: Number(a.category_id || a.projectId || 1),
+        category_name: a.category_name || a.category || "General",
+        thumbnail: a.thumbnail || a.image,
+        published_at: a.published_at || a.date
     };
 };
 
@@ -126,7 +129,8 @@ export const get_article_handler = [
         }
 
         if (status && status !== 'all') {
-            filtered = filtered.filter(a => a.status === status);
+            const statusArray = status.split(',');
+            filtered = filtered.filter(a => statusArray.includes(a.status));
         }
 
         // Note: articles_list.json currently doesn't have numeric IDs for categories/writers, 

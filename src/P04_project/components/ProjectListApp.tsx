@@ -1,5 +1,6 @@
 import { Header } from '@/P00_common/components/Header';
 import { Footer } from '@/P00_common/components/Footer';
+import { HeroSection } from '@/P00_common/components/HeroSection';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
 import { PROJECT_LIST_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
@@ -9,7 +10,7 @@ export default function ProjectListApp() {
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
-    const [categories, setCategories] = useState<{label: string, id: string}[]>([]);
+    const [categories, setCategories] = useState<{ label: string, id: string }[]>([]);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -23,7 +24,7 @@ export default function ProjectListApp() {
             .then(res => res.json())
             .then(data => {
                 setProjects(data);
-                
+
                 // Extract unique categories from projects
                 const uniqueCats = Array.from(new Set(data.map((p: any) => p.category_id)))
                     .filter(Boolean)
@@ -32,7 +33,7 @@ export default function ProjectListApp() {
                         return { label: project.category, id: id as string };
                     });
                 setCategories(uniqueCats);
-                
+
                 setLoading(false);
             })
             .catch(err => {
@@ -41,8 +42,8 @@ export default function ProjectListApp() {
             });
     }, []);
 
-    const filteredProjects = selectedCategory === "all" 
-        ? projects 
+    const filteredProjects = selectedCategory === "all"
+        ? projects
         : projects.filter(p => p.category_id === selectedCategory);
 
     return (
@@ -50,23 +51,12 @@ export default function ProjectListApp() {
             <Header />
 
             {/* Hero Section */}
-            <section
-                className="relative bg-cover bg-center"
-                style={{
-                    backgroundImage: `url('${PROJECT_LIST_CONFIG.hero.backgroundImage}')`,
-                }}
-            >
-                <div className="container mx-auto px-6 py-24 md:py-32">
-                    <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
-                        <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                            <span className="text-[#67e0b8]">{PROJECT_LIST_CONFIG.hero.title.substring(0, 6)}</span>{PROJECT_LIST_CONFIG.hero.title.substring(6)}
-                        </h1>
-                        <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md text-xl">
-                            {PROJECT_LIST_CONFIG.hero.description}
-                        </p>
-                    </div>
-                </div>
-            </section>
+            <HeroSection
+                title={PROJECT_LIST_CONFIG.hero.title}
+                description={PROJECT_LIST_CONFIG.hero.description}
+                bgImage={PROJECT_LIST_CONFIG.hero.backgroundImage}
+                highlightCount={6}
+            />
 
             <main className="container mx-auto px-6 py-12 flex-grow max-w-[80%]">
                 {/* Filter UI */}
@@ -124,7 +114,7 @@ export default function ProjectListApp() {
                                             </span>
                                         </div>
                                     </div>
- 
+
                                     {/* Right: Content */}
                                     <div className="md:w-3/5 lg:w-2/3 p-10 md:p-12 flex flex-col justify-between">
                                         <div>
@@ -141,7 +131,7 @@ export default function ProjectListApp() {
                                                 {project.description}
                                             </p>
                                         </div>
- 
+
                                         <div className="mt-8 flex items-center justify-between border-t border-gray-50 pt-8">
                                             <div className="flex items-center gap-4 text-[#2d7a5f] font-black text-xs uppercase tracking-[0.2em] group-hover:gap-6 transition-all">
                                                 <span>{PROJECT_LIST_CONFIG.projectCard.detailText}</span>

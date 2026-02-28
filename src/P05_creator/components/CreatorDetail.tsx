@@ -5,8 +5,9 @@ import { Pagination } from '@/P00_common/components/Pagination';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '@/constants';
 import { Users, Sparkles, ArrowLeft } from 'lucide-react';
-import { CREATOR_DETAIL_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
+import { CREATOR_DETAIL_CONFIG } from '@/R01_config/siteConfig';
 import { cn } from '@/P00_common/ui/utils';
+import { FallbackImage } from '@/P00_common/components/FallbackImage';
 
 interface CreatorDetailProps {
     cid: string | null;
@@ -30,7 +31,16 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                 if (!res.ok) throw new Error('Creator not found');
                 return res.json();
             })
-            .then(data => setCreator(data));
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const targetId = cid || gid;
+                    const found = data.find(c => c.creator_id?.toString() === targetId);
+                    if (!found) throw new Error('Creator not found');
+                    setCreator(found);
+                } else {
+                    setCreator(data);
+                }
+            });
 
         // Fetch articles by this creator/group
         const fetchArticles = fetch(`${API_BASE_URL}/articles?${query}&limit=100`)
@@ -80,10 +90,12 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                                 "w-48 h-48 overflow-hidden border-8 border-gray-50 shadow-2xl relative z-10",
                                 creator.creator_type === 'group' ? "rounded-[3rem]" : "rounded-full"
                             )}>
-                                <img
-                                    src={creator.icon_path || COMMON_CONFIG.defaultIconUrl}
-                                    alt={creator.display_name}
+                                <FallbackImage
+                                    src={creator.icon_path}
+                                    alt={creator.display_name || '👤'}
+                                    fallbackText={(creator.display_name || '?').charAt(0).toUpperCase()}
                                     className="w-full h-full object-cover"
+                                    fallbackClassName="text-6xl text-gray-300 bg-gray-50 bg-gradient-to-br from-gray-100 to-gray-200"
                                 />
                             </div>
                             <div className={cn(
@@ -141,7 +153,13 @@ export default function CreatorDetail({ cid, gid }: CreatorDetailProps) {
                                         className="flex items-center gap-3 bg-white pr-6 py-1.5 pl-1.5 rounded-full border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-100 transition-all group"
                                     >
                                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100">
-                                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.display_name}`} alt={member.display_name} />
+                                            <FallbackImage
+                                                src={member.icon_path}
+                                                alt={member.display_name || '👤'}
+                                                fallbackText={(member.display_name || '?').charAt(0).toUpperCase()}
+                                                className="w-full h-full object-cover"
+                                                fallbackClassName="text-lg bg-gray-100 text-gray-400"
+                                            />
                                         </div>
                                         <span className="text-sm font-black text-gray-700 group-hover:text-emerald-600">{member.display_name}</span>
                                     </a>

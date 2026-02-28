@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/P00_common/components/Header";
 import { Footer } from "@/P00_common/components/Footer";
+import { HeroSection } from "@/P00_common/components/HeroSection";
 import { NoticeCard, Notice } from "@/P00_common/components/NoticeCard";
 import { Pagination } from "@/P00_common/components/Pagination";
 import { API_BASE_URL } from "@/constants";
@@ -59,23 +60,12 @@ function App() {
 
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section
-                    className="relative bg-cover bg-center"
-                    style={{
-                        backgroundImage: `url('${NOTICE_LIST_CONFIG.bgImage}')`,
-                    }}
-                >
-                    <div className="container mx-auto px-6 py-24 md:py-32">
-                        <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
-                            <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                                <span className="text-[#67e0b8]">{NOTICE_LIST_CONFIG.title.substring(0, 4)}</span>{NOTICE_LIST_CONFIG.title.substring(4)}
-                            </h1>
-                            <p className="text-gray-200 mb-0 max-w-2xl mx-auto drop-shadow-md text-xl">
-                                {NOTICE_LIST_CONFIG.description}
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                <HeroSection
+                    title={NOTICE_LIST_CONFIG.title}
+                    description={NOTICE_LIST_CONFIG.description}
+                    bgImage={NOTICE_LIST_CONFIG.bgImage}
+                    highlightCount={4}
+                />
 
                 <div className="container mx-auto px-6 py-16">
                     {isLoading ? (

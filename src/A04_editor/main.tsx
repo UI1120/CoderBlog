@@ -4,7 +4,7 @@ import App from './App.tsx'
 import '@/P00_common/styles/globals.css'
 
 async function enableMocking() {
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV !== 'development' || import.meta.env.VITE_ENABLE_MOCK !== 'true') {
         return
     }
 
