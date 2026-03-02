@@ -66,7 +66,13 @@ export const GroupManager = ({
     const handleGroupOpenModal = (group: any = null) => {
         setEditingGroup(group);
         if (group) {
-            setGroupFormData({ ...group });
+            // Map the flat member IDs back to the expected object shape { creator_id, display_name }
+            const mappedMembers = (group.member_ids || group.members || []).map((id: number) => {
+                const creator = creators.find(c => c.creator_id === id);
+                return creator ? { creator_id: creator.creator_id, display_name: creator.display_name } : null;
+            }).filter(Boolean);
+
+            setGroupFormData({ ...group, members: mappedMembers });
         } else {
             setGroupFormData({ display_name: "", profile: "", creator_type: "group", icon_path: "", members: [] });
         }

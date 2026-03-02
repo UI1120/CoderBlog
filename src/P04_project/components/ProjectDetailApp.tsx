@@ -7,7 +7,7 @@ import { API_BASE_URL } from '@/constants';
 import { PROJECT_DETAIL_CONFIG, COMMON_CONFIG } from '@/R01_config/siteConfig';
 
 export default function ProjectDetailApp() {
-    const [projectDetails, setProjectDetails] = useState<{ project_name: string; description: string; thumbnail?: string } | null>(null);
+    const [projectDetails, setProjectDetails] = useState<{ title: string; description: string; thumbnail?: string } | null>(null);
     const [articles, setArticles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
@@ -24,8 +24,8 @@ export default function ProjectDetailApp() {
         setLoading(true);
 
         if (!pid) {
-           window.location.href = '/notfound'; // Basic validation
-           return;
+            window.location.href = '/notfound'; // Basic validation
+            return;
         }
 
         // Fetch individual project details
@@ -85,20 +85,20 @@ export default function ProjectDetailApp() {
         url.searchParams.set('page', newPage.toString());
         // Use pushState to update URL without refreshing
         window.history.pushState({ page: newPage }, '', url.toString());
-        
+
         // Trigger fetch somehow? 
         // NOTE: In the current useEffect design using [] dependency with window.location, we need to trigger re-fetch.
         // Actually, the cleanest way is to add [page] dependency to the main useEffect, 
         // OR reload the page (bad UX), OR updating the useEffect dependencies.
         // Let's refactor the useEffect to depend on [page] (and pid which is stable).
-        
+
         // However, the previous implementation relied on component mounting mostly.
         // Let's correct the useEffect dependency in the next step if strictly needed, 
         // but since I'm rewriting the whole body, I can fix the dependency array now.
         // But `window.history.pushState` does NOT trigger popstate or component update by itself unless we listen to it or use state.
         // Since `page` state updates, if I put `page` in useEffect dependency, it will fetch.
     };
-    
+
     // Refactored useEffect to trigger on page change
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -112,7 +112,7 @@ export default function ProjectDetailApp() {
         fetch(`${API_BASE_URL}/articles?pid=${pid}&page=${page}&limit=${ITEMS_PER_PAGE}`)
             .then(res => res.json())
             .then(data => {
-                 if (data.articles) {
+                if (data.articles) {
                     setArticles(data.articles);
                     setTotalItems(data.total);
                 } else {
@@ -125,15 +125,15 @@ export default function ProjectDetailApp() {
                 console.error(err);
                 setLoading(false);
             });
-            
+
     }, [page]); // Dependency on page
 
     // Initial load for project details (run once)
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const pid = urlParams.get('pid');
-        if(pid) {
-             fetch(`${API_BASE_URL}/projects?pid=${pid}`)
+        if (pid) {
+            fetch(`${API_BASE_URL}/projects?pid=${pid}`)
                 .then(res => res.json())
                 .then(data => setProjectDetails(data))
                 .catch(err => console.error(err));
@@ -157,7 +157,7 @@ export default function ProjectDetailApp() {
                 <div className="container mx-auto px-6 py-24 md:py-32">
                     <div className="max-w-3xl mx-auto text-center backdrop-blur-md bg-[#2d7a5f]/70 rounded-2xl p-8 border-2 border-[#67e0b8] shadow-lg">
                         <h1 className="text-white mb-4 text-4xl font-bold drop-shadow-lg">
-                            {projectDetails?.project_name || PROJECT_DETAIL_CONFIG.hero.defaultTitle}
+                            {projectDetails?.title || PROJECT_DETAIL_CONFIG.hero.defaultTitle}
                         </h1>
                         <p className="text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md text-xl">
                             {projectDetails?.description || PROJECT_DETAIL_CONFIG.hero.defaultDescription}

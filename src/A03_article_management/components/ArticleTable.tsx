@@ -9,11 +9,11 @@ import {
     Clock,
     EyeOff
 } from "lucide-react";
+import { AdminSelect } from "@/A00_common/components/AdminSelect";
 import { cn } from "@/P00_common/ui/utils";
 
 interface Article {
-    article_id?: number;
-    id?: number;
+    article_id: number;
     title: string;
     writer_name: string;
     category_name: string;
@@ -22,6 +22,7 @@ interface Article {
     updated_at: string;
     comment_count: number;
     image?: string;
+    writer_account_id?: number | string;
 }
 
 interface ArticleTableProps {
@@ -30,6 +31,7 @@ interface ArticleTableProps {
     onChangeStatus: (article: Article, newStatus: string) => void;
     onDelete: (article: Article) => void;
     isAdmin: boolean;
+    user?: any;
 }
 
 const statusConfig = {
@@ -39,7 +41,7 @@ const statusConfig = {
     private: { label: "非公開", icon: <EyeOff className="w-3 h-3" />, color: "bg-rose-50 text-rose-600 border-rose-100" },
 };
 
-export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, onChangeStatus, onDelete, isAdmin }) => {
+export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, onChangeStatus, onDelete, isAdmin, user }) => {
     return (
         <div className="w-full overflow-x-auto bg-white rounded-3xl border border-gray-100 shadow-sm">
             <table className="w-full text-left border-collapse">
@@ -52,9 +54,9 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, on
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                    {articles.map((article, index) => {
+                    {articles.map((article) => {
                         const config = statusConfig[article.status];
-                        const uniqueKey = article.article_id || article.id || index;
+                        const uniqueKey = article.article_id;
                         return (
                             <tr key={uniqueKey} className="hover:bg-gray-50/50 transition-colors group">
                                 <td className="px-6 py-5">
@@ -83,19 +85,23 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, on
                                 <td className="px-6 py-5">
                                     <div className="flex flex-col items-center gap-2">
                                         {isAdmin ? (
-                                            <select
+                                            <AdminSelect
                                                 value={article.status}
-                                                onChange={(e) => onChangeStatus(article, e.target.value)}
+                                                onChange={(val) => onChangeStatus(article, val)}
+                                                options={[
+                                                    { label: "公開中", value: "published" },
+                                                    { label: "下書き", value: "draft" },
+                                                    { label: "予約中", value: "scheduled", disabled: true },
+                                                    { label: "非公開", value: "private" }
+                                                ]}
                                                 className={cn(
-                                                    "appearance-none items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold cursor-pointer hover:border-emerald-300 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/10",
-                                                    config.color
+                                                    "w-28 py-1.5 h-auto text-[10px] border-transparent",
+                                                    config.color.split(" ")[0], config.color.split(" ")[1],
+                                                    "hover:opacity-80"
                                                 )}
-                                            >
-                                                <option value="published">公開中</option>
-                                                <option value="draft">下書き</option>
-                                                <option value="scheduled">予約中</option>
-                                                <option value="private">非公開</option>
-                                            </select>
+                                                popoverWidth="w-40"
+                                                title="ステータス管理"
+                                            />
                                         ) : (
                                             <div className={cn(
                                                 "flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold",
@@ -116,15 +122,17 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({ articles, onEdit, on
                                         <span className="text-xs font-bold font-mono">{article.comment_count}</span>
                                     </div>
                                 </td>
-                                <td className="px-6 py-5">
+                                <td className="px-6 py-5 text-right">
                                     <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
-                                        <button
-                                            onClick={() => onEdit(article)}
-                                            className="p-2.5 bg-white border border-gray-100 hover:border-emerald-200 text-emerald-500 rounded-xl transition-all shadow-sm"
-                                            title="編集"
-                                        >
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
+                                        {(isAdmin || String(article.writer_account_id) === String(user?.id)) && (
+                                            <button
+                                                onClick={() => onEdit(article)}
+                                                className="p-2.5 bg-white border border-gray-100 hover:border-emerald-200 text-emerald-500 rounded-xl transition-all shadow-sm"
+                                                title="編集"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                        )}
                                         {isAdmin && (
                                             <button
                                                 onClick={() => onDelete(article)}

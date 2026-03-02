@@ -20,7 +20,7 @@ export default function App() {
     const [activeMetric, setActiveMetric] = useState<'pv' | 'likes' | 'articles'>('pv');
     const [aggregationMode, setAggregationMode] = useState<'weekly' | 'cumulative'>('weekly');
 
-    useEffect(() => {
+    const fetchData = () => {
         if (!authLoading && user) {
             setLoading(true);
             Promise.all([
@@ -40,6 +40,13 @@ export default function App() {
                     setLoading(false);
                 });
         }
+    };
+
+    useEffect(() => {
+        fetchData();
+        // 5 minutes background poll to sync and load latest data
+        const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+        return () => clearInterval(intervalId);
     }, [authLoading, user]);
 
     if (authLoading) return null;

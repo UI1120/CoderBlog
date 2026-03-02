@@ -9,7 +9,7 @@ const App: React.FC = () => {
     // Login States
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
-    
+
     // UI/Flow States
     const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
     const [accountId, setAccountId] = useState<number | null>(null);
@@ -19,6 +19,7 @@ const App: React.FC = () => {
     // Password Change States
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [displayName, setDisplayName] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,8 +40,9 @@ const App: React.FC = () => {
             if (response.ok) {
                 if (data.needs_password_change) {
                     setNeedsPasswordChange(true);
-                    setAccountId(data.user.account_id);
-                    toast.info('初回ログインのためパスワードの変更が必要です');
+                    setAccountId(data.user.id);
+                    setDisplayName(data.user.name || '');
+                    toast.info('初回ログインのため、初期情報の確認とパスワードの変更が必要です');
                 } else {
                     toast.success('ログインに成功しました');
                     setTimeout(() => {
@@ -68,9 +70,9 @@ const App: React.FC = () => {
             return;
         }
 
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
         if (!passwordRegex.test(newPassword)) {
-            setError('パスワードは8文字以上の英数混合である必要があります');
+            setError('パスワードは8文字以上で、少なくとも1つの英字と数字を含む必要があります。');
             return;
         }
 
@@ -82,9 +84,10 @@ const App: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     password: newPassword,
-                    needs_password_change: false 
+                    display_name: displayName,
+                    needs_password_change: false
                 }),
             });
 
@@ -197,8 +200,30 @@ const App: React.FC = () => {
                             <form className="space-y-8 relative z-10" onSubmit={handlePasswordChange}>
                                 <div className="space-y-6">
                                     <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-emerald-800 text-xs font-medium leading-relaxed">
-                                        セキュリティ保護のため、新しいパスワードを設定してください。
-                                        <div className="mt-1 text-[10px] opacity-70 font-bold">※ 8文字以上・英数混合</div>
+                                        セキュリティ保護のため、パスワードの設定と表示名の確認を行ってください。
+                                        <div className="mt-1 text-[10px] opacity-70 font-bold">※ パスワード：8文字以上・英数混合</div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">
+                                            Creator Display Name
+                                        </label>
+                                        <div className="relative group/field">
+                                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within/field:text-emerald-500 transition-colors">
+                                                <User className="w-5 h-5" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                required
+                                                disabled={isSubmitting}
+                                                maxLength={20}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-14 pr-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 placeholder-gray-300 shadow-inner"
+                                                placeholder="表示名（ペンネーム等）"
+                                                value={displayName}
+                                                onChange={(e) => setDisplayName(e.target.value)}
+                                            />
+                                        </div>
+                                        <p className="text-[9px] text-gray-400 ml-1">※ 記事の執筆者名として公開されます。</p>
                                     </div>
 
                                     <div className="space-y-2">
@@ -256,7 +281,7 @@ const App: React.FC = () => {
                                         className="w-full h-14 rounded-2xl text-base shadow-xl shadow-emerald-600/20"
                                         icon={<ArrowRight className={isSubmitting ? "animate-pulse" : ""} />}
                                     >
-                                        {isSubmitting ? "Setting Up..." : "パスワードを設定して完了"}
+                                        {isSubmitting ? "Setting Up..." : "設定を完了してログイン"}
                                     </AdminButton>
                                 </div>
                             </form>

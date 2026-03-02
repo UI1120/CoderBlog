@@ -10,10 +10,11 @@ import {
     AlertCircle,
     XCircle
 } from "lucide-react";
+import { AdminSelect } from "@/A00_common/components/AdminSelect";
 import { cn } from "@/P00_common/ui/utils";
 
 interface Notice {
-    notice_id: number;
+    id: number;
     title: string;
     category: string;
     url?: string;
@@ -54,7 +55,7 @@ export const NoticeTable: React.FC<NoticeTableProps> = ({ notices, onEdit, onCha
                     {notices.map((notice) => {
                         const config = statusConfig[notice.status] || statusConfig.draft;
                         return (
-                            <tr key={notice.notice_id} className="hover:bg-gray-50/50 transition-colors group">
+                            <tr key={notice.id} className="hover:bg-gray-50/50 transition-colors group">
                                 <td className="px-6 py-5">
                                     <div>
                                         <div className="flex items-center gap-2 mb-1.5">
@@ -76,20 +77,24 @@ export const NoticeTable: React.FC<NoticeTableProps> = ({ notices, onEdit, onCha
                                 <td className="px-6 py-5">
                                     <div className="flex flex-col items-center gap-2">
                                         {isAdmin ? (
-                                            <select
+                                            <AdminSelect
                                                 value={notice.status}
-                                                onChange={(e) => onChangeStatus(notice, e.target.value)}
+                                                onChange={(val) => onChangeStatus(notice, val)}
+                                                options={[
+                                                    { label: "公開中", value: "published" },
+                                                    { label: "下書き", value: "draft" },
+                                                    { label: "予約中", value: "scheduled", disabled: true },
+                                                    { label: "非公開", value: "private" },
+                                                    { label: "掲載終了", value: "expired" }
+                                                ]}
                                                 className={cn(
-                                                    "appearance-none items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold cursor-pointer hover:border-emerald-300 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/10",
-                                                    config.color
+                                                    "w-28 py-1.5 h-auto text-[10px] border-transparent",
+                                                    config.color.split(" ")[0], config.color.split(" ")[1],
+                                                    "hover:opacity-80"
                                                 )}
-                                            >
-                                                <option value="published">公開中</option>
-                                                <option value="draft">下書き</option>
-                                                <option value="scheduled">予約中</option>
-                                                <option value="private">非公開</option>
-                                                <option value="expired">掲載終了</option>
-                                            </select>
+                                                popoverWidth="w-40"
+                                                title="ステータス管理"
+                                            />
                                         ) : (
                                             <div className={cn(
                                                 "flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold",

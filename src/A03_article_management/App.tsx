@@ -124,6 +124,16 @@ export default function App() {
         }
     }, [authLoading, isInitialized, fetchData]);
 
+    // 5 minutes background poll to sync and load latest data
+    useEffect(() => {
+        if (!authLoading && isInitialized) {
+            const intervalId = setInterval(() => {
+                fetchData();
+            }, 5 * 60 * 1000);
+            return () => clearInterval(intervalId);
+        }
+    }, [authLoading, isInitialized, fetchData]);
+
     const handleStatusChange = async (type: 'article' | 'comment' | 'notice', id: number, newStatus: string) => {
         try {
             let endpoint = "";
@@ -149,7 +159,7 @@ export default function App() {
         if (!deleteTarget) return;
         try {
             const { type, data } = deleteTarget;
-            const id = type === 'article' ? (data.article_id || data.id) : type === 'comment' ? data.comment_id : data.notice_id;
+            const id = type === 'article' ? data.article_id : type === 'comment' ? data.id : data.id;
 
             let endpoint = "";
             if (type === 'article') endpoint = `${API_BASE_URL}/admin/articles/${id}`;
@@ -220,6 +230,9 @@ export default function App() {
                             onClick={() => {
                                 setActiveTab('article');
                                 setStatusFilter(['draft']);
+                                if (!isAdmin && user) {
+                                    setWriterFilter(String(user.id));
+                                }
                             }}
                         />
                         <AdminTab
@@ -295,7 +308,7 @@ export default function App() {
                                 onChange={setWriterFilter}
                                 options={[
                                     { value: 'all', label: '全ての執筆者' },
-                                    ...writers.map(w => ({ value: String(w.creator_id), label: w.display_name }))
+                                    ...writers.filter(w => w.account_id).map(w => ({ value: String(w.account_id), label: w.display_name }))
                                 ]}
                                 className="w-44"
                             />
@@ -317,23 +330,24 @@ export default function App() {
                 ) : activeTab === 'article' ? (
                     <ArticleTable
                         articles={articles}
-                        onEdit={(a) => window.location.href = `/editor?mode=article&id=${a.article_id || a.id}`}
-                        onChangeStatus={(a, s) => handleStatusChange('article', (a.article_id || a.id) as number, s)}
+                        onEdit={(a) => window.location.href = `/editor?mode=article&id=${a.article_id}`}
+                        onChangeStatus={(a, s) => handleStatusChange('article', a.article_id as number, s)}
                         onDelete={(a) => confirmDelete('article', a)}
                         isAdmin={isAdmin}
+                        user={user}
                     />
                 ) : activeTab === 'notice' ? (
                     <NoticeTable
                         notices={notices}
-                        onEdit={(n) => window.location.href = `/editor?mode=notice&id=${n.notice_id}`}
-                        onChangeStatus={(n, s) => handleStatusChange('notice', n.notice_id, s)}
+                        onEdit={(n) => window.location.href = `/editor?mode=notice&id=${n.id}`}
+                        onChangeStatus={(n, s) => handleStatusChange('notice', n.id, s)}
                         onDelete={(n) => confirmDelete('notice', n)}
                         isAdmin={isAdmin}
                     />
                 ) : (
                     <CommentTable
                         comments={comments}
-                        onStatusChange={(c, s) => handleStatusChange('comment', c.comment_id, s)}
+                        onStatusChange={(c, s) => handleStatusChange('comment', c.id, s)}
                         onDelete={(c) => confirmDelete('comment', c)}
                         isAdmin={isAdmin}
                     />

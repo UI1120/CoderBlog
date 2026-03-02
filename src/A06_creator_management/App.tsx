@@ -107,10 +107,10 @@ export default function App() {
                 return;
             }
 
-            // Complexity check: 8+ alphanumeric
-            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            // Complexity check: 8+ with at least one letter and one number
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
             if (!passwordRegex.test(individualFormData.password)) {
-                setPasswordError("8文字以上の英数字混合で入力してください");
+                setPasswordError("パスワードは8文字以上で、少なくとも1つの英字と数字を含む必要があります。");
                 return;
             }
         }
@@ -144,10 +144,18 @@ export default function App() {
             : `${API_BASE_URL}/admin/creators`;
 
         try {
+            const payload = {
+                name: groupFormData.display_name,
+                type: groupFormData.creator_type,
+                profile: groupFormData.profile,
+                icon_path: groupFormData.icon_path,
+                member_ids: groupFormData.members
+            };
+
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(groupFormData),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {

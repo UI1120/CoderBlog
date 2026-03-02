@@ -41,6 +41,8 @@ export function ArticleMetadataEditor({
         fetch(`${API_BASE_URL}/header/tags`).then(res => res.json()).then(setTagsList).catch(console.error);
     }, []);
 
+    const [isDragging, setIsDragging] = useState(false);
+
     const handleTagToggle = (tagLabel: string) => {
         if (tags.includes(tagLabel)) {
             onTagsChange(tags.filter((t) => t !== tagLabel));
@@ -49,8 +51,7 @@ export function ArticleMetadataEditor({
         }
     };
 
-    const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+    const processFile = async (file: File) => {
         if (file && file.type.startsWith('image/')) {
             try {
                 const formData = new FormData();
@@ -76,6 +77,32 @@ export function ArticleMetadataEditor({
         }
     };
 
+    const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            processFile(file);
+        }
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            processFile(file);
+        }
+    };
+
     const commonInputClass = "w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-200 transition-all font-bold text-gray-700 text-sm appearance-none";
     const labelClass = "block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-1";
 
@@ -88,7 +115,7 @@ export function ArticleMetadataEditor({
                         <AdminSelect
                             value={project}
                             onChange={onProjectChange}
-                            options={[{ label: "選択なし", value: "none" }, ...projects.map(p => ({ label: p.label, value: p.label }))]}
+                            options={[{ label: "選択なし", value: "none" }, ...projects.map(p => ({ label: p.label, value: p.value || p.label }))]}
                             placeholder="プロジェクトを選択"
                             title="Select Project"
                         />
@@ -98,7 +125,7 @@ export function ArticleMetadataEditor({
                         <AdminSelect
                             value={group}
                             onChange={onGroupChange}
-                            options={[{ label: "選択なし", value: "none" }, ...groups.map(g => ({ label: g.label, value: g.label }))]}
+                            options={[{ label: "選択なし", value: "none" }, ...groups.map(g => ({ label: g.label, value: g.value || g.label }))]}
                             placeholder="グループを選択"
                             title="Select Group"
                         />
@@ -142,29 +169,36 @@ export function ArticleMetadataEditor({
             </div>
 
             <div className="space-y-6">
-                <AdminCard className="p-8 flex flex-col items-center justify-center min-h-[400px] relative">
-                    <label className={labelClass + " absolute top-8 left-8"}>サムネイル画像</label>
-                    {thumbnail ? (
-                        <div className="w-full h-full flex flex-col gap-6">
-                            <div className="relative group w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-inner">
-                                <img src={thumbnail} alt="Preview" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <AdminButton variant="danger" onClick={() => onThumbnailChange('')} icon={<Trash2 className="w-4 h-4" />}>削除</AdminButton>
+                <AdminCard className="p-0 overflow-hidden">
+                    <div
+                        className={`w-full h-full p-8 flex flex-col items-center justify-center min-h-[400px] relative transition-colors ${isDragging ? 'border-2 border-emerald-500 bg-emerald-50/50 border-dashed m-1 rounded-2xl' : ''}`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    >
+                        <label className={labelClass + " absolute top-8 left-8"}>サムネイル画像</label>
+                        {thumbnail ? (
+                            <div className="w-full h-full flex flex-col gap-6">
+                                <div className="relative group w-full aspect-video rounded-2xl overflow-hidden border border-gray-100 shadow-inner">
+                                    <img src={thumbnail} alt="Preview" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <AdminButton variant="danger" onClick={() => onThumbnailChange('')} icon={<Trash2 className="w-4 h-4" />}>削除</AdminButton>
+                                    </div>
                                 </div>
+                                <div className="flex justify-center"><AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />} onClick={() => fileInputRef.current?.click()}>貼り替え</AdminButton></div>
                             </div>
-                            <div className="flex justify-center"><AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />} onClick={() => fileInputRef.current?.click()}>貼り替え</AdminButton></div>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-center gap-6">
-                            <div className="w-20 h-20 rounded-full bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center"><Upload className="w-8 h-8 text-gray-300" /></div>
-                            <div className="text-center">
-                                <p className="font-bold text-gray-400 text-sm">画像をここにドロップ</p>
-                                <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest mt-1">Recommended size: 1200x630px</p>
+                        ) : (
+                            <div className="flex flex-col items-center gap-6">
+                                <div className="w-20 h-20 rounded-full bg-gray-50 border border-dashed border-gray-200 flex items-center justify-center"><Upload className="w-8 h-8 text-gray-300" /></div>
+                                <div className="text-center">
+                                    <p className="font-bold text-gray-400 text-sm">画像をここにドロップ</p>
+                                    <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest mt-1">Recommended size: 1200x630px</p>
+                                </div>
+                                <AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />} onClick={() => fileInputRef.current?.click()}>アップロード</AdminButton>
                             </div>
-                            <AdminButton variant="secondary" icon={<Upload className="w-4 h-4" />} onClick={() => fileInputRef.current?.click()}>アップロード</AdminButton>
-                        </div>
-                    )}
-                    <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleThumbnailUpload} />
+                        )}
+                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleThumbnailUpload} />
+                    </div>
                 </AdminCard>
             </div>
         </div>

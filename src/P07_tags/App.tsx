@@ -7,7 +7,7 @@ import { TAG_LIST_CONFIG } from '@/R01_config/siteConfig';
 import { Hash } from 'lucide-react';
 
 export default function App() {
-    const [tags, setTags] = useState<{ id: string | number, label: string, articleCount?: number }[]>([]);
+    const [tags, setTags] = useState<{ id: string | number, name: string, article_count?: number }[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -47,16 +47,16 @@ export default function App() {
                             {tags.map((tag) => (
                                 <a
                                     key={tag.id}
-                                    href={`/search?q=${encodeURIComponent(tag.label)}`}
+                                    href={`/search?q=${encodeURIComponent(tag.name)}`}
                                     className="group relative flex items-center gap-2 bg-white px-8 py-4 rounded-full border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                                 >
                                     <Hash className="w-4 h-4 text-emerald-400 group-hover:text-emerald-500 transition-colors" />
                                     <span className="text-lg font-bold text-gray-700 group-hover:text-emerald-600 transition-colors">
-                                        {tag.label}
+                                        {tag.name}
                                     </span>
-                                    {tag.articleCount !== undefined && (
+                                    {tag.article_count !== undefined && (
                                         <span className="text-[10px] font-black text-gray-300 group-hover:text-emerald-400 ml-1">
-                                            ({tag.articleCount})
+                                            ({tag.article_count})
                                         </span>
                                     )}
                                     <div className="absolute inset-0 rounded-full ring-2 ring-emerald-500/0 group-hover:ring-emerald-500/10 transition-all scale-105 opacity-0 group-hover:opacity-100" />

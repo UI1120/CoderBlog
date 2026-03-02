@@ -1,18 +1,16 @@
 import React from "react";
 import {
-    Check,
-    X,
     Trash2,
     User,
     Calendar,
     Globe,
     ExternalLink
 } from "lucide-react";
-import { AdminButton } from "@/A00_common/components/AdminButton";
+import { AdminSelect } from "@/A00_common/components/AdminSelect";
 import { cn } from "@/P00_common/ui/utils";
 
 interface Comment {
-    comment_id: number;
+    id: number;
     article_id: number;
     article_title: string;
     guest_name: string;
@@ -42,7 +40,7 @@ export const CommentTable: React.FC<CommentTableProps> = ({ comments, onStatusCh
                 const config = statusConfig[comment.status];
                 return (
                     <div
-                        key={comment.comment_id}
+                        key={comment.id}
                         className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 hover:shadow-md hover:border-emerald-100 transition-all group"
                     >
                         <div className="flex flex-col md:flex-row gap-6">
@@ -103,32 +101,29 @@ export const CommentTable: React.FC<CommentTableProps> = ({ comments, onStatusCh
 
                             {/* Right: Actions */}
                             <div className="flex md:flex-col gap-2 justify-end md:justify-start">
-                                {comment.status === 'pending' ? (
-                                    <>
-                                        <AdminButton
-                                            onClick={() => onStatusChange(comment, 'approved')}
-                                            className="bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200/50 py-1.5 px-4 text-xs"
-                                            icon={<Check className="w-4 h-4" />}
-                                        >
-                                            承認
-                                        </AdminButton>
-                                        <AdminButton
-                                            variant="ghost"
-                                            onClick={() => onStatusChange(comment, 'rejected')}
-                                            className="text-gray-500 hover:text-rose-600 hover:bg-rose-50 py-1.5 px-4 text-xs"
-                                            icon={<X className="w-4 h-4" />}
-                                        >
-                                            却下
-                                        </AdminButton>
-                                    </>
+                                {isAdmin ? (
+                                    <div className="w-full">
+                                        <AdminSelect
+                                            value={comment.status}
+                                            onChange={(val) => onStatusChange(comment, val as any)}
+                                            options={[
+                                                { label: "承認待ち", value: "pending" },
+                                                { label: "承認済み", value: "approved" },
+                                                { label: "却下", value: "rejected" }
+                                            ]}
+                                            className={cn(
+                                                "w-32 py-1.5 h-auto text-[10px] border-transparent",
+                                                config.color.split(" ")[0], config.color.split(" ")[1],
+                                                "hover:opacity-80"
+                                            )}
+                                            popoverWidth="w-40"
+                                            title="ステータス管理"
+                                        />
+                                    </div>
                                 ) : (
-                                    <AdminButton
-                                        variant="ghost"
-                                        onClick={() => onStatusChange(comment, 'pending')}
-                                        className="text-gray-400 hover:text-amber-600 py-1.5 px-4 text-xs"
-                                    >
-                                        戻す
-                                    </AdminButton>
+                                    <div className={cn("text-[10px] font-bold px-3 py-1.5 rounded-full", config.color.split(" ")[0], config.color.split(" ")[1])}>
+                                        {config.label}
+                                    </div>
                                 )}
                                 {isAdmin && (
                                     <div className="md:mt-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">

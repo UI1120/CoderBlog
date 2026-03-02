@@ -3,21 +3,7 @@ import article001 from '../articles/article_001.json';
 import article002 from '../articles/article_002.json';
 import articlesData from '../articles/articles_list.json';
 
-const mapArticle = (a: any) => {
-    return {
-        ...a,
-        article_id: Number(a.id || a.article_id),
-        writer_id: Number(a.writer_id || a.writerId),
-        writer_name: a.writer_name || a.writer,
-        writer_icon: a.writer_icon || a.writerIcon,
-        project_id: Number(a.project_id || a.projectId || a.category_id || 1),
-        project_name: a.project_name || a.project || a.category || "General",
-        category_id: Number(a.category_id || a.projectId || 1),
-        category_name: a.category_name || a.category || "General",
-        thumbnail: a.thumbnail || a.image,
-        published_at: a.published_at || a.date
-    };
-};
+const mapArticle = (a: any) => a;
 
 export let articlesList = [...articlesData].map(mapArticle);
 

@@ -2,21 +2,7 @@ import { http, HttpResponse } from 'msw';
 import articlesData from '../articles/articles_list.json';
 import projectsArticles from '../articleLists/projectsArticles.json';
 
-const mapArticle = (a: any) => {
-    return {
-        ...a,
-        article_id: Number(a.id || a.article_id),
-        writer_id: Number(a.writer_id || a.writerId),
-        writer_name: a.writer_name || a.writer,
-        writer_icon: a.writer_icon || a.writerIcon,
-        project_id: Number(a.project_id || a.projectId || a.category_id || 1),
-        project_name: a.project_name || a.project || a.category || "General",
-        category_id: Number(a.category_id || a.projectId || 1),
-        category_name: a.category_name || a.category || "General",
-        thumbnail: a.thumbnail || a.image,
-        published_at: a.published_at || a.date
-    };
-};
+const mapArticle = (a: any) => a;
 
 export const get_search_handler = [
     http.get('/api/search', ({ request }) => {
@@ -42,8 +28,8 @@ export const get_search_handler = [
 
         const filteredArticles = publishedArticles.filter((article: any) =>
             article.title.toLowerCase().includes(query) ||
-            article.category.toLowerCase().includes(query) ||
-            article.writer.toLowerCase().includes(query) ||
+            article.category_name.toLowerCase().includes(query) ||
+            article.writer_name.toLowerCase().includes(query) ||
             (article.tags && article.tags.some((t: string) => t.toLowerCase().includes(query)))
         );
 

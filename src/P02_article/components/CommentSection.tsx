@@ -5,9 +5,10 @@ import { API_BASE_URL } from "@/constants";
 
 interface Comment {
   id: string;
-  user_name: string;
+  guest_name: string;
   content: string;
   date: string;
+  status: 'approved' | 'pending';
 }
 
 interface CommentSectionProps {
@@ -16,6 +17,7 @@ interface CommentSectionProps {
 
 export function CommentSection({ articleId }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
+  const [pendingComments, setPendingComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,11 +65,11 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        const newComment: Comment = {
-          id: data.comment_id || Date.now().toString(),
-          user_name: data.guest_name || userName,
-          content: data.content || commentText,
+        const newPending: Comment = {
+          id: `pending-${Date.now()}`,
+          guest_name: userName.trim() || "匿名",
+          content: "【管理人の承認後に表示されます】",
+          status: 'pending',
           date: new Date().toLocaleString("ja-JP", {
             year: "numeric",
             month: "long",
@@ -77,10 +79,10 @@ export function CommentSection({ articleId }: CommentSectionProps) {
           })
         };
 
-        setComments([...comments, newComment]);
+        setPendingComments([newPending, ...pendingComments]);
         setUserName("");
         setCommentText("");
-        toast.success("コメントを投稿しました");
+        toast.success("コメントを投稿しました。管理者の承認後に表示されます。");
       } else {
         toast.error("コメントの投稿に失敗しました");
       }
@@ -99,22 +101,22 @@ export function CommentSection({ articleId }: CommentSectionProps) {
       {/* コメント表示 */}
       <div className="bg-white rounded-lg shadow-md p-8">
         <h2 className="text-3xl mb-6">
-          コメント({comments.length})
+          コメント({comments.length + pendingComments.length})
         </h2>
 
         <div className="space-y-6">
-          {comments.map((comment) => (
+          {[...pendingComments, ...comments].map((comment) => (
             <div
               key={comment.id}
-              className="border-b border-gray-200 pb-6 last:border-b-0"
+              className={`border-b border-gray-200 pb-6 last:border-b-0 ${comment.status === 'pending' || comment.id.toString().startsWith('pending') ? 'opacity-70' : ''}`}
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 bg-[#67e0b8] rounded-full flex items-center justify-center text-white">
-                  {(comment.user_name || "G").charAt(0)}
+                  {(comment.guest_name || "G").charAt(0)}
                 </div>
                 <div>
                   <div className="text-gray-900">
-                    {comment.user_name}
+                    {comment.guest_name}
                   </div>
                   <div className="text-sm text-gray-500">
                     {comment.date}

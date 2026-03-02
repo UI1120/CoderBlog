@@ -1,6 +1,5 @@
 import { http, HttpResponse } from 'msw';
 import creatorsData from '../admin/creators.json';
-import accountsData from '../admin/accounts.json';
 
 export const get_creators_handler = [
     http.get('/api/creators', ({ request }) => {
@@ -9,23 +8,8 @@ export const get_creators_handler = [
         const gid = url.searchParams.get('gid');
 
         // Join creators with account data if individual
-        // Note: according to DB design, individual icons are in accounts table.
-        // Private data like email/role should not be exposed in the public API.
-        const enrichedCreators = creatorsData.creators.map(creator => {
-            if (creator.creator_type === 'individual' && creator.account_id) {
-                const account = accountsData.accounts.find(a => a.account_id === creator.account_id);
-                return {
-                    creator_id: creator.creator_id,
-                    creator_type: creator.creator_type,
-                    display_name: creator.display_name,
-                    profile: creator.profile,
-                    icon_path: account?.icon_path || '',
-                    // DO NOT expose email, role, status, last_login_at here
-                };
-            }
-            // For groups, return as is (plus members if applicable)
-            return creator;
-        });
+        // No longer needed as icon_path is in creators table.
+        const enrichedCreators = creatorsData.creators;
 
         if (cid) {
             const creator = enrichedCreators.find(c => c.creator_id.toString() === cid && c.creator_type === 'individual');

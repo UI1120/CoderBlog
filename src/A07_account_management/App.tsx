@@ -22,7 +22,7 @@ import { AdminModal } from "@/A00_common/components/AdminModal";
 import { cn } from "@/P00_common/ui/utils";
 
 export default function App() {
-    const { user, isAdmin, loading: authLoading } = useAdminAuth();
+    const { user, isAdmin, loading: authLoading } = useAdminAuth(true);
     const [accounts, setAccounts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -57,10 +57,16 @@ export default function App() {
     };
 
     useEffect(() => {
-        if (!authLoading) {
+        if (!authLoading && !isAdmin) {
+            window.location.href = '/baduser';
+        }
+    }, [authLoading, isAdmin]);
+
+    useEffect(() => {
+        if (!authLoading && isAdmin) {
             fetchData();
         }
-    }, [authLoading]);
+    }, [authLoading, isAdmin]);
 
     const handleUpdateField = async (accountId: number, field: string, value: any) => {
         if (!isAdmin) return;
@@ -193,12 +199,12 @@ export default function App() {
                             <table className="w-full text-left font-sans">
                                 <thead>
                                     <tr className="border-b border-gray-50 bg-gray-50/50">
-                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">User</th>
-                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black w-48">Role</th>
-                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black w-48">Status</th>
-                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">Last Login</th>
+                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">ユーザー</th>
+                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black w-48">権限ロール</th>
+                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black w-48">ステータス</th>
+                                        <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black">最終ログイン</th>
                                         {isAdmin && (
-                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black text-right">Actions</th>
+                                            <th className="px-8 py-5 text-gray-400 uppercase tracking-widest text-[10px] font-black text-right">操作</th>
                                         )}
                                     </tr>
                                 </thead>

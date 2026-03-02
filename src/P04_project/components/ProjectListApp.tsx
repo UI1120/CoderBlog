@@ -10,7 +10,7 @@ export default function ProjectListApp() {
     const [projects, setProjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
-    const [categories, setCategories] = useState<{ label: string, id: string }[]>([]);
+    const [categories, setCategories] = useState<{ name: string, id: string }[]>([]);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -23,14 +23,15 @@ export default function ProjectListApp() {
         fetch(`${API_BASE_URL}/projects`)
             .then(res => res.json())
             .then(data => {
-                setProjects(data);
+                const projectsData = data.projects || [];
+                setProjects(projectsData);
 
                 // Extract unique categories from projects
-                const uniqueCats = Array.from(new Set(data.map((p: any) => p.category_id)))
+                const uniqueCats = Array.from(new Set(projectsData.map((p: any) => p.category_id)))
                     .filter(Boolean)
                     .map(id => {
-                        const project = data.find((p: any) => p.category_id === id);
-                        return { label: project.category, id: id as string };
+                        const project = projectsData.find((p: any) => p.category_id === id);
+                        return { name: project.category_name, id: id as string };
                     });
                 setCategories(uniqueCats);
 
@@ -76,7 +77,7 @@ export default function ProjectListApp() {
                                 className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap flex items-center gap-2 ${selectedCategory === cat.id ? "bg-[#2d7a5f] text-white shadow-lg shadow-emerald-900/10" : "bg-white text-gray-400 hover:bg-gray-50 border border-gray-100"}`}
                             >
                                 <Tag className="w-3.5 h-3.5" />
-                                {cat.label}
+                                {cat.name}
                             </button>
                         ))}
                     </div>
@@ -95,8 +96,8 @@ export default function ProjectListApp() {
                     <div className="grid grid-cols-1 gap-12">
                         {filteredProjects.map((project) => (
                             <a
-                                key={project.project_id}
-                                href={`/project?pid=${project.project_id}`}
+                                key={project.id}
+                                href={`/project?pid=${project.id}`}
                                 className="group block transform hover:scale-[1.01] transition-all duration-300"
                             >
                                 <div className="bg-white rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-emerald-900/5 transition-all overflow-hidden border border-gray-100 flex flex-col md:flex-row h-full md:h-[350px]">
@@ -104,13 +105,13 @@ export default function ProjectListApp() {
                                     <div className="md:w-2/5 lg:w-1/3 relative overflow-hidden">
                                         <img
                                             src={project.thumbnail || PROJECT_LIST_CONFIG.hero.backgroundImage}
-                                            alt={project.project_name}
+                                            alt={project.title}
                                             className="w-full h-64 md:h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
                                         <div className="absolute top-6 left-6">
                                             <span className="bg-white/90 backdrop-blur-md text-[#2d7a5f] text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-[0.2em] shadow-sm border border-white/50">
-                                                {project.category}
+                                                {project.category_name}
                                             </span>
                                         </div>
                                     </div>
@@ -121,11 +122,11 @@ export default function ProjectListApp() {
                                             <div className="flex items-center gap-4 mb-6">
                                                 <div className="w-12 h-1 bg-emerald-500 rounded-full group-hover:w-20 transition-all duration-500" />
                                                 <span className="text-[10px] font-black text-emerald-600/50 uppercase tracking-[0.3em]">
-                                                    Project Spec 0{project.project_id}
+                                                    Project Spec 0{project.id} ({project.article_count} Articles)
                                                 </span>
                                             </div>
                                             <h3 className="text-4xl font-black text-gray-900 mb-6 group-hover:text-[#2d7a5f] transition-colors leading-tight">
-                                                {project.project_name}
+                                                {project.title}
                                             </h3>
                                             <p className="text-gray-500 text-xl leading-relaxed line-clamp-2 md:line-clamp-3 font-medium">
                                                 {project.description}

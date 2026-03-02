@@ -29,7 +29,7 @@ const statusConfig: Record<Status, { label: string; color: string }> = {
 };
 
 export default function App() {
-    const { user, loading: authLoading } = useAdminAuth();
+    const { user, isAdmin, loading: authLoading } = useAdminAuth();
     const [mode, setMode] = useState<EditorMode>("article");
     const [activeTab, setActiveTab] = useState<Tab>("edit");
 
@@ -58,9 +58,16 @@ export default function App() {
     const [expiresAt, setExpiresAt] = useState("");
 
     useEffect(() => {
+        if (authLoading) return; // Wait for auth to finish before fetching or checking
+
         const searchParams = new URLSearchParams(window.location.search);
         const id = searchParams.get("id");
         const urlMode = searchParams.get("mode") as EditorMode | null;
+
+        if (urlMode === 'notice' && !isAdmin) {
+            window.location.href = '/baduser';
+            return;
+        }
 
         if (urlMode && (['article', 'wiki', 'notice'] as EditorMode[]).includes(urlMode)) {
             setMode(urlMode);
@@ -72,12 +79,17 @@ export default function App() {
             const abortController = new AbortController();
 
             if (currentMode === "article") {
-                fetch(`${API_BASE_URL}/articles/${id}`, { signal: abortController.signal })
+                fetch(`${API_BASE_URL}/admin/articles/${id}`, { signal: abortController.signal })
                     .then(res => {
                         if (!res.ok) throw new Error("Failed to fetch article");
                         return res.json();
                     })
                     .then(data => {
+                        if (!isAdmin && String(data.writer_account_id) !== String(user?.id)) {
+                            window.location.href = '/baduser';
+                            return;
+                        }
+
                         setTitle(data.title || "");
                         setContent(data.content || "");
                         setStatus((data.status as Status) || "draft");
@@ -128,7 +140,7 @@ export default function App() {
                 abortController.abort();
             };
         }
-    }, []);
+    }, [authLoading, isAdmin, user?.id]);
 
     const handleSave = () => {
         // Validation logic based on mode...
@@ -148,16 +160,16 @@ export default function App() {
             payload.content = content;
             payload.summary = summary;
             payload.keywords = keywords;
-            payload.project_id = project;
-            payload.group_id = group;
+            payload.project_id = (project && project !== "none") ? parseInt(project) : null;
+            payload.group_creator_id = (group && group !== "none") ? parseInt(group) : null;
             payload.tag_ids = tags;
-            payload.thumbnail_url = thumbnail;
+            payload.thumbnail_path = thumbnail;
         } else if (mode === "wiki") {
             if (!content.trim()) { toast.error("本文を入力してください"); return; }
             payload.content = content;
             payload.slug = slug;
             payload.parent_page_id = parentPageId;
-            payload.project_id = wikiProjectId;
+            payload.project_id = (wikiProjectId && wikiProjectId !== "none") ? parseInt(wikiProjectId) : null;
         } else if (mode === "notice") {
             if (!category.trim()) { toast.error("カテゴリを入力してください"); return; }
             if (category.length > 8) { toast.error("カテゴリは8文字以内で入力してください"); return; }
@@ -198,15 +210,37 @@ export default function App() {
                     toast.success(`お知らせを${id ? '更新' : '作成'}しました`);
                     // 保存完了後に管理画面トップ（もしくは記事・コメント管理）へ遷移
                     setTimeout(() => {
-                        window.location.href = "/article_management?tab=notices";
+                        window.location.href = "/article_management?tab=notice";
                     }, 1000);
                 })
                 .catch(e => {
                     console.error(e);
                     toast.error("お知らせの保存に失敗しました");
                 });
+        } else if (mode === "article") {
+            const endpoint = id ? `${API_BASE_URL}/admin/articles/${id}` : `${API_BASE_URL}/admin/articles`;
+
+            fetch(endpoint, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to save article");
+                    return res.json();
+                })
+                .then(() => {
+                    toast.success(`記事を${id ? '更新' : '作成'}しました`);
+                    setTimeout(() => {
+                        window.location.href = "/article_management?tab=article";
+                    }, 1000);
+                })
+                .catch(e => {
+                    console.error(e);
+                    toast.error("記事の保存に失敗しました");
+                });
         } else {
-            // 他のモードの保存ロジック（未実装・または既存Mock）
+            // Wiki等の保存ロジック（未実装・または既存Mock）
             toast.success(`${mode.toUpperCase()} を保存しました`);
         }
     };

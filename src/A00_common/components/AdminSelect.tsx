@@ -5,7 +5,7 @@ import { cn } from "@/P00_common/ui/utils";
 interface AdminSelectProps {
     value: string;
     onChange: (value: string) => void;
-    options: { label: string; value: string }[];
+    options: { label: string; value: string; disabled?: boolean }[];
     placeholder?: string;
     className?: string;
     popoverWidth?: string;
@@ -52,14 +52,19 @@ export function AdminSelect({
                         <div
                             key={option.value}
                             className={cn(
-                                "flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer group/item",
-                                value === option.value
+                                "flex items-center justify-between p-3 rounded-xl transition-all",
+                                option.disabled ? "opacity-50 cursor-not-allowed bg-gray-50/50 grayscale" : "cursor-pointer group/item",
+                                value === option.value && !option.disabled
                                     ? "bg-emerald-50 text-emerald-700 shadow-sm"
-                                    : "hover:bg-gray-50 text-gray-600 hover:text-emerald-600"
+                                    : (!option.disabled && "hover:bg-gray-50 text-gray-600 hover:text-emerald-600")
                             )}
-                            onClick={() => onChange(option.value)}
+                            onClick={() => !option.disabled && onChange(option.value)}
                         >
-                            <span className={cn("font-bold text-sm transition-all", value === option.value ? "translate-x-1" : "group-hover/item:translate-x-1")}>
+                            <span className={cn(
+                                "font-bold text-sm transition-all",
+                                value === option.value ? "translate-x-1" : (!option.disabled && "group-hover/item:translate-x-1"),
+                                option.disabled && "text-gray-400"
+                            )}>
                                 {option.label}
                             </span>
                             {value === option.value && (

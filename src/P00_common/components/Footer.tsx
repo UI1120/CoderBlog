@@ -7,7 +7,7 @@
             OPUCoder
           </div>
           <p className="text-gray-400 text-sm">
-            © 2026 OPUCoder - 岡山県立大学 技術系サークル
+            © 2026 OpuCoder - 岡山県立大学 技術系サークル
           </p>
         </div>
 

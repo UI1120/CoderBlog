@@ -1,19 +1,18 @@
-﻿{
-    "id": 1,
+{
     "title": "Reactを使った効率的なWebアプリケーション開発",
     "summary": "モダンなReactの機能を活用して、パフォーマンスの高いWebアプリケーションを構築する方法を解説します。",
-    "category": "技術",
     "category_id": 1,
-    "project": "Reactプロジェクト",
     "project_id": 1,
-    "tags": ["React", "TypeScript", "Vite"],
-    "writer": "田中 太郎",
+    "tags": [
+        "React",
+        "TypeScript",
+        "Vite"
+    ],
     "writer_id": 2,
     "writer_icon": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
     "group": "AI研究会",
     "group_id": 11,
     "group_icon": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=100&h=100&fit=crop",
-    "published_date": "2025年12月1日",
     "good_count": 42,
     "thumbnail": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
     "content": "# はじめに\n\nこの記事では、Reactを使った効率的なWebアプリケーション開発について解説します。\n\n## 比較表\n\n| 機能 | React 18 | React 19 |\n| :--- | :--- | :--- |\n| コンパイラ | なし | あり (React Compiler) |\n| アクション | 手動 | 自動 (useActionState) |\n| ドキュメントメタデータ | 手動制御 | ネイティブサポート |\n\n## アーキテクチャ図\n\n```mermaid\ngraph TD;\n    User-->Browser;\n    Browser-->ReactApp;\n    ReactApp-->API;\n    API-->DB;\n```\n\n## 主要なポイント\n\n### 1. コンポーネント設計\n\n再利用可能なコンポーネントを作成することで、開発効率が大幅に向上します。\n\n- **単一責任の原則**を守る\n- **Props**を適切に設計する\n- **カスタムフック**で共通ロジックを抽出する\n\n### 2. パフォーマンス最適化\n\n```javascript\nimport { memo, useMemo, useCallback } from 'react';\n\nconst MyComponent = memo(({ data }) => {\n  const processedData = useMemo(() => {\n    return data.map(item => item * 2);\n  }, [data]);\n  \n  return <div>{processedData}</div>;\n});\n```\n\n### 3. 状態管理\n\n適切な状態管理戦略を選択することが重要です：\n\n1. ローカル状態には `useState` を使用\n2. グローバル状態には Context API や状態管理ライブラリを検討\n3. サーバー状態には React Query などのライブラリを活用\n\n## まとめ\n\nReactの機能を適切に活用することで、保守性が高く、パフォーマンスに優れたアプリケーションを構築できます。継続的な学習と実践が成功への鍵となります。",
@@ -39,5 +38,11 @@
             "category": "技術",
             "published_date": "2025年11月20日"
         }
-    ]
+    ],
+    "article_id": 1,
+    "category_name": "技術",
+    "project_name": "Reactプロジェクト",
+    "writer_name": "田中 太郎",
+    "published_at": "2025-12-01T10:00:00Z",
+    "updated_at": "2025-12-01T10:00:00Z"
 }

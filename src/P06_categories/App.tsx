@@ -7,7 +7,7 @@ import { CATEGORY_LIST_CONFIG } from '@/R01_config/siteConfig';
 import { LayoutGrid, ArrowRight } from 'lucide-react';
 
 export default function App() {
-    const [categories, setCategories] = useState<{ id: string | number, label: string, articleCount?: number }[]>([]);
+    const [categories, setCategories] = useState<{ id: string | number, name: string, article_count?: number }[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ export default function App() {
                             {categories.map((cat) => (
                                 <a
                                     key={cat.id}
-                                    href={`/search?q=${encodeURIComponent(cat.label)}`}
+                                    href={`/search?q=${encodeURIComponent(cat.name)}`}
                                     className="group bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex items-center justify-between"
                                 >
                                     <div className="flex items-center gap-4">
@@ -57,11 +57,11 @@ export default function App() {
                                         <div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl font-black text-gray-800 tracking-tight group-hover:text-emerald-700 transition-colors">
-                                                    {cat.label}
+                                                    {cat.name}
                                                 </span>
-                                                {cat.articleCount !== undefined && (
+                                                {cat.article_count !== undefined && (
                                                     <span className="px-2 py-0.5 bg-gray-100 text-[10px] font-black text-gray-400 rounded-full group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
-                                                        {cat.articleCount}
+                                                        {cat.article_count}
                                                     </span>
                                                 )}
                                             </div>

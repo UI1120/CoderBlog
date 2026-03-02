@@ -1,7 +1,7 @@
 import { ArrowRight, LinkIcon, AlertCircle, Bell } from "lucide-react";
 
 interface Notice {
-    notice_id: number;
+    id: number;
     title: string;
     category: string;
     url?: string;
@@ -46,9 +46,9 @@ export function RecentNotices({ notices, isAdmin }: RecentNoticesProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {notices.length > 0 ? notices.map((notice) => (
                         <div
-                            key={notice.notice_id}
+                            key={notice.id}
                             className="p-5 bg-gray-50/50 rounded-2xl hover:bg-emerald-50/50 transition-all group cursor-pointer border border-transparent hover:border-emerald-100 flex flex-col justify-between"
-                            onClick={() => window.location.href = `/editor?mode=notice&id=${notice.notice_id}`}
+                            onClick={() => window.location.href = `/editor?mode=notice&id=${notice.id}`}
                         >
                             <div>
                                 <div className="flex justify-between items-start mb-3">

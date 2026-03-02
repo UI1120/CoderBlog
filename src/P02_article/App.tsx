@@ -2,6 +2,7 @@ import { ArticleDetail } from "./components/ArticleDetail";
 import { Header } from '@/P00_common/components/Header';
 import { Footer } from '@/P00_common/components/Footer';
 import { useEffect, useState } from "react";
+import { Toaster } from "sonner";
 import { API_BASE_URL } from "@/constants";
 
 export default function App() {
@@ -47,6 +48,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
+      <Toaster position="top-center" richColors />
       <main className="flex-grow">
         <ArticleDetail
           article={article}

@@ -8,13 +8,22 @@ export const management_handlers = [
         const url = new URL(request.url);
         const accountId = url.searchParams.get('account_id');
 
+        const enrichedAccounts = accountsData.accounts.map(a => {
+            const creator = creatorsData.creators.find(c => c.account_id === a.account_id && c.creator_type === 'individual');
+            return {
+                ...a,
+                icon_path: creator?.icon_path || '',
+                display_name: creator?.display_name || ''
+            };
+        });
+
         if (accountId) {
-            const account = accountsData.accounts.find(a =>
+            const account = enrichedAccounts.find(a =>
                 a.account_id.toString() === accountId || a.login_name === accountId
             );
             return HttpResponse.json({ accounts: account ? [account] : [] });
         }
-        return HttpResponse.json(accountsData);
+        return HttpResponse.json({ accounts: enrichedAccounts });
     }),
     http.post('/api/admin/accounts', async ({ request }) => {
         const data = await request.json();
@@ -44,23 +53,13 @@ export const management_handlers = [
 
             // Return only the individual profile linked to this account, and groups they belong to
             let individual: any = creatorsData.creators.find(c => c.account_id === id);
-            if (individual) {
-                const account = accountsData.accounts.find(a => a.account_id === id);
-                individual = { ...individual, icon_path: account?.icon_path || '' };
-            }
             const groups = creatorsData.creators.filter(c =>
                 c.creator_type === 'group' &&
                 c.members?.some(m => m.creator_id === individual?.creator_id)
             );
             return HttpResponse.json({ creators: individual ? [individual, ...groups] : groups });
         }
-        const enriched = creatorsData.creators.map(c => {
-            if (c.creator_type === 'individual' && c.account_id) {
-                const account = accountsData.accounts.find(a => a.account_id === c.account_id);
-                return { ...c, icon_path: account?.icon_path || '' };
-            }
-            return c;
-        });
+        const enriched = creatorsData.creators;
         return HttpResponse.json({ creators: enriched });
     }),
     http.post('/api/admin/creators', async ({ request }) => {

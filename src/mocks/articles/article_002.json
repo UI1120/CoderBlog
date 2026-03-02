@@ -1,20 +1,24 @@
 {
-    "id": 2,
     "title": "TypeScript 5.x の新機能について",
     "summary": "TypeScript 5.x で導入された主要な機能と、実プロジェクトでの活用方法について解説します。",
-    "category": "Systems / Web",
     "category_id": 2,
-    "project": "TS研究プロジェクト",
     "project_id": 3,
-    "tags": ["TypeScript", "Frontend"],
-    "writer": "佐藤 一輝",
+    "tags": [
+        "TypeScript",
+        "Frontend"
+    ],
     "writer_id": 3,
     "writer_icon": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop",
     "group": "岡山デザイン部",
     "group_id": 12,
     "group_icon": "https://images.unsplash.com/photo-1558655146-d09347e92766?w=100&h=100&fit=crop",
-    "published_date": "2025年12月25日",
     "good_count": 42,
     "thumbnail": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0eXBlc2NyaXB0fGVufDF8fHx8MTc2NDU2NzA5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    "content": "# TypeScript 5.x の新機能\n\nTypeScript 5.x では、さらに型安全で書きやすい機能が追加されました。\n\n## Const Type Parameters\n\n型引数に `const` をつけることで、推論される型をリテラル型として扱うことができます。\n\n```typescript\nfunction readonly<const T>(arg: T) {\n  return arg;\n}\n```\n\n## Decorators\n\nECMAScript のデコレータ仕様に基づいた新しいデコレータがサポートされました。\n\n詳細な使い方は公式ドキュメントを参照してください。"
+    "content": "# TypeScript 5.x の新機能\n\nTypeScript 5.x では、さらに型安全で書きやすい機能が追加されました。\n\n## Const Type Parameters\n\n型引数に `const` をつけることで、推論される型をリテラル型として扱うことができます。\n\n```typescript\nfunction readonly<const T>(arg: T) {\n  return arg;\n}\n```\n\n## Decorators\n\nECMAScript のデコレータ仕様に基づいた新しいデコレータがサポートされました。\n\n詳細な使い方は公式ドキュメントを参照してください。",
+    "article_id": 2,
+    "category_name": "Systems / Web",
+    "project_name": "TS研究プロジェクト",
+    "writer_name": "佐藤 一輝",
+    "published_at": "2025-12-01T10:00:00Z",
+    "updated_at": "2025-12-01T10:00:00Z"
 }
